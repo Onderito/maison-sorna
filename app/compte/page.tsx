@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 
 import { getCustomerProfile } from "@/app/lib/shopify/customers";
 
@@ -47,13 +46,12 @@ export default async function AccountPage({
               <p className="mt-5 max-w-md text-base leading-7 opacity-75">
                 Votre historique de commandes apparaîtra ici lors de la prochaine étape.
               </p>
-              <Link
+              <a
                 href="/api/auth/shopify/logout"
-                prefetch={false}
                 className="mt-10 inline-flex min-h-12 items-center border-b border-current text-sm tracking-[0.12em] uppercase transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current active:opacity-50 motion-reduce:transition-none"
               >
                 Se déconnecter
-              </Link>
+              </a>
             </div>
           ) : (
             <div>
@@ -65,13 +63,12 @@ export default async function AccountPage({
                   La connexion n’a pas pu être terminée. Veuillez recommencer.
                 </p>
               )}
-              <Link
+              <a
                 href="/api/auth/shopify/login"
-                prefetch={false}
                 className="mt-10 inline-flex min-h-12 items-center border-b border-current text-sm tracking-[0.12em] uppercase transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current active:opacity-50 motion-reduce:transition-none"
               >
                 Se connecter
-              </Link>
+              </a>
             </div>
           )}
         </div>
