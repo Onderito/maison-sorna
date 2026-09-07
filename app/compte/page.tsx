@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 
 import {
+  getCustomerAddresses,
+  type CustomerAddress,
+} from "@/app/lib/shopify/customer-addresses";
+import {
   getCustomerOrders,
   getCustomerProfile,
   type CustomerOrder,
@@ -114,15 +118,53 @@ function OrderHistory({ orders }: { orders: CustomerOrder[] }) {
   );
 }
 
+function AddressBook({ addresses }: { addresses: CustomerAddress[] }) {
+  if (addresses.length === 0) {
+    return (
+      <p className="mt-5 max-w-md text-base leading-7 opacity-75">
+        Aucune adresse n’est encore enregistrée sur ce compte.
+      </p>
+    );
+  }
+
+  return (
+    <ol className="mt-6 grid border-t border-current/20 md:grid-cols-2">
+      {addresses.map((address, index) => (
+        <li
+          key={address.id}
+          className={`border-b border-current/20 py-6 md:px-8 ${index % 2 === 0 ? "md:border-r md:pl-0" : "md:pr-0"}`}
+        >
+          <div className="flex items-baseline justify-between gap-6">
+            <p className="font-display text-2xl tracking-[-0.02em]">
+              {address.name || `Adresse ${index + 1}`}
+            </p>
+            {address.isDefault && (
+              <p className="text-[0.65rem] tracking-[0.14em] uppercase opacity-60">Par défaut</p>
+            )}
+          </div>
+          <address className="mt-4 text-sm leading-6 not-italic opacity-75">
+            {address.company && <span className="block">{address.company}</span>}
+            {address.formatted.map((line, lineIndex) => (
+              <span key={`${lineIndex}-${line}`} className="block">{line}</span>
+            ))}
+            {address.phoneNumber && <span className="mt-2 block">{address.phoneNumber}</span>}
+          </address>
+        </li>
+      ))}
+    </ol>
+  );
+}
+
 export default async function AccountPage({
   searchParams,
 }: {
   searchParams: Promise<{ erreur?: string }>;
 }) {
-  const [{ erreur }, customer, orders] = await Promise.all([
+  const [{ erreur }, customer, orders, addresses] = await Promise.all([
     searchParams,
     getCustomerProfile(),
     getCustomerOrders(),
+    getCustomerAddresses(),
   ]);
   const greetingName = getGreetingName(customer);
 
@@ -166,6 +208,12 @@ export default async function AccountPage({
           )}
         </div>
       </div>
+      {customer && (
+        <section className="mt-20 border-t border-current pt-6 md:mt-28">
+          <p className="text-xs tracking-[0.16em] uppercase opacity-60">Adresses</p>
+          <AddressBook addresses={addresses ?? []} />
+        </section>
+      )}
     </main>
   );
 }

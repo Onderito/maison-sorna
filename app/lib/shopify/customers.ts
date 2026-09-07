@@ -276,6 +276,46 @@ async function getCustomerGraphqlEndpoint(shopDomain: string) {
   return configuration.graphql_api;
 }
 
+export async function customerAccountFetch<T>({
+  operationName,
+  query,
+  variables = {},
+}: {
+  operationName: string;
+  query: string;
+  variables?: Record<string, unknown>;
+}): Promise<T | null> {
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get(CUSTOMER_AUTH_COOKIES.accessToken)?.value;
+  if (!accessToken) return null;
+
+  const { shopDomain } = getCustomerAccountConfiguration();
+  const endpoint = await getCustomerGraphqlEndpoint(shopDomain);
+  const response = await fetch(endpoint, {
+    method: "POST",
+    cache: "no-store",
+    headers: { "Content-Type": "application/json", Authorization: accessToken },
+    body: JSON.stringify({ operationName, query, variables }),
+  });
+
+  if (response.status === 401) return null;
+  if (!response.ok) {
+    throw new Error(`La requête du compte client a échoué (HTTP ${response.status}).`);
+  }
+
+  const result = (await response.json()) as { data?: T; errors?: unknown[] };
+  if (result.errors?.length) {
+    throw new Error("Shopify a renvoyé une erreur pour le compte client.", {
+      cause: result.errors,
+    });
+  }
+  if (!result.data) {
+    throw new Error("Shopify n’a pas renvoyé les données du compte client attendues.");
+  }
+
+  return result.data;
+}
+
 export async function getCustomerProfile(): Promise<CustomerProfile | null> {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get(CUSTOMER_AUTH_COOKIES.accessToken)?.value;
