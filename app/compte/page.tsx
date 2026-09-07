@@ -6,9 +6,13 @@ import {
 } from "@/app/lib/shopify/customer-addresses";
 import {
   getCustomerOrders,
-  getCustomerProfile,
+  getOrderRouteId,
   type CustomerOrder,
+} from "@/app/lib/shopify/customer-orders";
+import {
+  getCustomerProfile,
 } from "@/app/lib/shopify/customers";
+import Link from "next/link";
 
 export const metadata: Metadata = { title: "Compte | Maison Sörna" };
 
@@ -105,12 +109,12 @@ function OrderHistory({ orders }: { orders: CustomerOrder[] }) {
           </div>
           <div className="flex flex-col items-start gap-4 sm:items-end sm:text-right">
             <p className="text-base tabular-nums">{formatOrderPrice(order)}</p>
-            <a
-              href={order.statusPageUrl}
+            {getOrderRouteId(order.id) ? <Link
+              href={`/compte/commandes/${getOrderRouteId(order.id)}`}
               className="inline-flex min-h-10 items-center border-b border-current text-xs tracking-[0.12em] uppercase transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current active:opacity-50 motion-reduce:transition-none"
             >
               Voir la commande
-            </a>
+            </Link> : <a href={order.statusPageUrl}>Voir la commande</a>}
           </div>
         </li>
       ))}

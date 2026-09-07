@@ -41,19 +41,6 @@ export type CustomerProfile = {
   emailAddress: string | null;
 };
 
-export type CustomerOrder = {
-  id: string;
-  name: string;
-  processedAt: string;
-  financialStatus: string | null;
-  fulfillmentStatus: string;
-  statusPageUrl: string;
-  totalPrice: {
-    amount: string;
-    currencyCode: string;
-  };
-};
-
 function requireEnvironmentVariable(name: string) {
   const value = process.env[name];
 
@@ -374,92 +361,4 @@ export async function getCustomerProfile(): Promise<CustomerProfile | null> {
     displayName: customer.displayName,
     emailAddress: typeof email === "string" ? email : null,
   };
-}
-
-export async function getCustomerOrders(): Promise<CustomerOrder[] | null> {
-  const cookieStore = await cookies();
-  const accessToken = cookieStore.get(CUSTOMER_AUTH_COOKIES.accessToken)?.value;
-  if (!accessToken) return null;
-
-  const { shopDomain } = getCustomerAccountConfiguration();
-  const endpoint = await getCustomerGraphqlEndpoint(shopDomain);
-  const response = await fetch(endpoint, {
-    method: "POST",
-    cache: "no-store",
-    headers: { "Content-Type": "application/json", Authorization: accessToken },
-    body: JSON.stringify({
-      operationName: "CustomerOrders",
-      query: `query CustomerOrders {
-        customer {
-          orders(first: 20, sortKey: PROCESSED_AT, reverse: true) {
-            nodes {
-              id
-              name
-              processedAt
-              financialStatus
-              fulfillmentStatus
-              statusPageUrl
-              totalPrice { amount currencyCode }
-            }
-          }
-        }
-      }`,
-    }),
-  });
-
-  if (response.status === 401) return null;
-  if (!response.ok) {
-    throw new Error(`La récupération des commandes a échoué (HTTP ${response.status}).`);
-  }
-
-  const result = (await response.json()) as {
-    data?: { customer?: { orders?: { nodes?: unknown[] } } };
-    errors?: unknown[];
-  };
-  if (result.errors?.length) {
-    throw new Error("Shopify a renvoyé une erreur pour les commandes client.", {
-      cause: result.errors,
-    });
-  }
-
-  const nodes = result.data?.customer?.orders?.nodes;
-  if (!Array.isArray(nodes)) {
-    throw new Error("Shopify a renvoyé un historique de commandes invalide.");
-  }
-
-  return nodes.map((node) => {
-    if (!node || typeof node !== "object") {
-      throw new Error("Shopify a renvoyé une commande invalide.");
-    }
-
-    const order = node as Record<string, unknown>;
-    const totalPrice = order.totalPrice;
-    if (
-      typeof order.id !== "string" ||
-      typeof order.name !== "string" ||
-      typeof order.processedAt !== "string" ||
-      (order.financialStatus !== null && typeof order.financialStatus !== "string") ||
-      typeof order.fulfillmentStatus !== "string" ||
-      !isHttpsUrl(order.statusPageUrl) ||
-      !totalPrice ||
-      typeof totalPrice !== "object" ||
-      typeof (totalPrice as Record<string, unknown>).amount !== "string" ||
-      typeof (totalPrice as Record<string, unknown>).currencyCode !== "string"
-    ) {
-      throw new Error("Shopify a renvoyé une commande invalide.");
-    }
-
-    return {
-      id: order.id,
-      name: order.name,
-      processedAt: order.processedAt,
-      financialStatus: order.financialStatus,
-      fulfillmentStatus: order.fulfillmentStatus,
-      statusPageUrl: order.statusPageUrl,
-      totalPrice: {
-        amount: (totalPrice as Record<string, string>).amount,
-        currencyCode: (totalPrice as Record<string, string>).currencyCode,
-      },
-    };
-  });
 }
