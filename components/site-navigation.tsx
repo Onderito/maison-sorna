@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import CustomerAccountLink from "@/components/customer-account-link";
+
 const navigation = [
   { label: "Infuser", href: "/#infuser" },
   { label: "Appliquer", href: "/#appliquer" },
@@ -72,16 +74,11 @@ export default function SiteNavigation({
           <Image src={`${assets}/cart.svg`} alt="" width={18} height={18} className={`size-[18px] ${iconClass}`} />
         </Link>
 
-        <Link
-          href="/api/auth/shopify/login"
-          prefetch={false}
-          aria-label="Se connecter"
-          title="Se connecter"
-          className="flex min-h-11 min-w-11 items-center justify-center gap-2 transition-transform duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current active:scale-[0.96] motion-reduce:transform-none motion-reduce:transition-none"
-        >
-          <Image src={`${assets}/account.svg`} alt="" width={18} height={18} className={`size-[18px] ${iconClass}`} />
-          {!overlay && <span className="hidden text-sm xl:inline">Se connecter</span>}
-        </Link>
+        <CustomerAccountLink
+          assets={assets}
+          iconClass={iconClass}
+          overlay={overlay}
+        />
       </div>
     </header>
   );

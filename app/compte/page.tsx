@@ -5,35 +5,49 @@ import { getCustomerProfile } from "@/app/lib/shopify/customers";
 
 export const metadata: Metadata = { title: "Compte | Maison Sörna" };
 
+function capitalize(value: string) {
+  return value.charAt(0).toLocaleUpperCase("fr-FR") + value.slice(1);
+}
+
+function getGreetingName(customer: Awaited<ReturnType<typeof getCustomerProfile>>) {
+  if (!customer) return null;
+
+  const firstName = customer.firstName?.trim();
+  if (firstName) return firstName;
+
+  const emailName = customer.emailAddress
+    ?.split("@")[0]
+    ?.split(/[._+-]+/)[0]
+    ?.trim();
+  if (emailName) return capitalize(emailName);
+
+  return capitalize(customer.displayName.trim().split(/\s+/)[0] || "vous");
+}
+
 export default async function AccountPage({
   searchParams,
 }: {
   searchParams: Promise<{ erreur?: string }>;
 }) {
   const [{ erreur }, customer] = await Promise.all([searchParams, getCustomerProfile()]);
+  const greetingName = getGreetingName(customer);
 
   return (
     <main className="mx-auto w-[calc(100%-2rem)] max-w-[1569px] border-t border-current/20 py-14 md:w-[90.8%] md:py-24">
       <p className="text-xs tracking-[0.18em] uppercase">Espace personnel</p>
       <div className="mt-12 grid gap-12 border-t border-current/20 pt-8 md:grid-cols-[minmax(0,1fr)_minmax(18rem,0.65fr)] md:gap-20 md:pt-12">
         <h1 className="max-w-4xl font-display text-[clamp(3.5rem,9vw,9rem)] leading-[0.82] tracking-[-0.045em]">
-          {customer ? `Bonjour, ${customer.displayName}` : "Votre compte"}
+          {greetingName ? `Bonjour, ${greetingName}` : "Votre compte"}
         </h1>
 
         <div className="border-t border-current pt-6">
           {customer ? (
-            <dl className="space-y-8">
-              <div>
-                <dt className="text-xs tracking-[0.16em] uppercase opacity-60">Identité</dt>
-                <dd className="mt-2 text-lg">{customer.displayName}</dd>
-              </div>
-              {customer.emailAddress && (
-                <div>
-                  <dt className="text-xs tracking-[0.16em] uppercase opacity-60">Adresse e-mail</dt>
-                  <dd className="mt-2 break-all text-lg">{customer.emailAddress}</dd>
-                </div>
-              )}
-            </dl>
+            <div>
+              <p className="text-xs tracking-[0.16em] uppercase opacity-60">Commandes</p>
+              <p className="mt-5 max-w-md text-base leading-7 opacity-75">
+                Votre historique de commandes apparaîtra ici lors de la prochaine étape.
+              </p>
+            </div>
           ) : (
             <div>
               <p className="max-w-md text-base leading-7 opacity-75">

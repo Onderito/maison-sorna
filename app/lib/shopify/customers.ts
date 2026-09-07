@@ -30,6 +30,7 @@ type CustomerTokenResponse = {
 };
 
 export type CustomerProfile = {
+  firstName: string | null;
   displayName: string;
   emailAddress: string | null;
 };
@@ -227,6 +228,7 @@ export async function getCustomerProfile(): Promise<CustomerProfile | null> {
       operationName: "CustomerProfile",
       query: `query CustomerProfile {
         customer {
+          firstName
           displayName
           emailAddress { emailAddress }
         }
@@ -240,7 +242,13 @@ export async function getCustomerProfile(): Promise<CustomerProfile | null> {
   }
 
   const result = (await response.json()) as {
-    data?: { customer?: { displayName?: unknown; emailAddress?: { emailAddress?: unknown } | null } };
+    data?: {
+      customer?: {
+        firstName?: unknown;
+        displayName?: unknown;
+        emailAddress?: { emailAddress?: unknown } | null;
+      };
+    };
     errors?: unknown[];
   };
   if (result.errors?.length) {
@@ -249,9 +257,18 @@ export async function getCustomerProfile(): Promise<CustomerProfile | null> {
 
   const customer = result.data?.customer;
   const email = customer?.emailAddress?.emailAddress;
-  if (!customer || typeof customer.displayName !== "string" || (email != null && typeof email !== "string")) {
+  if (
+    !customer ||
+    typeof customer.displayName !== "string" ||
+    (customer.firstName != null && typeof customer.firstName !== "string") ||
+    (email != null && typeof email !== "string")
+  ) {
     throw new Error("Shopify a renvoyé un profil client invalide.");
   }
 
-  return { displayName: customer.displayName, emailAddress: typeof email === "string" ? email : null };
+  return {
+    firstName: typeof customer.firstName === "string" ? customer.firstName : null,
+    displayName: customer.displayName,
+    emailAddress: typeof email === "string" ? email : null,
+  };
 }
