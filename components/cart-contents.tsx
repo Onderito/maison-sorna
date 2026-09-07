@@ -131,7 +131,7 @@ export default function CartContents({ cart }: { cart: CartView | null }) {
             </dl>
             <p className="text-sm leading-relaxed">Les frais de livraison et le montant final seront confirmés au paiement.</p>
             <a
-              href={cart.checkoutUrl}
+              href="/api/checkout"
               aria-disabled={isPending}
               tabIndex={isPending ? -1 : undefined}
               onClick={(event) => { if (isPending) event.preventDefault(); }}

@@ -61,7 +61,7 @@ export type ShopifyCartDetails = ShopifyCart & {
   lines: ShopifyCartLine[];
 };
 
-export type CartView = Omit<ShopifyCartDetails, "id">;
+export type CartView = Omit<ShopifyCartDetails, "id" | "checkoutUrl">;
 
 export type CartLineActionResult = {
   status: "success" | "warning" | "error";

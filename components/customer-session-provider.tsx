@@ -7,6 +7,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { useRouter } from "next/navigation";
 
 const CustomerSessionContext = createContext<boolean | undefined>(undefined);
 
@@ -17,6 +18,7 @@ export function CustomerSessionProvider({
   children: ReactNode;
   initialAuthenticated: boolean;
 }) {
+  const router = useRouter();
   const [authenticated, setAuthenticated] = useState(initialAuthenticated);
 
   useEffect(() => {
@@ -28,10 +30,14 @@ export function CustomerSessionProvider({
           cache: "no-store",
           signal: controller.signal,
         });
-        const result = (await response.json()) as { authenticated?: unknown };
+        const result = (await response.json()) as {
+          authenticated?: unknown;
+          refreshed?: unknown;
+        };
 
         if (response.ok && typeof result.authenticated === "boolean") {
           setAuthenticated(result.authenticated);
+          if (result.refreshed === true) router.refresh();
         }
       } catch (error) {
         if (!(error instanceof DOMException && error.name === "AbortError")) {
@@ -42,7 +48,7 @@ export function CustomerSessionProvider({
 
     void verifySession();
     return () => controller.abort();
-  }, []);
+  }, [router]);
 
   return (
     <CustomerSessionContext value={authenticated}>

@@ -3,8 +3,10 @@ import "server-only";
 import { cookies } from "next/headers";
 import { shopifyFetch } from "@/app/lib/shopify";
 import type {
+  ShopifyCart,
   ShopifyCartDetails,
   ShopifyCartLine,
+  ShopifyCartMutationPayload,
   ShopifyMoney,
 } from "@/app/lib/shopify-types";
 
@@ -65,6 +67,19 @@ export const removeCartLinesMutation = `
   }
 `;
 
+const updateCartBuyerIdentityMutation = `
+  mutation UpdateCartBuyerIdentity($cartId: ID!, $customerAccessToken: String!) {
+    cartBuyerIdentityUpdate(
+      cartId: $cartId
+      buyerIdentity: { customerAccessToken: $customerAccessToken }
+    ) {
+      cart { id checkoutUrl totalQuantity }
+      userErrors { field message }
+      warnings { code message }
+    }
+  }
+`;
+
 type CartPage = Omit<ShopifyCartDetails, "lines"> & {
   lines: {
     nodes: ShopifyCartLine[];
@@ -113,6 +128,55 @@ function validateCart(cart: CartPage) {
       throw new Error("Une ligne du panier Shopify est incomplète.");
     }
   }
+}
+
+function requireBasicCart(cart: ShopifyCart | null | undefined) {
+  if (
+    !cart ||
+    typeof cart.id !== "string" ||
+    typeof cart.checkoutUrl !== "string" ||
+    !Number.isInteger(cart.totalQuantity) ||
+    cart.totalQuantity < 0
+  ) {
+    throw new Error("Shopify a renvoyé un panier invalide.");
+  }
+
+  return cart;
+}
+
+export async function associateCustomerWithCart({
+  cartId,
+  customerAccessToken,
+}: {
+  cartId: string;
+  customerAccessToken: string;
+}) {
+  if (!/^gid:\/\/shopify\/Cart\/[^\s]+$/.test(cartId) || !customerAccessToken) {
+    throw new Error("Les informations d’association du panier sont invalides.");
+  }
+
+  const response = await shopifyFetch(
+    updateCartBuyerIdentityMutation,
+    { cartId, customerAccessToken },
+    { cache: "no-store" },
+  );
+  const payload: ShopifyCartMutationPayload | undefined =
+    response.data?.cartBuyerIdentityUpdate;
+
+  if (
+    !payload ||
+    !Array.isArray(payload.userErrors) ||
+    !Array.isArray(payload.warnings)
+  ) {
+    throw new Error("La réponse d’association du panier est invalide.");
+  }
+  if (payload.userErrors.length > 0) {
+    throw new Error("Shopify a refusé d’associer le client au panier.", {
+      cause: payload.userErrors,
+    });
+  }
+
+  return requireBasicCart(payload.cart);
 }
 
 export async function getCartDetails(): Promise<ShopifyCartDetails | null> {

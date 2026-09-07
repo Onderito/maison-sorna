@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 
-import { getCustomerProfile } from "@/app/lib/shopify/customers";
+import {
+  getCustomerOrders,
+  getCustomerProfile,
+  type CustomerOrder,
+} from "@/app/lib/shopify/customers";
 
 export const metadata: Metadata = { title: "Compte | Maison Sörna" };
 
@@ -23,12 +27,103 @@ function getGreetingName(customer: Awaited<ReturnType<typeof getCustomerProfile>
   return capitalize(customer.displayName.trim().split(/\s+/)[0] || "vous");
 }
 
+const financialStatusLabels: Record<string, string> = {
+  AUTHORIZED: "Autorisée",
+  EXPIRED: "Expirée",
+  PAID: "Payée",
+  PARTIALLY_PAID: "Partiellement payée",
+  PARTIALLY_REFUNDED: "Partiellement remboursée",
+  PENDING: "Paiement en attente",
+  REFUNDED: "Remboursée",
+  VOIDED: "Annulée",
+};
+
+const fulfillmentStatusLabels: Record<string, string> = {
+  FULFILLED: "Expédiée",
+  IN_PROGRESS: "En préparation",
+  ON_HOLD: "En attente",
+  OPEN: "À préparer",
+  PARTIALLY_FULFILLED: "Partiellement expédiée",
+  PENDING_FULFILLMENT: "En attente de préparation",
+  RESTOCKED: "Remise en stock",
+  SCHEDULED: "Planifiée",
+  UNFULFILLED: "À préparer",
+};
+
+function formatOrderDate(value: string) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return value;
+
+  return new Intl.DateTimeFormat("fr-FR", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  }).format(date);
+}
+
+function formatOrderPrice(order: CustomerOrder) {
+  const amount = Number(order.totalPrice.amount);
+  if (!Number.isFinite(amount)) return `${order.totalPrice.amount} ${order.totalPrice.currencyCode}`;
+
+  try {
+    return new Intl.NumberFormat("fr-FR", {
+      style: "currency",
+      currency: order.totalPrice.currencyCode,
+    }).format(amount);
+  } catch {
+    return `${order.totalPrice.amount} ${order.totalPrice.currencyCode}`;
+  }
+}
+
+function OrderHistory({ orders }: { orders: CustomerOrder[] }) {
+  if (orders.length === 0) {
+    return (
+      <p className="mt-5 max-w-md text-base leading-7 opacity-75">
+        Vous n’avez pas encore passé de commande avec ce compte.
+      </p>
+    );
+  }
+
+  return (
+    <ol className="mt-6 border-t border-current/20">
+      {orders.map((order) => (
+        <li key={order.id} className="grid gap-5 border-b border-current/20 py-6 sm:grid-cols-[1fr_auto]">
+          <div>
+            <p className="font-display text-2xl tracking-[-0.02em]">{order.name}</p>
+            <p className="mt-1 text-sm opacity-60">{formatOrderDate(order.processedAt)}</p>
+            <p className="mt-4 text-sm leading-6">
+              {financialStatusLabels[order.financialStatus ?? ""] ??
+                order.financialStatus ??
+                "Paiement non renseigné"}
+              <span aria-hidden="true" className="mx-2 opacity-40">/</span>
+              {fulfillmentStatusLabels[order.fulfillmentStatus] ?? order.fulfillmentStatus}
+            </p>
+          </div>
+          <div className="flex flex-col items-start gap-4 sm:items-end sm:text-right">
+            <p className="text-base tabular-nums">{formatOrderPrice(order)}</p>
+            <a
+              href={order.statusPageUrl}
+              className="inline-flex min-h-10 items-center border-b border-current text-xs tracking-[0.12em] uppercase transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current active:opacity-50 motion-reduce:transition-none"
+            >
+              Voir la commande
+            </a>
+          </div>
+        </li>
+      ))}
+    </ol>
+  );
+}
+
 export default async function AccountPage({
   searchParams,
 }: {
   searchParams: Promise<{ erreur?: string }>;
 }) {
-  const [{ erreur }, customer] = await Promise.all([searchParams, getCustomerProfile()]);
+  const [{ erreur }, customer, orders] = await Promise.all([
+    searchParams,
+    getCustomerProfile(),
+    getCustomerOrders(),
+  ]);
   const greetingName = getGreetingName(customer);
 
   return (
@@ -43,9 +138,7 @@ export default async function AccountPage({
           {customer ? (
             <div>
               <p className="text-xs tracking-[0.16em] uppercase opacity-60">Commandes</p>
-              <p className="mt-5 max-w-md text-base leading-7 opacity-75">
-                Votre historique de commandes apparaîtra ici lors de la prochaine étape.
-              </p>
+              <OrderHistory orders={orders ?? []} />
               <a
                 href="/api/auth/shopify/logout"
                 className="mt-10 inline-flex min-h-12 items-center border-b border-current text-sm tracking-[0.12em] uppercase transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current active:opacity-50 motion-reduce:transition-none"
@@ -56,7 +149,7 @@ export default async function AccountPage({
           ) : (
             <div>
               <p className="max-w-md text-base leading-7 opacity-75">
-                Connectez-vous pour retrouver vos informations et, bientôt, vos commandes Maison Sörna.
+                Connectez-vous pour retrouver vos informations et vos commandes Maison Sörna.
               </p>
               {erreur === "authentification" && (
                 <p className="mt-6 border-l border-current pl-4 text-sm leading-6" role="alert">
