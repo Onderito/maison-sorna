@@ -2,8 +2,9 @@ import { createHash, randomBytes } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
 
 import {
+  CUSTOMER_AUTH_COOKIES,
   getCustomerAccountConfiguration,
-  getCustomerAuthorizationEndpoint,
+  getCustomerOpenIdConfiguration,
 } from "@/app/lib/shopify/customers";
 
 const AUTH_COOKIE_MAX_AGE = 10 * 60;
@@ -27,12 +28,11 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const authorizationEndpoint =
-      await getCustomerAuthorizationEndpoint(shopDomain);
+    const openIdConfiguration = await getCustomerOpenIdConfiguration(shopDomain);
     const state = createSecureValue();
     const nonce = createSecureValue();
     const codeVerifier = createSecureValue();
-    const authorizationUrl = new URL(authorizationEndpoint);
+    const authorizationUrl = new URL(openIdConfiguration.authorization_endpoint);
 
     authorizationUrl.searchParams.set(
       "scope",
@@ -58,10 +58,10 @@ export async function GET(request: NextRequest) {
       maxAge: AUTH_COOKIE_MAX_AGE,
     };
 
-    response.cookies.set("shopify_customer_auth_state", state, cookieOptions);
-    response.cookies.set("shopify_customer_auth_nonce", nonce, cookieOptions);
+    response.cookies.set(CUSTOMER_AUTH_COOKIES.state, state, cookieOptions);
+    response.cookies.set(CUSTOMER_AUTH_COOKIES.nonce, nonce, cookieOptions);
     response.cookies.set(
-      "shopify_customer_auth_code_verifier",
+      CUSTOMER_AUTH_COOKIES.codeVerifier,
       codeVerifier,
       cookieOptions,
     );
