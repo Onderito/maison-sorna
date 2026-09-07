@@ -47,6 +47,13 @@ export default async function AccountPage({
               <p className="mt-5 max-w-md text-base leading-7 opacity-75">
                 Votre historique de commandes apparaîtra ici lors de la prochaine étape.
               </p>
+              <Link
+                href="/api/auth/shopify/logout"
+                prefetch={false}
+                className="mt-10 inline-flex min-h-12 items-center border-b border-current text-sm tracking-[0.12em] uppercase transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current active:opacity-50 motion-reduce:transition-none"
+              >
+                Se déconnecter
+              </Link>
             </div>
           ) : (
             <div>

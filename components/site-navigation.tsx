@@ -74,11 +74,7 @@ export default function SiteNavigation({
           <Image src={`${assets}/cart.svg`} alt="" width={18} height={18} className={`size-[18px] ${iconClass}`} />
         </Link>
 
-        <CustomerAccountLink
-          assets={assets}
-          iconClass={iconClass}
-          overlay={overlay}
-        />
+        <CustomerAccountLink />
       </div>
     </header>
   );

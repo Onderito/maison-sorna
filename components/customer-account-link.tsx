@@ -1,21 +1,13 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-type CustomerAccountLinkProps = {
-  assets: string;
-  iconClass: string;
-  overlay: boolean;
-};
+const linkClassName =
+  "inline-flex min-h-11 items-center justify-center whitespace-nowrap text-xs uppercase tracking-[0.08em] transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current active:opacity-50 motion-reduce:transition-none md:text-sm";
 
-export default function CustomerAccountLink({
-  assets,
-  iconClass,
-  overlay,
-}: CustomerAccountLinkProps) {
-  const [authenticated, setAuthenticated] = useState(false);
+export default function CustomerAccountLink() {
+  const [authenticated, setAuthenticated] = useState<boolean | null>(null);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -42,27 +34,34 @@ export default function CustomerAccountLink({
     return () => controller.abort();
   }, []);
 
-  const label = authenticated ? "Se déconnecter" : "Se connecter";
-  const href = authenticated
-    ? "/api/auth/shopify/logout"
-    : "/api/auth/shopify/login";
+  if (authenticated === null) {
+    return <span className="block h-11 w-[5.5rem] md:w-[13rem]" aria-hidden="true" />;
+  }
+
+  if (!authenticated) {
+    return (
+      <Link
+        href="/api/auth/shopify/login"
+        prefetch={false}
+        className={linkClassName}
+      >
+        Se connecter
+      </Link>
+    );
+  }
 
   return (
-    <Link
-      href={href}
-      prefetch={false}
-      aria-label={label}
-      title={label}
-      className="flex min-h-11 min-w-11 items-center justify-center gap-2 transition-transform duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current active:scale-[0.96] motion-reduce:transform-none motion-reduce:transition-none"
-    >
-      <Image
-        src={`${assets}/account.svg`}
-        alt=""
-        width={18}
-        height={18}
-        className={`size-[18px] ${iconClass}`}
-      />
-      {!overlay && <span className="hidden text-sm xl:inline">{label}</span>}
-    </Link>
+    <div className="flex items-center gap-4 lg:gap-6">
+      <Link href="/compte" prefetch={false} className={linkClassName}>
+        Mon compte
+      </Link>
+      <Link
+        href="/api/auth/shopify/logout"
+        prefetch={false}
+        className={`${linkClassName} hidden md:inline-flex`}
+      >
+        Se déconnecter
+      </Link>
+    </div>
   );
 }
