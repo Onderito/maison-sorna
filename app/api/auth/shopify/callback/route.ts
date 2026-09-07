@@ -17,9 +17,17 @@ function valuesMatch(left: string, right: string) {
 }
 
 function clearAuthenticationCookies(response: NextResponse) {
-  response.cookies.delete(CUSTOMER_AUTH_COOKIES.state);
-  response.cookies.delete(CUSTOMER_AUTH_COOKIES.nonce);
-  response.cookies.delete(CUSTOMER_AUTH_COOKIES.codeVerifier);
+  const expiredCookieOptions = {
+    httpOnly: true,
+    secure: true,
+    sameSite: "lax" as const,
+    path: "/",
+    maxAge: 0,
+  };
+
+  response.cookies.set(CUSTOMER_AUTH_COOKIES.state, "", expiredCookieOptions);
+  response.cookies.set(CUSTOMER_AUTH_COOKIES.nonce, "", expiredCookieOptions);
+  response.cookies.set(CUSTOMER_AUTH_COOKIES.codeVerifier, "", expiredCookieOptions);
 }
 
 export async function GET(request: NextRequest) {

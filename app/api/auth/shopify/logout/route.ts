@@ -7,12 +7,17 @@ import {
 } from "@/app/lib/shopify/customers";
 
 function clearCustomerSession(response: NextResponse) {
-  response.cookies.delete(CUSTOMER_AUTH_COOKIES.accessToken);
-  response.cookies.delete(CUSTOMER_AUTH_COOKIES.refreshToken);
-  response.cookies.delete(CUSTOMER_AUTH_COOKIES.idToken);
-  response.cookies.delete(CUSTOMER_AUTH_COOKIES.state);
-  response.cookies.delete(CUSTOMER_AUTH_COOKIES.nonce);
-  response.cookies.delete(CUSTOMER_AUTH_COOKIES.codeVerifier);
+  const expiredCookieOptions = {
+    httpOnly: true,
+    secure: true,
+    sameSite: "lax" as const,
+    path: "/",
+    maxAge: 0,
+  };
+
+  for (const cookieName of Object.values(CUSTOMER_AUTH_COOKIES)) {
+    response.cookies.set(cookieName, "", expiredCookieOptions);
+  }
 }
 
 export async function GET(request: NextRequest) {
