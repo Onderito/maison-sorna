@@ -1,0 +1,147 @@
+"use client";
+
+import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import Link from "next/link";
+import { removeCartLine, updateCartLine } from "@/app/actions/cart-lines";
+import type { CartLineActionResult, CartView, ShopifyMoney } from "@/app/lib/shopify-types";
+
+function formatMoney(money: ShopifyMoney) {
+  return new Intl.NumberFormat("fr-FR", {
+    style: "currency",
+    currency: money.currencyCode,
+  }).format(Number(money.amount));
+}
+
+export default function CartContents({ cart }: { cart: CartView | null }) {
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+  const [feedback, setFeedback] = useState<CartLineActionResult | null>(null);
+
+  function changeLine(lineId: string, quantity: number | null) {
+    if (isPending) return;
+    setFeedback(null);
+
+    startTransition(async () => {
+      try {
+        const result = quantity === null
+          ? await removeCartLine(lineId)
+          : await updateCartLine(lineId, quantity);
+        setFeedback(result);
+      } catch {
+        setFeedback({ status: "error", message: "La réponse n’a pas pu être confirmée. Vérifiez votre connexion et le contenu du panier." });
+        router.refresh();
+      }
+    });
+  }
+
+  return (
+    <div className="space-y-6">
+      <div role="status" aria-atomic="true" className="min-h-6 text-sm">
+        {isPending ? "Mise à jour du panier…" : feedback?.message}
+      </div>
+      {!cart || cart.totalQuantity === 0 ? (
+        <div className="space-y-4">
+          <p>Votre panier est vide.</p>
+          <Link href="/" className="inline-flex min-h-11 items-center underline underline-offset-4">
+            Retour à l’accueil
+          </Link>
+        </div>
+      ) : (
+        <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,1.7fr)_minmax(0,1fr)]">
+          <section aria-label="Articles du panier">
+            <p className="mb-6 text-sm">
+              {cart.totalQuantity} {cart.totalQuantity > 1 ? "articles" : "article"}
+            </p>
+            <ul className="divide-y divide-foreground/15">
+              {cart.lines.map((line) => {
+                const variant = line.merchandise;
+                const image = variant.image ?? variant.product.featuredImage;
+                const label = `${variant.product.title}${variant.title === "Default Title" ? "" : ` — ${variant.title}`}`;
+
+                return (
+                  <li key={line.id} className="flex gap-4 py-6 first:pt-0 sm:gap-6">
+                    {image && (
+                      <div className="relative size-20 shrink-0 overflow-hidden rounded-md sm:size-28">
+                        <Image
+                          src={image.url}
+                          alt={image.altText ?? variant.product.title}
+                          fill
+                          sizes="(max-width: 640px) 80px, 112px"
+                          className="object-cover"
+                        />
+                      </div>
+                    )}
+                    <div className="min-w-0 flex-1 space-y-2">
+                      <h2 className="text-lg font-medium">
+                        <Link href={`/produits/${encodeURIComponent(variant.product.handle)}`} className="hover:underline focus-visible:outline-2 focus-visible:outline-offset-4">
+                          {variant.product.title}
+                        </Link>
+                      </h2>
+                      {variant.title !== "Default Title" && <p className="text-sm">Format : {variant.title}</p>}
+                      <div className="flex flex-wrap items-center gap-3">
+                        <div role="group" aria-label={`Quantité : ${label}`} className="inline-flex items-center rounded-lg border border-foreground/25">
+                          <button
+                            type="button"
+                            onClick={() => changeLine(line.id, line.quantity - 1)}
+                            disabled={isPending || line.quantity <= 1}
+                            aria-label={`Diminuer la quantité : ${label}`}
+                            className="size-11 cursor-pointer rounded-l-lg transition-[background-color,transform] duration-150 hover:bg-foreground/5 focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground active:scale-[0.96] disabled:cursor-not-allowed disabled:opacity-35 disabled:active:scale-100 motion-reduce:transform-none motion-reduce:transition-none"
+                          >
+                            −
+                          </button>
+                          <span className="min-w-10 px-2 text-center text-sm tabular-nums">{line.quantity}</span>
+                          <button
+                            type="button"
+                            onClick={() => changeLine(line.id, line.quantity + 1)}
+                            disabled={isPending || line.quantity >= 2_147_483_647}
+                            aria-label={`Augmenter la quantité : ${label}`}
+                            className="size-11 cursor-pointer rounded-r-lg transition-[background-color,transform] duration-150 hover:bg-foreground/5 focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground active:scale-[0.96] disabled:cursor-not-allowed disabled:opacity-35 disabled:active:scale-100 motion-reduce:transform-none motion-reduce:transition-none"
+                          >
+                            +
+                          </button>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => changeLine(line.id, null)}
+                          disabled={isPending}
+                          aria-label={`Supprimer ${label}`}
+                          className="min-h-11 cursor-pointer px-1 text-sm underline underline-offset-4 transition-opacity duration-150 hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground disabled:cursor-not-allowed disabled:opacity-35 motion-reduce:transition-none"
+                        >
+                          Supprimer
+                        </button>
+                      </div>
+                      <p className="text-sm tabular-nums">Prix unitaire : {formatMoney(line.cost.amountPerQuantity)}</p>
+                      <p className="font-medium tabular-nums">Total : {formatMoney(line.cost.totalAmount)}</p>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
+
+          <section aria-labelledby="cart-summary-title" className="space-y-6 rounded-xl border border-foreground/15 p-6">
+            <h2 id="cart-summary-title" className="text-xl">Récapitulatif</h2>
+            <dl>
+              <div className="flex flex-wrap justify-between gap-3">
+                <dt>{cart.cost.subtotalAmountEstimated ? "Sous-total estimé" : "Sous-total"}</dt>
+                <dd className="font-medium tabular-nums">{formatMoney(cart.cost.subtotalAmount)}</dd>
+              </div>
+            </dl>
+            <p className="text-sm leading-relaxed">Les frais de livraison et le montant final seront confirmés au paiement.</p>
+            <a
+              href={cart.checkoutUrl}
+              aria-disabled={isPending}
+              tabIndex={isPending ? -1 : undefined}
+              onClick={(event) => { if (isPending) event.preventDefault(); }}
+              className="flex min-h-12 w-full items-center justify-center rounded-lg bg-foreground px-6 py-3 text-center font-medium text-background transition-[opacity,transform] duration-150 hover:opacity-85 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-foreground active:scale-[0.96] aria-disabled:pointer-events-none aria-disabled:opacity-50 motion-reduce:transform-none motion-reduce:transition-none"
+            >
+              Passer au paiement
+            </a>
+          </section>
+        </div>
+      )}
+    </div>
+  );
+}
