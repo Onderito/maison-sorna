@@ -72,16 +72,16 @@ export default function SiteNavigation({
           <Image src={`${assets}/cart.svg`} alt="" width={18} height={18} className={`size-[18px] ${iconClass}`} />
         </Link>
 
-        <button
-          type="button"
-          disabled
-          aria-label="Se connecter — bientôt disponible"
-          title="La connexion sera disponible ultérieurement"
-          className="flex min-h-11 min-w-11 items-center justify-center gap-2 opacity-60"
+        <Link
+          href="/api/auth/shopify/login"
+          prefetch={false}
+          aria-label="Se connecter"
+          title="Se connecter"
+          className="flex min-h-11 min-w-11 items-center justify-center gap-2 transition-transform duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current active:scale-[0.96] motion-reduce:transform-none motion-reduce:transition-none"
         >
           <Image src={`${assets}/account.svg`} alt="" width={18} height={18} className={`size-[18px] ${iconClass}`} />
           {!overlay && <span className="hidden text-sm xl:inline">Se connecter</span>}
-        </button>
+        </Link>
       </div>
     </header>
   );
