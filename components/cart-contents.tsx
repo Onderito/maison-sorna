@@ -28,7 +28,7 @@ export default function CartContents({ cart }: { cart: CartView | null }) {
         const result = quantity === null
           ? await removeCartLine(lineId)
           : await updateCartLine(lineId, quantity);
-        setFeedback(result);
+        setFeedback(quantity === null && result.status === "success" ? null : result);
       } catch {
         setFeedback({ status: "error", message: "La réponse n’a pas pu être confirmée. Vérifiez votre connexion et le contenu du panier." });
         router.refresh();
