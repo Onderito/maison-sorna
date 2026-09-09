@@ -6,6 +6,14 @@ import {
   addToCartMutation,
   getCartQuery,
 } from "@/app/lib/shopify";
+import {
+  getCartErrorMessage,
+  getCartWarningMessage,
+} from "@/app/lib/shopify/cart-feedback";
+import {
+  SHOPIFY_CART_COOKIE,
+  SHOPIFY_CART_MAX_AGE,
+} from "@/app/lib/shopify/cart";
 import { cookies } from "next/headers";
 import type {
   AddToCartResult,
@@ -16,11 +24,12 @@ import type {
 async function saveCartId(cartId: string) {
   const cookieStore = await cookies();
 
-  cookieStore.set("cartId", cartId, {
+  cookieStore.set(SHOPIFY_CART_COOKIE, cartId, {
     httpOnly: true,
     sameSite: "lax",
     secure: process.env.NODE_ENV === "production",
     path: "/",
+    maxAge: SHOPIFY_CART_MAX_AGE,
   });
 }
 
@@ -58,15 +67,21 @@ async function createCart(): Promise<ShopifyCart> {
 async function getCartId() {
   const cookieStore = await cookies();
 
-  return cookieStore.get("cartId")?.value;
+  return cookieStore.get(SHOPIFY_CART_COOKIE)?.value;
 }
 
-export async function addToCart(variantId: string): Promise<AddToCartResult> {
+export async function addToCart(
+  variantId: string,
+  quantity: number,
+): Promise<AddToCartResult> {
   if (
     typeof variantId !== "string" ||
     !/^gid:\/\/shopify\/ProductVariant\/\d+$/.test(variantId)
   ) {
     return { status: "error", message: "Choisis un format valide avant de l’ajouter." };
+  }
+  if (!Number.isInteger(quantity) || quantity < 1 || quantity > 2_147_483_647) {
+    return { status: "error", message: "La quantité choisie n’est pas valide." };
   }
 
   try {
@@ -74,7 +89,7 @@ export async function addToCart(variantId: string): Promise<AddToCartResult> {
     const cart = (await getCart()) ?? (await createCart());
     const response = await shopifyFetch(
       addToCartMutation,
-      { cartId: cart.id, merchandiseId: variantId },
+      { cartId: cart.id, merchandiseId: variantId, quantity },
       { cache: "no-store" },
     );
     const payload: ShopifyCartMutationPayload | undefined = response.data?.cartLinesAdd;
@@ -90,7 +105,7 @@ export async function addToCart(variantId: string): Promise<AddToCartResult> {
     if (payload.userErrors.length > 0) {
       return {
         status: "error",
-        message: payload.userErrors.map((error) => error.message).join(" "),
+        message: getCartErrorMessage(payload.userErrors),
       };
     }
 
@@ -99,7 +114,7 @@ export async function addToCart(variantId: string): Promise<AddToCartResult> {
     if (payload.warnings.length > 0) {
       return {
         status: "warning",
-        message: payload.warnings.map((warning) => warning.message).join(" "),
+        message: getCartWarningMessage(payload.warnings),
         totalQuantity: updatedCart.totalQuantity,
       };
     }

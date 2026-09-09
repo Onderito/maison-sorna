@@ -1,7 +1,7 @@
 export async function shopifyFetch(
   query: string,
   variables = {},
-  options: { cache?: RequestCache } = {},
+  options: { cache?: RequestCache; buyerIp?: string } = {},
 ) {
   const domain = process.env.SHOPIFY_STORE_DOMAIN;
   const storefrontAccessToken = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN;
@@ -14,14 +14,20 @@ export async function shopifyFetch(
     throw new Error("La variable SHOPIFY_STOREFRONT_ACCESS_TOKEN est manquante.");
   }
 
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    "Shopify-Storefront-Private-Token": storefrontAccessToken,
+  };
+
+  if (options.buyerIp) {
+    headers["Shopify-Storefront-Buyer-IP"] = options.buyerIp;
+  }
+
   const response = await fetch(`https://${domain}/api/2026-07/graphql.json`, {
     method: "POST",
     cache: options.cache,
 
-    headers: {
-      "Content-Type": "application/json",
-      "Shopify-Storefront-Private-Token": storefrontAccessToken,
-    },
+    headers,
 
     body: JSON.stringify({
       query,
@@ -89,6 +95,11 @@ query GetProduct($handle: String!) {
         id
         title
         availableForSale
+        quantityRule {
+          minimum
+          maximum
+          increment
+        }
 
         price {
           amount
@@ -114,12 +125,14 @@ export const createCartMutation = `
         totalQuantity
       }
       userErrors {
+        code
         field
         message
       }
       warnings {
         code
         message
+        target
       }
     }
   }
@@ -129,13 +142,14 @@ export const addToCartMutation = `
   mutation AddToCart(
     $cartId: ID!
     $merchandiseId: ID!
+    $quantity: Int!
   ) {
     cartLinesAdd(
       cartId: $cartId
       lines: [
         {
           merchandiseId: $merchandiseId
-          quantity: 1
+          quantity: $quantity
         }
       ]
     ) {
@@ -146,12 +160,14 @@ export const addToCartMutation = `
       }
 
       userErrors {
+        code
         field
         message
       }
       warnings {
         code
         message
+        target
       }
     }
   }

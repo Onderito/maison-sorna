@@ -7,12 +7,17 @@ import {
   removeCartLinesMutation,
   updateCartLinesMutation,
 } from "@/app/lib/shopify/cart";
+import {
+  getCartErrorMessage,
+  getCartWarningMessage,
+} from "@/app/lib/shopify/cart-feedback";
+import { getCartLineQuantityError } from "@/app/lib/shopify/cart-validation";
 import type { CartLineActionResult } from "@/app/lib/shopify-types";
 
 type CartLinePayload = {
   cart: { id: string; totalQuantity: number } | null;
-  userErrors: { message: string }[];
-  warnings: { message: string }[];
+  userErrors: { code: string | null; field: string[] | null; message: string }[];
+  warnings: { code: string; message: string; target: string | null }[];
 };
 
 async function mutateCartLine(
@@ -37,7 +42,17 @@ async function mutateCartLine(
     } else if (!cart.lines.some((line) => line.id === lineId)) {
       result = { status: "error", message: "Cet article n’est plus dans votre panier." };
     } else {
+      const currentLine = cart.lines.find((line) => line.id === lineId)!;
       const isRemoval = quantity === null;
+      const quantityError = quantity === null
+        ? null
+        : getCartLineQuantityError(currentLine, quantity);
+
+      if (quantityError) {
+        revalidatePath("/panier");
+        return { status: "error", message: quantityError };
+      }
+
       const field = isRemoval ? "cartLinesRemove" : "cartLinesUpdate";
       const response: { data?: Partial<Record<typeof field, CartLinePayload>> } =
         await shopifyFetch(
@@ -58,7 +73,7 @@ async function mutateCartLine(
       }
 
       if (payload.userErrors.length > 0) {
-        result = { status: "error", message: payload.userErrors.map((error) => error.message).join(" ") };
+        result = { status: "error", message: getCartErrorMessage(payload.userErrors) };
       } else {
         if (
           !payload.cart ||
@@ -69,9 +84,25 @@ async function mutateCartLine(
           throw new Error("Shopify n’a pas confirmé la modification du panier.");
         }
 
-        result = payload.warnings.length > 0
-          ? { status: "warning", message: payload.warnings.map((warning) => warning.message).join(" ") }
-          : { status: "success", message: isRemoval ? "Article supprimé du panier." : "Quantité mise à jour." };
+        const refreshedCart = await getCartDetails();
+        if (!refreshedCart) {
+          result = { status: "error", message: "Votre panier a expiré. Ajoutez à nouveau vos articles." };
+        } else {
+          const refreshedLine = refreshedCart.lines.find((line) => line.id === lineId);
+
+          if (payload.warnings.length > 0) {
+            result = { status: "warning", message: getCartWarningMessage(payload.warnings) };
+          } else if (isRemoval && refreshedLine) {
+            throw new Error("Shopify n’a pas confirmé la suppression de la ligne.");
+          } else if (!isRemoval && refreshedLine?.quantity !== quantity) {
+            throw new Error("Shopify n’a pas confirmé la quantité demandée.");
+          } else {
+            result = {
+              status: "success",
+              message: isRemoval ? "Article supprimé du panier." : "Quantité mise à jour.",
+            };
+          }
+        }
       }
     }
   } catch {

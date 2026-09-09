@@ -10,6 +10,9 @@ import type {
   ShopifyMoney,
 } from "@/app/lib/shopify-types";
 
+export const SHOPIFY_CART_COOKIE = "cartId";
+export const SHOPIFY_CART_MAX_AGE = 30 * 24 * 60 * 60;
+
 const getCartDetailsQuery = `
   query GetCartDetails($cartId: ID!, $after: String) {
     cart(id: $cartId) {
@@ -32,6 +35,12 @@ const getCartDetailsQuery = `
             ... on ProductVariant {
               id
               title
+              availableForSale
+              quantityRule {
+                minimum
+                maximum
+                increment
+              }
               image { url altText width height }
               product {
                 title
@@ -51,8 +60,8 @@ export const updateCartLinesMutation = `
   mutation UpdateCartLine($cartId: ID!, $lineId: ID!, $quantity: Int!) {
     cartLinesUpdate(cartId: $cartId, lines: [{ id: $lineId, quantity: $quantity }]) {
       cart { id totalQuantity }
-      userErrors { field message }
-      warnings { code message }
+      userErrors { code field message }
+      warnings { code message target }
     }
   }
 `;
@@ -61,8 +70,8 @@ export const removeCartLinesMutation = `
   mutation RemoveCartLine($cartId: ID!, $lineId: ID!) {
     cartLinesRemove(cartId: $cartId, lineIds: [$lineId]) {
       cart { id totalQuantity }
-      userErrors { field message }
-      warnings { code message }
+      userErrors { code field message }
+      warnings { code message target }
     }
   }
 `;
@@ -74,8 +83,8 @@ const updateCartBuyerIdentityMutation = `
       buyerIdentity: { customerAccessToken: $customerAccessToken }
     ) {
       cart { id checkoutUrl totalQuantity }
-      userErrors { field message }
-      warnings { code message }
+      userErrors { code field message }
+      warnings { code message target }
     }
   }
 `;
@@ -97,11 +106,35 @@ function isMoney(money: ShopifyMoney | undefined) {
   );
 }
 
+function isQuantityRule(
+  rule: ShopifyCartLine["merchandise"]["quantityRule"] | undefined,
+) {
+  return (
+    !!rule &&
+    Number.isInteger(rule.minimum) &&
+    rule.minimum >= 1 &&
+    Number.isInteger(rule.increment) &&
+    rule.increment >= 1 &&
+    (rule.maximum === null ||
+      (Number.isInteger(rule.maximum) && rule.maximum >= rule.minimum))
+  );
+}
+
+function isHttpsUrl(value: string) {
+  try {
+    const url = new URL(value);
+    return url.protocol === "https:" && !url.username && !url.password;
+  } catch {
+    return false;
+  }
+}
+
 function validateCart(cart: CartPage) {
   if (
     !cart ||
     typeof cart.id !== "string" ||
     typeof cart.checkoutUrl !== "string" ||
+    !isHttpsUrl(cart.checkoutUrl) ||
     !Number.isInteger(cart.totalQuantity) ||
     cart.totalQuantity < 0 ||
     !isMoney(cart.cost?.subtotalAmount) ||
@@ -122,6 +155,8 @@ function validateCart(cart: CartPage) {
       !isMoney(line.cost?.totalAmount) ||
       typeof line.merchandise?.id !== "string" ||
       typeof line.merchandise.title !== "string" ||
+      typeof line.merchandise.availableForSale !== "boolean" ||
+      !isQuantityRule(line.merchandise.quantityRule) ||
       typeof line.merchandise.product?.title !== "string" ||
       typeof line.merchandise.product.handle !== "string"
     ) {
@@ -135,6 +170,7 @@ function requireBasicCart(cart: ShopifyCart | null | undefined) {
     !cart ||
     typeof cart.id !== "string" ||
     typeof cart.checkoutUrl !== "string" ||
+    !isHttpsUrl(cart.checkoutUrl) ||
     !Number.isInteger(cart.totalQuantity) ||
     cart.totalQuantity < 0
   ) {
@@ -147,9 +183,11 @@ function requireBasicCart(cart: ShopifyCart | null | undefined) {
 export async function associateCustomerWithCart({
   cartId,
   customerAccessToken,
+  buyerIp,
 }: {
   cartId: string;
   customerAccessToken: string;
+  buyerIp?: string;
 }) {
   if (!/^gid:\/\/shopify\/Cart\/[^\s]+$/.test(cartId) || !customerAccessToken) {
     throw new Error("Les informations d’association du panier sont invalides.");
@@ -158,7 +196,7 @@ export async function associateCustomerWithCart({
   const response = await shopifyFetch(
     updateCartBuyerIdentityMutation,
     { cartId, customerAccessToken },
-    { cache: "no-store" },
+    { cache: "no-store", buyerIp },
   );
   const payload: ShopifyCartMutationPayload | undefined =
     response.data?.cartBuyerIdentityUpdate;
@@ -181,7 +219,7 @@ export async function associateCustomerWithCart({
 
 export async function getCartDetails(): Promise<ShopifyCartDetails | null> {
   const cookieStore = await cookies();
-  const cartId = cookieStore.get("cartId")?.value;
+  const cartId = cookieStore.get(SHOPIFY_CART_COOKIE)?.value;
 
   if (!cartId || !/^gid:\/\/shopify\/Cart\/[^\s]+$/.test(cartId)) {
     return null;

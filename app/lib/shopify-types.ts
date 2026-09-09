@@ -10,11 +10,18 @@ export type ShopifyImage = {
   height: number | null;
 };
 
+export type ShopifyQuantityRule = {
+  minimum: number;
+  maximum: number | null;
+  increment: number;
+};
+
 export type ShopifyVariant = {
   id: string;
   title: string;
   availableForSale: boolean;
   price: ShopifyMoney;
+  quantityRule: ShopifyQuantityRule;
 };
 
 export type ShopifyProduct = {
@@ -44,6 +51,8 @@ export type ShopifyCartLine = {
   merchandise: {
     id: string;
     title: string;
+    availableForSale: boolean;
+    quantityRule: ShopifyQuantityRule;
     image: ShopifyImage | null;
     product: {
       title: string;
@@ -70,8 +79,8 @@ export type CartLineActionResult = {
 
 export type ShopifyCartMutationPayload = {
   cart: ShopifyCart | null;
-  userErrors: { field: string[] | null; message: string }[];
-  warnings: { code: string; message: string }[];
+  userErrors: { code: string | null; field: string[] | null; message: string }[];
+  warnings: { code: string; message: string; target: string | null }[];
 };
 
 export type AddToCartResult = {

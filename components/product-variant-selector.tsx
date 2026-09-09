@@ -33,7 +33,7 @@ export default function ProductVariantSelector({
     setFeedback(null);
     startTransition(async () => {
       try {
-        const result = await addToCart(variant.id);
+        const result = await addToCart(variant.id, variant.quantityRule.minimum);
         setFeedback({ ...result, message: `${variant.title} : ${result.message}` });
         if (result.status !== "error") router.refresh();
       } catch {
@@ -99,7 +99,9 @@ export default function ProductVariantSelector({
         {isPending
           ? "Ajout en cours…"
           : selectedVariant.availableForSale
-            ? "Ajouter au panier"
+            ? selectedVariant.quantityRule.minimum > 1
+              ? `Ajouter ${selectedVariant.quantityRule.minimum} au panier`
+              : "Ajouter au panier"
             : "Format indisponible"}
       </button>
 

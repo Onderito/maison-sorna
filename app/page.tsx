@@ -8,9 +8,9 @@ export default function Home() {
     <>
       <SiteNavigation />
       <main>
-        {/* <HeroSection />
-      <RessentirSlider />
-      <RessentiHero /> */}
+        <HeroSection />
+        <RessentirSlider />
+        <RessentiHero />
       </main>
     </>
   );

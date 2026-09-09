@@ -18,6 +18,9 @@ export default function CartContents({ cart }: { cart: CartView | null }) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [feedback, setFeedback] = useState<CartLineActionResult | null>(null);
+  const hasUnavailableLine = cart?.lines.some(
+    (line) => !line.merchandise.availableForSale,
+  ) ?? false;
 
   function changeLine(lineId: string, quantity: number | null) {
     if (isPending) return;
@@ -59,6 +62,11 @@ export default function CartContents({ cart }: { cart: CartView | null }) {
                 const variant = line.merchandise;
                 const image = variant.image ?? variant.product.featuredImage;
                 const label = `${variant.product.title}${variant.title === "Default Title" ? "" : ` — ${variant.title}`}`;
+                const { minimum, maximum, increment } = variant.quantityRule;
+                const canDecrease = line.quantity - increment >= minimum;
+                const canIncrease =
+                  variant.availableForSale &&
+                  (maximum === null || line.quantity + increment <= maximum);
 
                 return (
                   <li key={line.id} className="flex gap-4 py-6 first:pt-0 sm:gap-6">
@@ -80,12 +88,23 @@ export default function CartContents({ cart }: { cart: CartView | null }) {
                         </Link>
                       </h2>
                       {variant.title !== "Default Title" && <p className="text-sm">Format : {variant.title}</p>}
+                      {!variant.availableForSale && (
+                        <p className="text-sm" role="alert">
+                          Cet article est actuellement indisponible. Supprimez-le du panier pour continuer.
+                        </p>
+                      )}
+                      {(minimum > 1 || increment > 1 || maximum !== null) && (
+                        <p className="text-xs">
+                          Quantité : minimum {minimum}, par {increment}
+                          {maximum !== null ? `, maximum ${maximum}` : ""}.
+                        </p>
+                      )}
                       <div className="flex flex-wrap items-center gap-3">
                         <div role="group" aria-label={`Quantité : ${label}`} className="inline-flex items-center rounded-lg border border-foreground/25">
                           <button
                             type="button"
-                            onClick={() => changeLine(line.id, line.quantity - 1)}
-                            disabled={isPending || line.quantity <= 1}
+                            onClick={() => changeLine(line.id, line.quantity - increment)}
+                            disabled={isPending || !canDecrease}
                             aria-label={`Diminuer la quantité : ${label}`}
                             className="size-11 cursor-pointer rounded-l-lg transition-[background-color,transform] duration-150 hover:bg-foreground/5 focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground active:scale-[0.96] disabled:cursor-not-allowed disabled:opacity-35 disabled:active:scale-100 motion-reduce:transform-none motion-reduce:transition-none"
                           >
@@ -94,8 +113,8 @@ export default function CartContents({ cart }: { cart: CartView | null }) {
                           <span className="min-w-10 px-2 text-center text-sm tabular-nums">{line.quantity}</span>
                           <button
                             type="button"
-                            onClick={() => changeLine(line.id, line.quantity + 1)}
-                            disabled={isPending || line.quantity >= 2_147_483_647}
+                            onClick={() => changeLine(line.id, line.quantity + increment)}
+                            disabled={isPending || !canIncrease}
                             aria-label={`Augmenter la quantité : ${label}`}
                             className="size-11 cursor-pointer rounded-r-lg transition-[background-color,transform] duration-150 hover:bg-foreground/5 focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground active:scale-[0.96] disabled:cursor-not-allowed disabled:opacity-35 disabled:active:scale-100 motion-reduce:transform-none motion-reduce:transition-none"
                           >
@@ -130,11 +149,18 @@ export default function CartContents({ cart }: { cart: CartView | null }) {
               </div>
             </dl>
             <p className="text-sm leading-relaxed">Les frais de livraison et le montant final seront confirmés au paiement.</p>
+            {hasUnavailableLine && (
+              <p className="text-sm" role="alert">
+                Retirez les articles indisponibles avant de passer au paiement.
+              </p>
+            )}
             <a
               href="/api/checkout"
-              aria-disabled={isPending}
-              tabIndex={isPending ? -1 : undefined}
-              onClick={(event) => { if (isPending) event.preventDefault(); }}
+              aria-disabled={isPending || hasUnavailableLine}
+              tabIndex={isPending || hasUnavailableLine ? -1 : undefined}
+              onClick={(event) => {
+                if (isPending || hasUnavailableLine) event.preventDefault();
+              }}
               className="flex min-h-12 w-full items-center justify-center rounded-lg bg-foreground px-6 py-3 text-center font-medium text-background transition-[opacity,transform] duration-150 hover:opacity-85 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-foreground active:scale-[0.96] aria-disabled:pointer-events-none aria-disabled:opacity-50 motion-reduce:transform-none motion-reduce:transition-none"
             >
               Passer au paiement
