@@ -2,20 +2,68 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #211915;
+  --accent: #a9823d;
+  --button: #342018;
+  --text-on-light: #211915;
+  --text-on-dark: #e9e2d6;
+  --image-noise-opacity: 0.12;
+  --layout-columns: 4;
+  --layout-margin: 10px;
+  --layout-gutter: 20px;
+  --space-unit: 8px;
+  --space-1: var(--space-unit);
+  --space-2: calc(var(--space-unit) * 2);
+  --space-3: calc(var(--space-unit) * 3);
+  --space-4: calc(var(--space-unit) * 4);
+  --space-5: calc(var(--space-unit) * 5);
+  --space-6: calc(var(--space-unit) * 6);
+  --space-8: calc(var(--space-unit) * 8);
+  --space-10: calc(var(--space-unit) * 10);
+  --space-12: calc(var(--space-unit) * 12);
+  --space-16: calc(var(--space-unit) * 16);
+}
+
+@media (min-width: 768px) {
+  :root {
+    --layout-columns: 6;
+    --layout-margin: 20px;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --layout-columns: 10;
+  }
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-manrope);
-  --font-display: "Bodoni 72", "Bodoni MT", Didot, serif;
+  --font-display: var(--font-cormorant-garamond), Georgia, serif;
+  --color-accent: var(--accent);
+  --color-button: var(--button);
+  --color-text-on-light: var(--text-on-light);
+  --color-text-on-dark: var(--text-on-dark);
+}
+
+/* Shared layout foundation. Keep full-bleed media outside this container. */
+@utility site-container {
+  width: calc(100% - var(--layout-margin) * 2);
+  margin-inline: auto;
+}
+
+@utility site-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--layout-columns), minmax(0, 1fr));
+  column-gap: var(--layout-gutter);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
-    --foreground: #ededed;
+    --foreground: var(--text-on-dark);
   }
 }
 
@@ -23,4 +71,29 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-manrope), Arial, Helvetica, sans-serif;
+}
+
+@layer base {
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-cormorant-garamond), Georgia, serif;
+  }
+}
+
+/* Apply to the photograph wrapper; keep logos and icons untextured. */
+.image-grain {
+  position: relative;
+  isolation: isolate;
+}
+
+.image-grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  pointer-events: none;
+  background-image: url("/textures/noise.svg");
+  background-repeat: repeat;
+  opacity: var(--image-noise-opacity);
+  mix-blend-mode: soft-light;
 }

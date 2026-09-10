@@ -1,0 +1,75 @@
+.process {
+  position: relative;
+  isolation: isolate;
+}
+
+.step {
+  position: sticky;
+  top: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 58svh) minmax(0, 42svh);
+  height: 100svh;
+  overflow: hidden;
+  color: var(--text-on-light);
+  background: var(--text-on-dark) url("/figma/infuser/process/background.png") center / cover;
+}
+
+.step:nth-child(1) { z-index: 1; }
+.step:nth-child(2) { z-index: 2; }
+.step:nth-child(3) { z-index: 3; }
+.step:nth-child(4) { z-index: 4; }
+.step:nth-child(5) { z-index: 5; }
+
+.editorial {
+  position: relative;
+  min-height: 0;
+}
+
+.copy {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 20px 40px 20px 80px;
+}
+
+.botanical {
+  position: absolute;
+  top: 54%;
+  left: 50%;
+  width: 240px;
+  height: 290px;
+  transform: translate(-50%, -25%);
+}
+
+.botanical .botanicalImage {
+  object-fit: contain;
+}
+
+.scene {
+  position: relative;
+  min-height: 0;
+}
+
+@media (min-width: 768px) {
+  .step {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr);
+    gap: 20px;
+  }
+
+  .copy {
+    gap: 32px;
+    max-width: 682px;
+  }
+
+  .botanical {
+    top: 52.91%;
+    left: 49.5%;
+    width: 34%;
+    height: 42%;
+    transform: translate(-50%, -50%);
+  }
+}

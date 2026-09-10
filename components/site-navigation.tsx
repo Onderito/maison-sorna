@@ -4,9 +4,9 @@ import Link from "next/link";
 import CustomerAccountLink from "@/components/customer-account-link";
 
 const navigation = [
-  { label: "Infuser", href: "/#infuser" },
-  { label: "Appliquer", href: "/#appliquer" },
-  { label: "Ressentir", href: "/#ressentir" },
+  { label: "Infuser", href: "/infuser" },
+  { label: "Appliquer", href: "/appliquer" },
+  { label: "Ressentir", href: "/ressentir" },
 ] as const;
 
 type SiteNavigationProps = {
@@ -27,7 +27,7 @@ export default function SiteNavigation({
         overlay
           ? "absolute top-[clamp(1.5rem,4.57vh,3.1875rem)] left-1/2 -translate-x-1/2"
           : "relative mx-auto my-6 md:my-8"
-      } ${tone === "light" ? "text-white" : tone === "dark" ? "text-[#211915]" : "text-foreground"}`}
+      } ${tone === "light" ? "text-text-on-dark" : tone === "dark" ? "text-text-on-light" : "text-foreground"}`}
     >
       <Link
         href="/"

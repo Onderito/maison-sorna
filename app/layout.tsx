@@ -1,14 +1,22 @@
 import type { Metadata } from "next";
-import { Manrope } from "next/font/google";
+import { Cormorant_Garamond, Manrope } from "next/font/google";
 import { cookies } from "next/headers";
 
 import { CUSTOMER_AUTH_COOKIES } from "@/app/lib/shopify/customers";
 import { CustomerSessionProvider } from "@/components/customer-session-provider";
+import { SmoothScroll } from "@/components/smooth-scroll";
 
+import "lenis/dist/lenis.css";
 import "./globals.css";
 
 const manrope = Manrope({
   variable: "--font-manrope",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const cormorantGaramond = Cormorant_Garamond({
+  variable: "--font-cormorant-garamond",
   subsets: ["latin"],
   display: "swap",
 });
@@ -23,10 +31,10 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   const initialAuthenticated = cookieStore.has(CUSTOMER_AUTH_COOKIES.accessToken);
 
   return (
-    <html lang="fr" className={`${manrope.variable} h-full antialiased`}>
+    <html lang="fr" className={`${manrope.variable} ${cormorantGaramond.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
         <CustomerSessionProvider initialAuthenticated={initialAuthenticated}>
-          {children}
+          <SmoothScroll>{children}</SmoothScroll>
         </CustomerSessionProvider>
       </body>
     </html>

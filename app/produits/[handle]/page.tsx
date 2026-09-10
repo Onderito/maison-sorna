@@ -39,6 +39,7 @@ export default async function ProductPage({
       </header>
 
       {product.featuredImage && (
+        <div className="image-grain">
         <Image
           src={product.featuredImage.url}
           alt={product.featuredImage.altText ?? product.title}
@@ -47,6 +48,7 @@ export default async function ProductPage({
           sizes="(max-width: 768px) calc(100vw - 48px), 720px"
           className="h-96 w-full object-cover"
         />
+        </div>
       )}
 
       <ProductVariantSelector

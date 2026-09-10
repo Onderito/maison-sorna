@@ -1,17 +1,11 @@
-import HeroSection from "@/components/hero-section";
-import RessentiHero from "@/components/ressenti-hero";
-import RessentirSlider from "@/components/ressentir-slider";
-import SiteNavigation from "@/components/site-navigation";
+import HeroSection from "@/app/_components/hero-section";
+import UniversCarousel from "@/app/_components/univers-carousel";
 
 export default function Home() {
   return (
-    <>
-      <SiteNavigation />
-      <main>
-        <HeroSection />
-        <RessentirSlider />
-        <RessentiHero />
-      </main>
-    </>
+    <main>
+      <HeroSection />
+      <UniversCarousel />
+    </main>
   );
 }

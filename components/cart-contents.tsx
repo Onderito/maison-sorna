@@ -71,7 +71,7 @@ export default function CartContents({ cart }: { cart: CartView | null }) {
                 return (
                   <li key={line.id} className="flex gap-4 py-6 first:pt-0 sm:gap-6">
                     {image && (
-                      <div className="relative size-20 shrink-0 overflow-hidden rounded-md sm:size-28">
+                      <div className="image-grain relative size-20 shrink-0 overflow-hidden rounded-md sm:size-28">
                         <Image
                           src={image.url}
                           alt={image.altText ?? variant.product.title}
@@ -161,7 +161,7 @@ export default function CartContents({ cart }: { cart: CartView | null }) {
               onClick={(event) => {
                 if (isPending || hasUnavailableLine) event.preventDefault();
               }}
-              className="flex min-h-12 w-full items-center justify-center rounded-lg bg-foreground px-6 py-3 text-center font-medium text-background transition-[opacity,transform] duration-150 hover:opacity-85 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-foreground active:scale-[0.96] aria-disabled:pointer-events-none aria-disabled:opacity-50 motion-reduce:transform-none motion-reduce:transition-none"
+              className="flex min-h-12 w-full items-center justify-center rounded-lg bg-button px-6 py-3 text-center font-medium text-text-on-dark transition-[opacity,transform] duration-150 hover:opacity-85 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-foreground active:scale-[0.96] aria-disabled:pointer-events-none aria-disabled:opacity-50 motion-reduce:transform-none motion-reduce:transition-none"
             >
               Passer au paiement
             </a>

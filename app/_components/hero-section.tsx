@@ -22,7 +22,7 @@ export function HeroSection({
 }: HeroSectionProps) {
   return (
     <section
-      className={`relative isolate min-h-[100svh] overflow-hidden bg-[#211915] text-[#e9e2d6] ${className}`}
+      className={`relative isolate min-h-[100svh] overflow-hidden bg-[#211915] text-text-on-dark ${className}`}
       aria-labelledby="hero-title"
     >
       <div

@@ -30,7 +30,7 @@ export function RessentirSlider({
   return (
     <section
       id="ressentir"
-      className={`relative isolate min-h-[100svh] overflow-hidden bg-[#18150f] text-[#e9e2d6] ${className}`}
+      className={`relative isolate min-h-[100svh] overflow-hidden bg-[#18150f] text-text-on-dark ${className}`}
       aria-label="Ressentir"
     >
       <div
@@ -62,7 +62,7 @@ export function RessentirSlider({
       {/* <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rotate-[4.71deg]">
         <a
           href={discoverHref}
-          className="group relative block h-[clamp(11.875rem,21.49vw,15rem)] w-[clamp(9.25rem,10.88vw,11.75rem)] border-2 border-[#ae8e39] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+          className="group relative block h-[clamp(11.875rem,21.49vw,15rem)] w-[clamp(9.25rem,10.88vw,11.75rem)] border-2 border-accent focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
           aria-label="Découvrir Ressentir"
         >
           <Image
@@ -72,7 +72,7 @@ export function RessentirSlider({
             sizes="(max-width: 768px) 148px, 188px"
             className="object-cover transition-transform duration-500 [transition-timing-function:cubic-bezier(0.2,0,0,1)] group-hover:scale-[1.04] group-active:scale-[0.96]"
           />
-          <span className="absolute inset-0 flex items-center justify-center font-sans text-base font-light whitespace-nowrap text-white md:text-xl">
+          <span className="absolute inset-0 flex items-center justify-center font-sans text-base font-light whitespace-nowrap text-text-on-dark md:text-xl">
             Découvrir →
           </span>
         </a>
@@ -95,7 +95,7 @@ export function RessentirSlider({
                   : index === 1
                     ? "text-center"
                     : "text-right"
-              } ${isActive ? "text-[#e9e2d6]" : "text-[#e9e2d6]/60"}`}
+              } ${isActive ? "text-text-on-dark" : "text-text-on-dark/60"}`}
               aria-current={isActive ? "step" : undefined}
             >
               {step.label}

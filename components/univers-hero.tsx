@@ -6,7 +6,9 @@ import SiteNavigation from "@/components/site-navigation";
 const defaultVideoSrc =
   "https://cdn.midjourney.com/video/5f955f2a-036c-41d6-8d47-66293ad99aca/1.mp4";
 
-type RessentiHeroProps = {
+type UniversHeroProps = {
+  title?: ReactNode;
+  id?: string;
   /** Replaces the default video with a custom background element. */
   children?: ReactNode;
   className?: string;
@@ -15,18 +17,20 @@ type RessentiHeroProps = {
   videoSrc?: string;
 };
 
-export function RessentiHero({
+export function UniversHero({
+  title = "La maison",
+  id = "la-maison",
   children,
   className = "",
   scrollTarget = "#ressentir",
   videoFadeDuration = 1.2,
   videoSrc = defaultVideoSrc,
-}: RessentiHeroProps) {
+}: UniversHeroProps) {
   return (
     <section
-      id="la-maison"
-      className={`relative isolate min-h-[100svh] overflow-hidden bg-[#18150f] text-white ${className}`}
-      aria-labelledby="ressenti-hero-title"
+      id={id}
+      className={`relative isolate min-h-[100svh] overflow-hidden bg-[#18150f] text-text-on-dark ${className}`}
+      aria-labelledby={`${id}-title`}
     >
       <div
         className="absolute inset-0 -z-20 overflow-hidden [&>*]:size-full [&_video]:object-cover"
@@ -57,10 +61,10 @@ export function RessentiHero({
             </div>
 
             <h1
-              id="ressenti-hero-title"
+              id={`${id}-title`}
               className="w-full font-display text-[clamp(3.5rem,11.57vw,12.5rem)] leading-[0.85] font-normal tracking-[-0.04em] whitespace-nowrap uppercase"
             >
-              La maison
+              {title}
             </h1>
           </div>
 
@@ -87,4 +91,4 @@ export function RessentiHero({
   );
 }
 
-export default RessentiHero;
+export default UniversHero;

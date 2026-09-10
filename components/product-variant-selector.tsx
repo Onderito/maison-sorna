@@ -94,7 +94,7 @@ export default function ProductVariantSelector({
         onClick={handleAddToCart}
         disabled={isPending || !selectedVariant.availableForSale}
         aria-busy={isPending}
-        className="min-h-12 w-full cursor-pointer rounded-lg bg-foreground px-6 py-3 font-medium text-background transition-[opacity,transform] duration-150 hover:opacity-85 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-foreground active:scale-[0.96] disabled:cursor-not-allowed disabled:opacity-50 disabled:active:scale-100 motion-reduce:transform-none motion-reduce:transition-none sm:w-auto"
+        className="min-h-12 w-full cursor-pointer rounded-lg bg-button px-6 py-3 font-medium text-text-on-dark transition-[opacity,transform] duration-150 hover:opacity-85 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-foreground active:scale-[0.96] disabled:cursor-not-allowed disabled:opacity-50 disabled:active:scale-100 motion-reduce:transform-none motion-reduce:transition-none sm:w-auto"
       >
         {isPending
           ? "Ajout en cours…"
