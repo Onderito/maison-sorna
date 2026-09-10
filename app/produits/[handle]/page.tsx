@@ -35,7 +35,7 @@ export default async function ProductPage({
     <main className="mx-auto w-full max-w-3xl space-y-8 px-6 py-12">
       <header className="space-y-4">
         <h1 className="text-3xl">{product.title}</h1>
-        <p className="whitespace-pre-line">{product.description}</p>
+        <p className="whitespace-pre-line opacity-80">{product.description}</p>
       </header>
 
       {product.featuredImage && (

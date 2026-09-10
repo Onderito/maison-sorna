@@ -87,7 +87,7 @@ export default function CartContents({ cart }: { cart: CartView | null }) {
                           {variant.product.title}
                         </Link>
                       </h2>
-                      {variant.title !== "Default Title" && <p className="text-sm">Format : {variant.title}</p>}
+                      {variant.title !== "Default Title" && <p className="text-sm opacity-80">Format : {variant.title}</p>}
                       {!variant.availableForSale && (
                         <p className="text-sm" role="alert">
                           Cet article est actuellement indisponible. Supprimez-le du panier pour continuer.
@@ -131,7 +131,7 @@ export default function CartContents({ cart }: { cart: CartView | null }) {
                           Supprimer
                         </button>
                       </div>
-                      <p className="text-sm tabular-nums">Prix unitaire : {formatMoney(line.cost.amountPerQuantity)}</p>
+                      <p className="text-sm tabular-nums opacity-80">Prix unitaire : {formatMoney(line.cost.amountPerQuantity)}</p>
                       <p className="font-display text-xl tabular-nums">{formatMoney(line.cost.totalAmount)}</p>
                     </div>
                   </li>
@@ -149,7 +149,7 @@ export default function CartContents({ cart }: { cart: CartView | null }) {
                 <dd className="font-medium tabular-nums">{formatMoney(cart.cost.subtotalAmount)}</dd>
               </div>
             </dl>
-            <p className="text-sm leading-relaxed">Les frais de livraison et le montant final seront confirmés au paiement.</p>
+            <p className="text-sm leading-relaxed opacity-80">Les frais de livraison et le montant final seront confirmés au paiement.</p>
             {hasUnavailableLine && (
               <p className="text-sm" role="alert">
                 Retirez les articles indisponibles avant de passer au paiement.

@@ -86,7 +86,7 @@ function formatOrderPrice(order: CustomerOrder) {
 function OrderHistory({ orders }: { orders: CustomerOrder[] }) {
   if (orders.length === 0) {
     return (
-      <p className="mt-5 max-w-md text-base leading-7 opacity-75">
+      <p className="mt-5 max-w-md text-base leading-7 opacity-80">
         Vous n’avez pas encore passé de commande avec ce compte.
       </p>
     );
@@ -125,7 +125,7 @@ function OrderHistory({ orders }: { orders: CustomerOrder[] }) {
 function AddressBook({ addresses }: { addresses: CustomerAddress[] }) {
   if (addresses.length === 0) {
     return (
-      <p className="mt-5 max-w-md text-base leading-7 opacity-75">
+      <p className="mt-5 max-w-md text-base leading-7 opacity-80">
         Aucune adresse n’est encore enregistrée sur ce compte.
       </p>
     );
@@ -146,7 +146,7 @@ function AddressBook({ addresses }: { addresses: CustomerAddress[] }) {
               <p className="text-[0.65rem] tracking-[0.14em] uppercase opacity-60">Par défaut</p>
             )}
           </div>
-          <address className="mt-4 text-sm leading-6 not-italic opacity-75">
+          <address className="mt-4 text-sm leading-6 not-italic opacity-80">
             {address.company && <span className="block">{address.company}</span>}
             {address.formatted.map((line, lineIndex) => (
               <span key={`${lineIndex}-${line}`} className="block">{line}</span>
@@ -194,7 +194,7 @@ export default async function AccountPage({
             </div>
           ) : (
             <div>
-              <p className="max-w-md text-base leading-7 opacity-75">
+              <p className="max-w-md text-base leading-7 opacity-80">
                 Connectez-vous pour retrouver vos informations et vos commandes Maison Sörna.
               </p>
               {erreur === "authentification" && (

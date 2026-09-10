@@ -79,13 +79,13 @@ export default async function CustomerOrderPage({
           <section className="border-t border-current pt-5">
             <h2 className="text-xs tracking-[0.16em] uppercase opacity-60">Livraison</h2>
             {order.shippingAddress ? (
-              <address className="mt-5 text-sm leading-6 not-italic opacity-75">
+              <address className="mt-5 text-sm leading-6 not-italic opacity-80">
                 {order.shippingAddress.name && <span className="block">{order.shippingAddress.name}</span>}
                 {order.shippingAddress.formatted.map((line, index) => (
                   <span key={`${index}-${line}`} className="block">{line}</span>
                 ))}
               </address>
-            ) : <p className="mt-5 text-sm opacity-75">Aucune adresse de livraison.</p>}
+            ) : <p className="mt-5 text-sm opacity-80">Aucune adresse de livraison.</p>}
           </section>
         </div>
       </div>
