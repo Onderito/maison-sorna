@@ -32,6 +32,7 @@ export function HeroSection({
         {children ?? (
           <SeamlessBackgroundVideo
             fadeDuration={videoFadeDuration}
+            poster="/figma/infuser/hero.png"
             src={videoSrc}
           />
         )}

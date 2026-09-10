@@ -40,21 +40,21 @@ export default function CartContents({ cart }: { cart: CartView | null }) {
   }
 
   return (
-    <div className="space-y-6">
-      <div role="status" aria-atomic="true" className="min-h-6 text-sm">
+    <div>
+      <div role="status" aria-atomic="true" className="min-h-6 text-xs tracking-[0.12em] uppercase opacity-60">
         {isPending ? "Mise à jour du panier…" : feedback?.message}
       </div>
       {!cart || cart.totalQuantity === 0 ? (
-        <div className="space-y-4">
-          <p>Votre panier est vide.</p>
-          <Link href="/" className="inline-flex min-h-11 items-center underline underline-offset-4">
+        <div className="py-10 md:py-16">
+          <p className="max-w-xl font-display text-[clamp(2rem,5vw,4.5rem)] leading-none tracking-[-0.035em]">Votre panier est vide.</p>
+          <Link href="/" className="mt-8 inline-flex min-h-11 items-center border-b border-current text-xs tracking-[0.14em] uppercase transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current active:opacity-50 motion-reduce:transition-none">
             Retour à l’accueil
           </Link>
         </div>
       ) : (
-        <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,1.7fr)_minmax(0,1fr)]">
+        <div className="grid items-start gap-14 lg:grid-cols-[minmax(0,1.65fr)_minmax(18rem,0.7fr)] lg:gap-20">
           <section aria-label="Articles du panier">
-            <p className="mb-6 text-sm">
+            <p className="mb-6 text-xs tracking-[0.16em] uppercase opacity-60">
               {cart.totalQuantity} {cart.totalQuantity > 1 ? "articles" : "article"}
             </p>
             <ul className="divide-y divide-foreground/15">
@@ -77,12 +77,12 @@ export default function CartContents({ cart }: { cart: CartView | null }) {
                           alt={image.altText ?? variant.product.title}
                           fill
                           sizes="(max-width: 640px) 80px, 112px"
-                          className="object-cover"
+                          className="object-cover outline -outline-offset-1 outline-black/10"
                         />
                       </div>
                     )}
                     <div className="min-w-0 flex-1 space-y-2">
-                      <h2 className="text-lg font-medium">
+                      <h2 className="font-display text-2xl tracking-[-0.02em] md:text-3xl">
                         <Link href={`/produits/${encodeURIComponent(variant.product.handle)}`} className="hover:underline focus-visible:outline-2 focus-visible:outline-offset-4">
                           {variant.product.title}
                         </Link>
@@ -132,7 +132,7 @@ export default function CartContents({ cart }: { cart: CartView | null }) {
                         </button>
                       </div>
                       <p className="text-sm tabular-nums">Prix unitaire : {formatMoney(line.cost.amountPerQuantity)}</p>
-                      <p className="font-medium tabular-nums">Total : {formatMoney(line.cost.totalAmount)}</p>
+                      <p className="font-display text-xl tabular-nums">{formatMoney(line.cost.totalAmount)}</p>
                     </div>
                   </li>
                 );
@@ -140,8 +140,9 @@ export default function CartContents({ cart }: { cart: CartView | null }) {
             </ul>
           </section>
 
-          <section aria-labelledby="cart-summary-title" className="space-y-6 rounded-xl border border-foreground/15 p-6">
-            <h2 id="cart-summary-title" className="text-xl">Récapitulatif</h2>
+          <section aria-labelledby="cart-summary-title" className="space-y-6 border-t border-current pt-6 lg:sticky lg:top-8">
+            <p className="text-xs tracking-[0.16em] uppercase opacity-60">Commande</p>
+            <h2 id="cart-summary-title" className="font-display text-4xl tracking-[-0.03em]">Récapitulatif</h2>
             <dl>
               <div className="flex flex-wrap justify-between gap-3">
                 <dt>{cart.cost.subtotalAmountEstimated ? "Sous-total estimé" : "Sous-total"}</dt>
@@ -161,7 +162,7 @@ export default function CartContents({ cart }: { cart: CartView | null }) {
               onClick={(event) => {
                 if (isPending || hasUnavailableLine) event.preventDefault();
               }}
-              className="flex min-h-12 w-full items-center justify-center rounded-lg bg-button px-6 py-3 text-center font-medium text-text-on-dark transition-[opacity,transform] duration-150 hover:opacity-85 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-foreground active:scale-[0.96] aria-disabled:pointer-events-none aria-disabled:opacity-50 motion-reduce:transform-none motion-reduce:transition-none"
+              className="flex min-h-14 w-full items-center justify-center bg-button px-6 py-4 text-center text-xs tracking-[0.14em] uppercase text-text-on-dark transition-[opacity,transform] duration-150 hover:opacity-85 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-foreground active:scale-[0.96] aria-disabled:pointer-events-none aria-disabled:opacity-50 motion-reduce:transform-none motion-reduce:transition-none"
             >
               Passer au paiement
             </a>
