@@ -97,3 +97,8 @@ body {
   opacity: var(--image-noise-opacity);
   mix-blend-mode: soft-light;
 }
+
+/* Warm paper surface used by the storefront's commerce pages. */
+.paper-background {
+  background: var(--text-on-dark) url("/figma/infuser/process/background.png") center top / cover fixed;
+}
