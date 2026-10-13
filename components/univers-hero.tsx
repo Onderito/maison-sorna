@@ -42,6 +42,7 @@ export function UniversHero({
             src={videoSrc}
           />
         )}
+        <span className="image-grain-overlay" aria-hidden="true" />
       </div>
 
       <SiteNavigation overlay tone="light" />
@@ -51,12 +52,12 @@ export function UniversHero({
           <div className="flex w-full flex-col items-center gap-3 md:gap-4">
             <div className="relative h-[clamp(5.75rem,11.9vh,8.375rem)] w-[clamp(4.5rem,6.02vw,6.5rem)] shrink-0 overflow-hidden">
               <Image
-                src="/figma/hero/monogram.png"
+                src="/logos/sorna-beige.png"
                 alt=""
-                width={104}
-                height={156}
+                width={330}
+                height={708}
                 priority
-                className="absolute -top-[5.97%] left-0 h-[116.42%] w-full max-w-none"
+                className="h-full w-full object-contain"
               />
             </div>
 
@@ -68,9 +69,6 @@ export function UniversHero({
             </h1>
           </div>
 
-          <p className="font-sans text-sm leading-normal text-pretty md:text-xl">
-            Grand cru Botannique
-          </p>
         </div>
       </div>
 

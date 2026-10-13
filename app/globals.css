@@ -2,12 +2,13 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #211915;
+  --foreground: #40200c;
   --accent: #a9823d;
-  --button: #342018;
-  --text-on-light: #211915;
+  --button: #40200c;
+  --text-on-light: #40200c;
   --text-on-dark: #e9e2d6;
-  --image-noise-opacity: 0.12;
+  --image-noise-opacity: 0.25;
+  --image-noise-size: 0.5px;
   --layout-columns: 4;
   --layout-margin: 10px;
   --layout-gutter: 20px;
@@ -85,18 +86,22 @@ body {
   isolation: isolate;
 }
 
-.image-grain::after {
+.image-grain::after,
+.image-grain-overlay {
   content: "";
   position: absolute;
   inset: 0;
   z-index: 1;
   border-radius: inherit;
   pointer-events: none;
-  background-image: url("/textures/noise.svg");
+  background-image: url("/textures/grain-mono.svg");
   background-repeat: repeat;
+  background-size: calc(160 * var(--image-noise-size)) calc(160 * var(--image-noise-size));
   opacity: var(--image-noise-opacity);
-  mix-blend-mode: soft-light;
+  mix-blend-mode: normal;
 }
+
+.image-grain-overlay { z-index: 30; }
 
 /* Warm paper surface used by the storefront's commerce pages. */
 .paper-background {

@@ -32,9 +32,9 @@ export default function SiteNavigation({
       <Link
         href="/"
         className="flex min-h-11 shrink-0 items-center font-display text-sm leading-none whitespace-nowrap uppercase transition-transform duration-200 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current active:scale-[0.96] motion-reduce:transform-none motion-reduce:transition-none md:text-lg"
-        aria-label="Maison Sörna, accueil"
+        aria-label="SÖRNA, accueil"
       >
-        Maison Sörna
+        SÖRNA
       </Link>
 
       <nav

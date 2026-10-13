@@ -8,7 +8,7 @@ import {
 } from "@/app/lib/shopify/customer-orders";
 import { getCustomerProfile } from "@/app/lib/shopify/customers";
 
-export const metadata: Metadata = { title: "Commande | Maison Sörna" };
+export const metadata: Metadata = { title: "Commande | SÖRNA" };
 
 function formatMoney(money: CustomerMoney | null) {
   if (!money) return "—";

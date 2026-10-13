@@ -1,7 +1,7 @@
 export async function shopifyFetch(
   query: string,
   variables = {},
-  options: { cache?: RequestCache; buyerIp?: string } = {},
+  options: { cache?: RequestCache; buyerIp?: string; next?: { revalidate: number; tags?: string[] } } = {},
 ) {
   const domain = process.env.SHOPIFY_STORE_DOMAIN;
   const storefrontAccessToken = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN;
@@ -26,6 +26,7 @@ export async function shopifyFetch(
   const response = await fetch(`https://${domain}/api/2026-07/graphql.json`, {
     method: "POST",
     cache: options.cache,
+    next: options.next,
 
     headers,
 

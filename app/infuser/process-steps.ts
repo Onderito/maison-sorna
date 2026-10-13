@@ -7,6 +7,7 @@ export type ProcessStep = {
   number: number;
   title: string;
   description: string | null;
+  cuvees: readonly string[];
   images: {
     botanical: ProcessImage;
     scene: ProcessImage;
@@ -23,8 +24,9 @@ export const processSteps: readonly [
   {
     number: 1,
     title: "Récolte",
+    cuvees: ["Pivoine Royale", "Brume des Cimes", "Écorce de Feu", "Miel d’Orchidée", "Sourcil d’Or"],
     description:
-      "Les jeunes feuilles sont prélevées à maturité, au moment où leur expression aromatique est la plus juste. Une récolte précise, à l’origine du caractère de chaque cru.",
+      "Bourgeons seuls ou feuilles plus mûres : chaque cru appelle sa cueillette. Au printemps, le choix de la pousse et du moment donne au thé son premier caractère.",
     images: {
       botanical: {
         src: "/figma/infuser/process/01-illu.webp",
@@ -39,8 +41,9 @@ export const processSteps: readonly [
   {
     number: 2,
     title: "Flétrissage",
+    cuvees: ["Pivoine Royale"],
     description:
-      "Délicatement étalées, les feuilles reposent jusqu’à perdre une part de leur humidité. Elles s’assouplissent lentement et concentrent leurs arômes, prêtes à révéler toute leur complexité.",
+      "Pour Pivoine Royale, les feuilles sont longuement étalées et perdent une part de leur humidité. Ce flétrissage est suivi d’un séchage : deux gestes qui préservent la délicatesse du thé blanc.",
     images: {
       botanical: {
         src: "/figma/infuser/process/02-illu.webp",
@@ -55,8 +58,9 @@ export const processSteps: readonly [
   {
     number: 3,
     title: "Oxydation",
+    cuvees: ["Écorce de Feu", "Miel d’Orchidée", "Sourcil d’Or"],
     description:
-      "Au contact de l’air, la feuille se transforme et sa couleur s’approfondit. Cette évolution maîtrisée façonne la richesse aromatique du cru, entre notes végétales, florales et fruitées.",
+      "Au contact de l’air, la feuille se transforme. Partielle pour les oolongs Écorce de Feu et Miel d’Orchidée, complète pour le thé noir Sourcil d’Or, l’oxydation façonne le caractère de chaque cru.",
     images: {
       botanical: {
         src: "/figma/infuser/process/03-illu.webp",
@@ -70,9 +74,10 @@ export const processSteps: readonly [
   },
   {
     number: 4,
-    title: "Chauffe / fixation",
+    title: "Fixation",
+    cuvees: ["Brume des Cimes"],
     description:
-      "Une chauffe précise interrompt l’oxydation au moment juste. Le profil aromatique se fixe, les nuances de la feuille sont préservées et l’identité du cru prend sa forme définitive.",
+      "Pour Brume des Cimes, les feuilles sont chauffées peu après la cueillette afin d’empêcher leur oxydation et de préserver leur fraîcheur. Elles sont ensuite roulées et séchées.",
     images: {
       botanical: {
         src: "/figma/infuser/process/04-illu.webp",
@@ -87,8 +92,9 @@ export const processSteps: readonly [
   {
     number: 5,
     title: "Torréfaction",
+    cuvees: ["Écorce de Feu"],
     description:
-      "Lentement torréfiées, les feuilles gagnent en profondeur et développent leurs notes chaudes. Ce dernier geste affine leur équilibre, stabilise leurs arômes et signe la longueur du cru.",
+      "Après une oxydation partielle, Écorce de Feu est torréfié, puis laissé au repos pour que le feu se fonde dans la feuille. Ce travail de patience révèle sa structure et sa longueur en bouche.",
     images: {
       botanical: {
         src: "/figma/infuser/process/05-illu.webp",

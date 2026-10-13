@@ -32,10 +32,11 @@ export function HeroSection({
         {children ?? (
           <SeamlessBackgroundVideo
             fadeDuration={videoFadeDuration}
-            poster="/figma/infuser/hero.png"
+            poster="/figma/hero/video-poster.jpg"
             src={videoSrc}
           />
         )}
+        <span className="image-grain-overlay" aria-hidden="true" />
       </div>
 
       <SiteNavigation overlay tone="dark" />
@@ -45,12 +46,12 @@ export function HeroSection({
           <div className="flex w-full flex-col items-center gap-3 md:gap-4">
             <div className="relative h-[clamp(5.75rem,11.9vh,8.3125rem)] w-[clamp(4.5rem,6.02vw,6.5rem)] shrink-0 overflow-hidden">
               <Image
-                src="/figma/hero/monogram.png"
+                src="/logos/sorna-beige.png"
                 alt=""
-                width={104}
-                height={156}
+                width={330}
+                height={708}
                 priority
-                className="absolute -top-[6.77%] left-0 h-[117.29%] w-full max-w-none"
+                className="h-full w-full object-contain"
               />
             </div>
 
@@ -58,13 +59,10 @@ export function HeroSection({
               id="hero-title"
               className="w-full text-balance font-display text-[clamp(3.25rem,11.57vw,12.5rem)] leading-[0.9] font-normal tracking-[-0.04em] uppercase"
             >
-              Maison Sörna
+              SÖRNA
             </h1>
           </div>
 
-          <p className="font-sans text-sm leading-normal text-pretty md:text-xl">
-            Grand cru Botanique
-          </p>
         </div>
       </div>
 

@@ -14,7 +14,7 @@ import {
 } from "@/app/lib/shopify/customers";
 import Link from "next/link";
 
-export const metadata: Metadata = { title: "Compte | Maison Sörna" };
+export const metadata: Metadata = { title: "Compte | SÖRNA" };
 
 function capitalize(value: string) {
   return value.charAt(0).toLocaleUpperCase("fr-FR") + value.slice(1);
@@ -195,7 +195,7 @@ export default async function AccountPage({
           ) : (
             <div>
               <p className="max-w-md text-base leading-7 opacity-80">
-                Connectez-vous pour retrouver vos informations et vos commandes Maison Sörna.
+                Connectez-vous pour retrouver vos informations et vos commandes SÖRNA.
               </p>
               {erreur === "authentification" && (
                 <p className="mt-6 border-l border-current pl-4 text-sm leading-6" role="alert">

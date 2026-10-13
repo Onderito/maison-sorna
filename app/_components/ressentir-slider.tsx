@@ -43,6 +43,7 @@ export function RessentirSlider({
             src={videoSrc}
           />
         )}
+        <span className="image-grain-overlay" aria-hidden="true" />
       </div>
 
       <div
@@ -80,7 +81,7 @@ export function RessentirSlider({
 
       <nav
         className="absolute right-1/2 bottom-[clamp(1.75rem,4.2vh,2.9375rem)] grid w-[calc(100%-2rem)] max-w-[1528px] translate-x-1/2 grid-cols-3 items-center font-display text-[clamp(1rem,3.24vw,3.5rem)] leading-normal whitespace-nowrap md:w-[88.4%]"
-        aria-label="Étapes de l’expérience Maison Sörna"
+        aria-label="Étapes de l’expérience SÖRNA"
       >
         {steps.map((step, index) => {
           const isActive = index === 2;
