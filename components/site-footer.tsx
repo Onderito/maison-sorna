@@ -7,7 +7,7 @@ const groups = [
     title: "Infuser",
     links: [
       { label: "Le savoir faire", href: "/infuser#infuser" },
-      { label: "La carte", href: "/infuser#la-carte" },
+      { label: "Les cinq sommets", href: "/infuser#la-carte" },
       { label: "Le rituel", href: "/infuser" },
       { label: "L’art de l’accord", href: "/infuser" },
     ],
@@ -22,8 +22,8 @@ const groups = [
   {
     title: "Ressentir",
     links: [
-      { label: "Les origines", href: "/ressentir" },
-      { label: "Le regard", href: "/ressentir" },
+      { label: "Les origines", href: "/ressentir#les-origines" },
+      { label: "Le regard", href: "/ressentir#le-regard" },
       { label: "À l’origine de la maison", href: "/ressentir" },
       { label: "Ceux qui font le reste", href: "/ressentir" },
     ],

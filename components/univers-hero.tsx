@@ -63,7 +63,7 @@ export function UniversHero({
 
             <h1
               id={`${id}-title`}
-              className="w-full font-display text-[clamp(3.5rem,11.57vw,12.5rem)] leading-[0.85] font-normal tracking-[-0.04em] whitespace-nowrap uppercase"
+              className="w-full font-display text-[length:var(--hero-title-mobile)] md:text-[clamp(3.5rem,11.57vw,12.5rem)] leading-[0.85] font-normal tracking-[-0.04em] text-balance md:whitespace-nowrap uppercase"
             >
               {title}
             </h1>

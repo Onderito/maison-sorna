@@ -8,6 +8,8 @@ type SeamlessBackgroundVideoProps = {
   className?: string;
   fadeDuration?: number;
   poster?: string;
+  /** The source already contains its loop transition; use native looping. */
+  seamlessLoop?: boolean;
   src: string;
 };
 
@@ -15,6 +17,7 @@ export function SeamlessBackgroundVideo({
   className = "",
   fadeDuration = 1.2,
   poster,
+  seamlessLoop = false,
   src,
 }: SeamlessBackgroundVideoProps) {
   const firstVideoRef = useRef<HTMLVideoElement>(null);
@@ -92,7 +95,7 @@ export function SeamlessBackgroundVideo({
       Number.isFinite(savedTime) &&
       savedTime > 0 &&
       Number.isFinite(video.duration) &&
-      savedTime < video.duration - fadeDuration
+      savedTime < video.duration - (seamlessLoop ? 0 : fadeDuration)
     ) {
       video.currentTime = savedTime;
     }
@@ -114,7 +117,7 @@ export function SeamlessBackgroundVideo({
       className={`relative overflow-hidden bg-[#211915] bg-cover bg-center ${className}`}
       style={poster ? { backgroundImage: `url(${poster})` } : undefined}
     >
-      {([0, 1] as const).map((index) => {
+      {(seamlessLoop ? ([0] as const) : ([0, 1] as const)).map((index) => {
         const isVisible = visibleVideo === index;
         const isPrevious = previousVideo === index;
 
@@ -133,6 +136,7 @@ export function SeamlessBackgroundVideo({
             data-video-active={isVisible}
             disablePictureInPicture
             muted
+            loop={seamlessLoop}
             playsInline
             poster={poster}
             preload="auto"
@@ -140,8 +144,8 @@ export function SeamlessBackgroundVideo({
             style={{ transitionDuration: `${fadeDuration}s` }}
             tabIndex={-1}
             onLoadedMetadata={() => restorePlayback(index)}
-            onEnded={() => startCrossfade(index)}
-            onTimeUpdate={() => handleTimeUpdate(index)}
+            onEnded={seamlessLoop ? undefined : () => startCrossfade(index)}
+            onTimeUpdate={seamlessLoop ? undefined : () => handleTimeUpdate(index)}
           />
         );
       })}

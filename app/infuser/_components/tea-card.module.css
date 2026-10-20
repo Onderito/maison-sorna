@@ -14,7 +14,6 @@
   scroll-margin-top: 20px;
   overflow: hidden;
   color: var(--text-on-light);
-  background: var(--text-on-dark);
 }
 
 .sectionReversed {
@@ -22,9 +21,6 @@
   grid-template-areas: "label photo";
 }
 
-.base { position: absolute; inset: 0; z-index: -2; overflow: hidden; }
-.base .baseImage { position: absolute; top: 0; width: 114.79%; height: 100%; left: -7.97%; object-fit: fill; }
-.paperImage { z-index: -1; object-fit: cover; }
 .photograph { grid-area: photo; position: relative; min-width: 0; min-height: 0; }
 .photographMedia { position: absolute; inset: 0; transform-origin: left bottom; }
 .purchase { flex-shrink: 0; min-height: 48px; height: 4.3svh; }

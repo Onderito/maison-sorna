@@ -3,8 +3,7 @@ import type { ReactNode } from "react";
 import SeamlessBackgroundVideo from "@/components/seamless-background-video";
 import SiteNavigation from "@/components/site-navigation";
 
-const defaultVideoSrc =
-  "https://cdn.midjourney.com/video/a60981aa-ee1b-4efc-b128-7ef859b39bcb/0.mp4";
+const defaultVideoSrc = "/figma/hero/mist-loop-v1.mp4";
 
 type HeroSectionProps = {
   /** Replaces the default video with a custom background element. */
@@ -32,7 +31,8 @@ export function HeroSection({
         {children ?? (
           <SeamlessBackgroundVideo
             fadeDuration={videoFadeDuration}
-            poster="/figma/hero/video-poster.jpg"
+            seamlessLoop={videoSrc === defaultVideoSrc}
+            poster={videoSrc === defaultVideoSrc ? "/figma/hero/mist-loop-v1-poster.jpg" : "/figma/hero/video-poster.jpg"}
             src={videoSrc}
           />
         )}
@@ -57,7 +57,7 @@ export function HeroSection({
 
             <h1
               id="hero-title"
-              className="w-full text-balance font-display text-[clamp(3.25rem,11.57vw,12.5rem)] leading-[0.9] font-normal tracking-[-0.04em] uppercase"
+              className="w-full text-balance font-display text-[length:var(--hero-title-mobile)] md:text-[clamp(3.25rem,11.57vw,12.5rem)] leading-[0.9] font-normal tracking-[-0.04em] uppercase"
             >
               SÖRNA
             </h1>
@@ -66,19 +66,6 @@ export function HeroSection({
         </div>
       </div>
 
-      <a
-        href="#infuser"
-        className="absolute bottom-[clamp(1.25rem,2.8vh,1.9375rem)] left-1/2 z-20 flex h-11 w-16 -translate-x-1/2 items-center justify-center focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current active:scale-[0.96]"
-        aria-label="Découvrir la suite"
-      >
-        <Image
-          src="/figma/hero/scroll-indicator.svg"
-          alt=""
-          width={64}
-          height={45}
-          className="h-[45px] w-16"
-        />
-      </a>
     </section>
   );
 }

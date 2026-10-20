@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { getProduct } from "@/app/lib/shopify/products";
 import TeaCardProduct from "./tea-card-product";
 import type { TeaCardEntry } from "./tea-card-data";
@@ -33,10 +32,6 @@ export default async function TeaCard() {
     <>
       {entries.map((entry, index) => (
         <TeaCardEntrance key={entry.handle} id={entry.handle} className={`${styles.section}${index % 2 === 1 ? ` ${styles.sectionReversed}` : ""}`}>
-          <div className={styles.base} aria-hidden="true">
-            <Image src="/figma/infuser/product/base.png" alt="" width={1671} height={941} quality={95} sizes="100vw" className={styles.baseImage} />
-          </div>
-          <Image src="/figma/infuser/product/paper.png" alt="" fill quality={95} sizes="100vw" className={styles.paperImage} />
           <TeaCardProduct entry={entry} />
         </TeaCardEntrance>
       ))}

@@ -14,10 +14,10 @@ export const metadata: Metadata = {
 export default function InfuserPage() {
   return (
     <>
-      <main className="paper-background">
+      <main>
         <UniversHero
           id="la-carte"
-          title="La carte"
+          title={<>Les cinq<br />sommets</>}
           scrollTarget="#sourcil-dor"
         >
           <Image

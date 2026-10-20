@@ -406,6 +406,8 @@ Never:
 
 ## Design & Animation Protection
 
+For animation work, follow Emil Kowalski’s principles: purposeful, restrained, interruptible motion; short UI transitions (usually 200–250ms, no more than 300ms); prefer transform and opacity; respect reduced-motion preferences. Reuse the existing animation skills and project easing tokens. This is the user's standing motion direction for this project.
+
 Maison Sörna has a deliberate custom art direction.
 
 Do NOT:

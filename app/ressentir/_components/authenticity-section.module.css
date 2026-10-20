@@ -1,0 +1,48 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+  padding: min(1.27315vw, 1.96956svh) 4.62963vw min(4.34028vw, 6.71441svh);
+  color: var(--text-on-light);
+}
+
+.header { display: flex; flex-direction: column; align-items: center; gap: min(1.85185vw, 2.86482svh); text-align: center; }
+.title { font-family: var(--font-cormorant-garamond), Georgia, serif; font-size: min(10.41667vw, 16.11459svh); line-height: 0.96667; font-weight: 400; text-transform: uppercase; }
+.header p { font-size: min(1.15741vw, 1.79051svh); line-height: 1.4; }
+.cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.15741vw; margin-top: min(6.30787vw, 9.75828svh); padding: 0; list-style: none; }
+.cards:focus-visible { outline: 2px solid var(--text-on-light); outline-offset: 6px; }
+.card { display: flex; flex-direction: column; align-items: center; gap: min(4.62963vw, 7.16204svh); min-width: 0; text-align: center; }
+.number { color: #838d76; font-family: var(--font-cormorant-garamond), Georgia, serif; font-size: min(5.55556vw, 8.59445svh); line-height: 1.2; font-weight: 400; }
+.card p { font-size: min(1.04167vw, 1.61146svh); line-height: 1.4; }
+.photograph { position: relative; width: 100%; aspect-ratio: 377 / 393; }
+.image { object-fit: cover; }
+.navigation { display: none; }
+
+@media (max-width: 767px) {
+  .section { min-height: auto; padding: 40px 20px 24px; }
+  .header { gap: 20px; }
+  .title {
+    min-width: 0;
+    max-width: 100%;
+    font-size: calc(var(--space-unit) * 5);
+    line-height: 1;
+    white-space: normal;
+    text-wrap: balance;
+    overflow-wrap: anywhere;
+  }
+  .header p { max-width: 28em; font-size: 13px; }
+  .cards { position: relative; display: flex; gap: 20px; margin-top: 40px; overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; scrollbar-width: none; }
+  .cards::-webkit-scrollbar { display: none; }
+  .card { flex: 0 0 100%; gap: 24px; scroll-snap-align: start; scroll-snap-stop: always; }
+  .number { font-size: 64px; }
+  .card p { font-size: 14px; }
+  .navigation { display: flex; justify-content: center; margin-top: 16px; }
+  .navigation button { display: grid; place-items: center; width: 44px; height: 44px; cursor: pointer; }
+  .navigation button span { width: 6px; height: 6px; border-radius: 50%; background: var(--text-on-light); opacity: 0.3; }
+  .navigation button[aria-current="true"] span { opacity: 1; }
+  .navigation button:focus-visible { outline: 2px solid var(--text-on-light); outline-offset: -4px; border-radius: 50%; }
+}
+
+@media (max-width: 359px) {
+  .title { font-size: calc(var(--space-unit) * 4); }
+}

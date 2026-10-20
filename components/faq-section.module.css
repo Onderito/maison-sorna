@@ -8,7 +8,6 @@
   height: 100svh;
   padding: 2.865svh var(--layout-margin) 1.433svh;
   color: var(--text-on-light);
-  background: #f5f2eb url("/figma/infuser/process/background.png") center / cover;
 }
 
 .header {
@@ -229,7 +228,7 @@
 @media (max-width: 767px) {
   .section { padding: 20px var(--layout-margin) 12px; }
   .header { margin-bottom: 16px; }
-  .title { font-size: clamp(28px, 7.5vw, 40px); line-height: 1.1; }
+  .title { font-size: var(--section-title-mobile-paper); line-height: 1.1; text-wrap: balance; }
   .introduction { max-width: 360px; margin: 10px auto 0; font-family: var(--font-manrope), Arial, sans-serif; font-size: 18px; line-height: 1.15; }
   .lineBreak { display: none; }
   .content { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 24svh) minmax(0, 1fr); gap: 16px; }

@@ -3,7 +3,7 @@ import SiteNavigation from "@/components/site-navigation";
 
 export default function ProductsLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="paper-background min-h-screen text-text-on-light">
+    <div className="min-h-screen text-text-on-light">
       <SiteNavigation tone="dark" />
       {children}
     </div>

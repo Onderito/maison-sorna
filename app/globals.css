@@ -1,7 +1,18 @@
 @import "tailwindcss";
 
+html { scroll-padding-top: 96px; }
+
+@media (min-width: 768px) and (max-width: 1199px) {
+  html { scroll-padding-top: 152px; }
+}
+
+@media (min-width: 1200px) {
+  html { scroll-padding-top: 104px; }
+}
+
 :root {
-  --background: #ffffff;
+  --background: #e9e2d6;
+  --paper-background: var(--background) url("/figma/infuser/process/background.png") center top / 100% auto repeat-y;
   --foreground: #40200c;
   --accent: #a9823d;
   --button: #40200c;
@@ -13,6 +24,9 @@
   --layout-margin: 10px;
   --layout-gutter: 20px;
   --space-unit: 8px;
+  --section-title-mobile-paper: calc(var(--space-unit) * 7);
+  --section-title-mobile-media: calc(var(--space-unit) * 6);
+  --hero-title-mobile: calc(var(--space-unit) * 7);
   --space-1: var(--space-unit);
   --space-2: calc(var(--space-unit) * 2);
   --space-3: calc(var(--space-unit) * 3);
@@ -61,15 +75,8 @@
   column-gap: var(--layout-gutter);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: var(--text-on-dark);
-  }
-}
-
 body {
-  background: var(--background);
+  background: var(--paper-background);
   color: var(--foreground);
   font-family: var(--font-manrope), Arial, Helvetica, sans-serif;
 }
@@ -102,8 +109,3 @@ body {
 }
 
 .image-grain-overlay { z-index: 30; }
-
-/* Warm paper surface used by the storefront's commerce pages. */
-.paper-background {
-  background: var(--text-on-dark) url("/figma/infuser/process/background.png") center top / cover fixed;
-}
