@@ -5,6 +5,7 @@ export type TeaCardEntry = {
   title: string;
   photograph: string;
   photographAlt: string;
+  photographFit?: "contain" | "cover";
   teaType: string;
   origin: string;
   lot: string;

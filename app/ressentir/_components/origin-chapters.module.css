@@ -10,7 +10,7 @@
   color: var(--text-on-light);
 }
 
-.title, .number {
+.title {
   font-family: var(--font-cormorant-garamond), Georgia, serif;
   font-weight: 400;
   text-transform: uppercase;
@@ -26,7 +26,7 @@
   line-height: 0.95556;
 }
 
-.title span, .chapter strong, .number { color: var(--chapter-sage); }
+.title span, .chapter strong { color: var(--chapter-sage); }
 .chapter strong { font-weight: 700; }
 .chapter p { font-size: min(1.15741vw, 1.79051svh); line-height: 1.4; }
 .leftPhoto { grid-column: 2; grid-row: 2; position: relative; }
@@ -35,7 +35,6 @@
 .panorama { grid-column: 2 / 4; grid-row: 5; position: relative; }
 .rightColumn { grid-column: 5; grid-row: 2 / 6; display: flex; flex-direction: column; gap: 24px; min-height: 0; }
 .rightPhoto { position: relative; width: 100%; height: min(34.72222vw, 53.71531svh); flex-shrink: 0; }
-.number { position: absolute; right: 0.5vw; bottom: 0; font-size: min(6.36574vw, 9.84781svh); line-height: normal; }
 
 @media (max-width: 767px) {
   .chapter {
@@ -72,5 +71,72 @@
     line-height: 1.4;
     text-wrap: pretty;
   }
-  .number { display: none; }
+}
+
+/* The first two origins have their own compositions; Orna keeps the original grid. */
+.letterChapter {
+  --chapter-sage: #838d76;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: clamp(24px, 3vw, 56px);
+  padding: clamp(40px, 5vw, 88px) clamp(16px, 2.3vw, 40px);
+  color: var(--text-on-light);
+}
+
+.letterHeader { display: flex; align-items: center; gap: clamp(24px, 4vw, 72px); min-width: 0; }
+.letter {
+  color: var(--chapter-sage);
+  font-family: var(--font-cormorant-garamond), Georgia, serif;
+  font-size: clamp(128px, 17vw, 290px);
+  line-height: 0.85;
+  font-weight: 400;
+  flex-shrink: 0;
+}
+.letterHeading { min-width: 0; }
+.letterLabel { margin-bottom: 16px; font-size: clamp(11px, 0.85vw, 14px); line-height: 1.4; letter-spacing: 0.14em; text-transform: uppercase; }
+.letterTitle { font-family: var(--font-cormorant-garamond), Georgia, serif; font-size: clamp(48px, 7vw, 120px); line-height: 0.95; font-weight: 400; text-transform: uppercase; }
+.mainPhoto, .insetPhoto, .detailPhoto { position: relative; min-width: 0; overflow: hidden; }
+.letterIntroduction, .letterDescription { min-width: 0; font-size: clamp(15px, 1.16vw, 20px); line-height: 1.5; }
+.letterChapter p { text-wrap: pretty; }
+.letterChapter strong { color: var(--chapter-sage); font-weight: 700; }
+
+.sancerre .letterHeader { grid-column: 1 / -1; grid-row: 1; }
+.sancerre .mainPhoto { grid-column: 1 / 9; grid-row: 2; aspect-ratio: 1.8; }
+.sancerre .letterIntroduction { grid-column: 9 / -1; grid-row: 2; align-self: end; padding-bottom: 8px; }
+.sancerre .insetPhoto { grid-column: 2 / 5; grid-row: 3 / 5; aspect-ratio: 4 / 5; }
+.sancerre .detailPhoto { grid-column: 8 / 12; grid-row: 3; aspect-ratio: 4 / 5; margin-top: 48px; }
+.sancerre .letterDescription { grid-column: 7 / 12; grid-row: 4; text-align: right; }
+
+.ile .letterHeader { grid-column: 1 / 7; grid-row: 1; align-self: center; }
+.ile .mainPhoto { grid-column: 8 / -1; grid-row: 1 / 3; aspect-ratio: 4 / 5; }
+.ile .letterIntroduction { grid-column: 2 / 6; grid-row: 2; align-self: end; }
+.ile .insetPhoto { grid-column: 1 / 8; grid-row: 3; aspect-ratio: 1.8; }
+.ile .detailPhoto { grid-column: 10 / -1; grid-row: 3 / 5; aspect-ratio: 4 / 5; margin-top: 56px; }
+.ile .letterDescription { grid-column: 2 / 8; grid-row: 4; max-width: 36em; }
+
+@media (min-width: 1024px) {
+  .sancerre .letterDescription { grid-column: 5 / 12; justify-self: end; }
+}
+
+@media (max-width: 767px) {
+  .letterChapter { gap: 28px 12px; padding: 40px 16px; }
+  .letterHeader { gap: 24px; }
+  .letter { font-size: 112px; }
+  .letterLabel { margin-bottom: 12px; font-size: 10px; letter-spacing: 0.1em; }
+  .letterTitle { font-size: clamp(38px, 11.5vw, 64px); }
+  .letterIntroduction, .letterDescription { font-size: 15px; }
+
+  .sancerre .letterHeader { grid-column: 1 / -1; grid-row: 1; }
+  .sancerre .mainPhoto { grid-column: 1 / -1; grid-row: 2; aspect-ratio: 1.25; }
+  .sancerre .letterIntroduction { grid-column: 1 / 12; grid-row: 3; padding: 0; }
+  .sancerre .insetPhoto { grid-column: 1 / 7; grid-row: 4; aspect-ratio: 4 / 5; }
+  .sancerre .detailPhoto { grid-column: 8 / -1; grid-row: 4; margin-top: 64px; }
+  .sancerre .letterDescription { grid-column: 2 / -1; grid-row: 5; }
+
+  .ile .letterHeader { grid-column: 1 / -1; grid-row: 1; flex-direction: row-reverse; justify-content: space-between; }
+  .ile .mainPhoto { grid-column: 4 / -1; grid-row: 2; aspect-ratio: 4 / 5; }
+  .ile .letterIntroduction { grid-column: 1 / -1; grid-row: 3; }
+  .ile .insetPhoto { grid-column: 1 / 12; grid-row: 4; aspect-ratio: 1.5; }
+  .ile .detailPhoto { grid-column: 8 / -1; grid-row: 5; margin-top: 0; }
+  .ile .letterDescription { grid-column: 1 / 8; grid-row: 5; align-self: end; font-size: 14px; }
 }

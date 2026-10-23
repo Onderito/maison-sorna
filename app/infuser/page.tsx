@@ -4,7 +4,7 @@ import UniversHero from "@/components/univers-hero";
 import SiteFooter from "@/components/site-footer";
 import FaqSection from "@/components/faq-section";
 import PlantProcess from "./_components/plant-process";
-import TeaCard from "./_components/tea-card";
+import TeaCollection from "./_components/tea-collection";
 import { processSteps } from "./process-steps";
 
 export const metadata: Metadata = {
@@ -17,11 +17,12 @@ export default function InfuserPage() {
       <main>
         <UniversHero
           id="la-carte"
-          title={<>Les cinq<br />sommets</>}
-          scrollTarget="#sourcil-dor"
+          title={<>Les Cinq<br />Sommets</>}
+          subtitle="Cinq grands crus de thé"
+          scrollTarget="#les-cuvees"
         >
           <Image
-            src="/figma/infuser/hero.png"
+            src="/figma/infuser/hero-wuyi.png"
             alt=""
             fill
             sizes="100vw"
@@ -29,7 +30,7 @@ export default function InfuserPage() {
             className="object-cover"
           />
         </UniversHero>
-        <TeaCard />
+        <TeaCollection />
         <PlantProcess steps={processSteps} />
         <FaqSection />
       </main>

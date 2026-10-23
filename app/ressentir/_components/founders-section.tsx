@@ -5,9 +5,11 @@ const founders = [
     id: "julien",
     name: "Julien",
     role: "Fondateur",
+    portraitSrc: "/figma/ressentir/fondateurs/julien-portrait.png",
+    editorialSrc: "/figma/ressentir/fondateurs/julien-vignes.png",
     paragraphs: [
-      "Ce qui m’anime, c’est le vin. Et le champagne surtout, qui est sans doute le vin où le lieu compte le plus et où l’on triche le moins.",
-      "Je n’ai pas de formation dans le vin. J’ai appris en buvant, en lisant, en comparant. Le thé est arrivé de la même manière. Je l’ai goûté comme je goûtais un vin : en cherchant le lieu derrière ce que j’avais dans la tasse.",
+      "J’ai grandi à Sancerre, au milieu des vignes, et le vin ne m’a jamais quitté. Le champagne surtout. Je ne l’ai pas étudié. J’ai appris en goûtant, en lisant, en comparant, avec toujours la même question. D’où vient ce que j’ai dans mon verre ?",
+      "Le thé est arrivé de la même manière. Je l’ai goûté comme je goûtais un vin, en cherchant le lieu derrière ce que j’avais dans la tasse. SÖRNA vient de là. Aujourd’hui encore, je prépare moi-même chaque commande.",
     ],
   },
   {
@@ -15,8 +17,8 @@ const founders = [
     name: "Antoine",
     role: "Associé",
     paragraphs: [
-      "31 ans et je viens de Sancerre, où j’ai grandi. Pendant 12 ans, j’ai travaillé comme ouvrier viticole, un métier qui m’a appris la patience, le respect du geste juste et l’exigence du travail bien fait, dans le respect de la terre et des saisons.",
-      "J’ai rejoint Maison Sorna parce que j’y ai retrouvé ces mêmes valeurs : l’authenticité, le naturel et l’exigence de la qualité.",
+      "Je viens de Sancerre, où j’ai grandi. Pendant douze ans, j’ai été ouvrier viticole. La taille, les vendanges, et entre les deux, des milliers de gestes répétés, pied après pied.",
+      "La vigne m’a appris la patience et la précision. J’ai rejoint SÖRNA parce que j’y ai retrouvé cette exigence de partir de ce que la terre donne, et d’accorder du soin à chaque geste.",
     ],
   },
 ];

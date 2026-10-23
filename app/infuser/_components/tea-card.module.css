@@ -80,12 +80,12 @@
 
 .cell { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.716svh; min-width: 0; }
 .formatButtons { display: flex; width: 85%; gap: 6px; }
-.formatButton { display: flex; flex: 1; flex-direction: column; align-items: center; justify-content: center; min-width: 0; min-height: 44px; padding: 4px; border: 1px solid rgb(64 32 12 / 25%); background: transparent; color: var(--text-on-light); font-family: var(--font-manrope), Arial, sans-serif; font-size: clamp(12px, 1vw, 16px); line-height: 1.2; font-variant-numeric: tabular-nums; cursor: pointer; }
+.formatButton { display: flex; flex: 1; flex-direction: column; align-items: center; justify-content: center; min-width: 0; min-height: 44px; padding: 4px; border: 1px solid rgb(64 32 12 / 25%); background: transparent; color: var(--text-on-light); font-family: var(--font-manrope), Arial, sans-serif; font-size: 16px; line-height: 1.2; font-variant-numeric: tabular-nums; cursor: pointer; }
 .formatButton[aria-pressed="true"] { border-color: var(--text-on-light); background: rgb(64 32 12 / 4%); font-weight: 600; }
 .formatButton[data-available="false"] { color: rgb(64 32 12 / 75%); }
 .formatButton:focus-visible { outline: 2px solid var(--text-on-light); outline-offset: 2px; }
 .formatButton:disabled { opacity: 0.6; cursor: wait; }
-.formatAvailability { margin-top: 2px; font-size: 10px; font-weight: 400; }
+.formatAvailability { margin-top: 2px; font-size: 16px; font-weight: 400; }
 .formatButton[aria-pressed="true"] .formatAvailability { font-weight: 500; }
 
 @media (hover: hover) and (pointer: fine) {
@@ -121,7 +121,7 @@
   padding: 8px 14px;
   background: var(--button);
   color: var(--text-on-dark);
-  font-size: clamp(14px, 1.04vw, 18px);
+  font-size: clamp(16px, 1.04vw, 18px);
   font-weight: 500;
   cursor: pointer;
  
@@ -172,8 +172,8 @@
   .heading .number { margin-top: 2px; font-size: var(--lot-size); }
   .cell { gap: var(--cell-gap); }
   .formatButtons { width: min(85%, 240px); }
-  .formatButton { min-height: var(--format-height); font-size: 14px; }
-  .formatAvailability { font-size: 11px; }
+  .formatButton { min-height: var(--format-height); font-size: 16px; }
+  .formatAvailability { font-size: 16px; }
   .price { font-size: var(--price-size); }
   .addButton { font-size: 16px; }
   .landscapeCrop .landscapeImage { top: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 8%; }
@@ -191,7 +191,7 @@
     --format-height: 48px;
   }
   .formatButton { font-size: 16px; }
-  .formatAvailability { font-size: 12px; }
+  .formatAvailability { font-size: 16px; }
   .addButton { font-size: 17px; }
 }
 
@@ -211,9 +211,9 @@
     --cell-gap: 3px;
     --format-height: 44px;
   }
-  .formatButton { font-size: clamp(13px, 1.6vw, 14px); }
-  .formatAvailability { font-size: 10px; }
-  .addButton { font-size: clamp(15px, 1.6vw, 16px); }
+  .formatButton { font-size: 16px; }
+  .formatAvailability { font-size: 16px; }
+  .addButton { font-size: 16px; }
 }
 
 @media (min-width: 600px) and (max-width: 1024px) and (max-height: 900px) {

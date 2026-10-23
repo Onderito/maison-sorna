@@ -5,10 +5,10 @@ import { useRef, useState } from "react";
 import styles from "./authenticity-section.module.css";
 
 const commitments = [
-  { text: "La formule complète est publiée.", image: "formule" },
-  { text: "Chaque lot de thé est analysé.", image: "analyse-the" },
-  { text: "Chaque soin est testé.", image: "test-soin" },
-  { text: "Les résultats sont publics", image: "resultats" },
+  { text: "Chaque formule de soin est publiée en entier, proportions et origines comprises.", image: "formule" },
+  { text: "Chaque lot de thé est analysé par un laboratoire indépendant.", image: "analyse-the" },
+  { text: "Chaque soin est testé sous contrôle dermatologique, et son efficacité mesurée en laboratoire.", image: "test-soin" },
+  { text: "Tous les résultats sont consultables.", image: "resultats" },
 ];
 
 export default function AuthenticitySection() {
@@ -27,9 +27,9 @@ export default function AuthenticitySection() {
   }
 
   return (
-    <section id="l-authenticite" className={styles.section} aria-labelledby="authenticity-title">
+    <section id="la-preuve" className={styles.section} aria-labelledby="authenticity-title">
       <header className={styles.header}>
-        <h2 id="authenticity-title" className={styles.title}>L’authenticité</h2>
+        <h2 id="authenticity-title" className={styles.title}>La preuve</h2>
         <p>Nous ne revendiquons que ce qui a été mesuré.</p>
       </header>
       <ol
@@ -54,9 +54,8 @@ export default function AuthenticitySection() {
           setActiveIndex(nearest);
         }}
       >
-        {commitments.map((commitment, index) => (
+        {commitments.map((commitment) => (
           <li key={commitment.image} className={styles.card}>
-            <span className={styles.number} aria-hidden="true">0{index + 1}</span>
             <p>{commitment.text}</p>
             <div className={styles.photograph}>
               <Image

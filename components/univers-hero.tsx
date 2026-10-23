@@ -8,6 +8,7 @@ const defaultVideoSrc =
 
 type UniversHeroProps = {
   title?: ReactNode;
+  subtitle?: string;
   id?: string;
   /** Replaces the default video with a custom background element. */
   children?: ReactNode;
@@ -19,6 +20,7 @@ type UniversHeroProps = {
 
 export function UniversHero({
   title = "La maison",
+  subtitle,
   id = "la-maison",
   children,
   className = "",
@@ -67,6 +69,7 @@ export function UniversHero({
             >
               {title}
             </h1>
+            {subtitle && <p className="max-w-[36em] px-4 font-sans text-[clamp(0.875rem,1.16vw,1.25rem)] leading-[1.4]">{subtitle}</p>}
           </div>
 
         </div>

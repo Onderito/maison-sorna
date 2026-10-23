@@ -5,6 +5,8 @@ type Profile = {
   id: string;
   name: string;
   role?: string;
+  portraitSrc?: string;
+  editorialSrc?: string;
   paragraphs: string[];
 };
 
@@ -21,8 +23,8 @@ export default function ProfilesSection({ id, label, profiles }: ProfilesSection
         <article key={profile.id} className={styles.profile} aria-labelledby={`${profile.id}-title`}>
           <div className={styles.portrait}>
             <Image
-              src="/figma/ressentir/fondateurs/portrait-provisoire.png"
-              alt=""
+              src={profile.portraitSrc ?? "/figma/ressentir/fondateurs/portrait-provisoire.png"}
+              alt={profile.portraitSrc ? `Portrait de ${profile.name} dans les vignes` : ""}
               fill
               sizes="(max-width: 767px) 100vw, 50vw"
               className={styles.image}
@@ -40,11 +42,12 @@ export default function ProfilesSection({ id, label, profiles }: ProfilesSection
             {profile.role && <p className={styles.role}>{profile.role}</p>}
             <div className={styles.editorialPhoto}>
               <Image
-                src="/figma/ressentir/fondateurs/portrait-provisoire.png"
+                src={profile.editorialSrc ?? "/figma/ressentir/fondateurs/portrait-provisoire.png"}
                 alt=""
                 fill
                 sizes="(min-width: 1024px) 28vw, 1px"
                 className={styles.image}
+                style={profile.editorialSrc ? { objectPosition: "center top" } : undefined}
               />
             </div>
           </div>

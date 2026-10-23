@@ -3,32 +3,31 @@ import FaqAccordion from "./faq-accordion";
 import FaqEntrance from "./faq-entrance";
 import styles from "./faq-section.module.css";
 
-// The origin answer comes from Figma; the remaining copy is provisional.
 const questions = [
   {
     id: "origine",
-    question: "D’où proviennent vos thés ?",
-    answer: "Nos cinq cuvées proviennent de Chine, principalement du Fujian. Chaque thé est associé à une origine et à une récolte identifiées.",
+    question: "D’où viennent vos thés ?",
+    answer: "De Chine, principalement du Fujian. Le lieu et la récolte de chaque cuvée sont indiqués sur sa fiche.",
   },
   {
     id: "preparation",
     question: "Comment préparer chaque cuvée ?",
-    answer: "La température de l’eau et le temps d’infusion varient selon le thé. Suivez les indications de votre cuvée, puis ajustez l’infusion à votre goût.",
+    answer: "Suivez les repères de votre cuvée pour la dose, la température et la durée, puis ajustez à votre goût. Les mêmes feuilles peuvent être infusées plusieurs fois, avec une tasse différente à chaque passage.",
   },
   {
     id: "aromes",
-    question: "Vos thés contiennent-ils des arômes ajoutés ?",
-    answer: "La composition de chaque cuvée est indiquée sur son emballage. Vous y trouverez les informations sur ses ingrédients et la présence éventuelle d’arômes ajoutés.",
+    question: "Vos thés sont-ils aromatisés ?",
+    answer: "Non, nos thés sont sans arôme ajouté ni assemblage. Leurs notes de miel, de fleurs ou de fruits viennent de la feuille, de son terroir et du travail des producteurs.",
   },
   {
     id: "analyses",
     question: "Vos thés sont-ils analysés ?",
-    answer: "Pour en savoir plus sur les analyses d’une cuvée, la Maison pourra vous renseigner sur les informations disponibles pour le lot concerné.",
+    answer: "Oui. Chaque lot est analysé par un laboratoire indépendant avant sa mise en vente. Les résultats sont consultables pour chaque lot.",
   },
   {
     id: "conservation",
-    question: "Combien de temps se conserve le thé ?",
-    answer: "Conservez votre thé dans une boîte bien fermée, à l’abri de la lumière, de l’humidité et des odeurs. Reportez-vous à la date indiquée sur l’emballage pour apprécier au mieux votre cuvée.",
+    question: "Combien de temps se garde un thé ?",
+    answer: "Gardez le pot fermé, à l’abri de la lumière, de la chaleur, de l’humidité et des odeurs. Le thé vert se boit plutôt dans l’année. Les thés blancs et oolongs torréfiés peuvent gagner en profondeur avec le temps. Retrouvez la date de référence sur l’emballage.",
   },
 ];
 
@@ -36,10 +35,9 @@ export default function FaqSection() {
   return (
     <FaqEntrance>
       <header className={styles.header}>
-        <h2 id="faq-title" className={styles.title}>Sörna vous répond</h2>
+        <h2 id="faq-title" className={styles.title}>SÖRNA vous répond</h2>
         <p className={styles.introduction}>
-          Origine, préparation, composition. Quelques réponses
-          <br className={styles.lineBreak} /> pour mieux connaître notre Maison.
+          Origine, préparation, conservation. L’essentiel pour choisir, servir et garder nos thés.
         </p>
       </header>
       <div className={styles.content}>
@@ -61,7 +59,7 @@ export default function FaqSection() {
             disabled
             title="Le contact sera bientôt disponible"
           >
-            Vous avez une autre question ?
+            Une autre question ? Écrivez-nous.
           </button>
         </div>
       </div>

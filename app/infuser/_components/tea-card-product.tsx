@@ -31,7 +31,7 @@ export default function TeaCardProduct({ entry }: { entry: TeaCardEntry }) {
             quality={95}
             loading="eager"
             sizes="(max-width: 1024px) calc(100vw - 40px), 60vw"
-            className="object-cover"
+            className={entry.photographFit === "contain" ? "object-contain p-6 md:p-12" : "object-cover"}
           />
         </motion.div>
       </motion.div>

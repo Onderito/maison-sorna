@@ -1,0 +1,43 @@
+.section { padding: clamp(48px, 6vw, 96px) var(--layout-margin); color: var(--text-on-light); }
+.header { margin-bottom: clamp(32px, 4vw, 64px); text-align: center; }
+.eyebrow { margin-bottom: 16px; font-size: 16px; letter-spacing: 0.12em; text-transform: uppercase; }
+.header h2 { color: #838d76; font-size: clamp(40px, 5.5vw, 88px); font-weight: 400; line-height: 1; text-transform: uppercase; text-wrap: balance; }
+.header > p:last-child { margin: 20px auto 0; max-width: 32em; font-size: 18px; line-height: 1.5; text-wrap: pretty; }
+.collection { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 20px; list-style: none; padding: 0; }
+.collection > li { min-width: 0; }
+.card { display: flex; height: 100%; flex-direction: column; color: inherit; text-decoration: none; }
+.artwork { position: relative; aspect-ratio: 4 / 5; border: 1px solid rgb(64 32 12 / 20%); overflow: hidden; }
+.number { position: absolute; top: 12px; left: 16px; color: #838d76; font-family: var(--font-cormorant-garamond), Georgia, serif; font-size: 32px; line-height: 1; }
+.botanical { object-fit: contain; padding: 38px 20px 52px; transition: transform 250ms var(--ease-out, cubic-bezier(0.23, 1, 0.32, 1)); }
+.family { position: absolute; right: 12px; bottom: 16px; left: 12px; font-size: 16px; line-height: 1.4; text-align: center; }
+.copy { display: flex; flex: 1; flex-direction: column; padding: 20px 0 0; }
+.copy h3 { color: #838d76; font-size: clamp(24px, 2vw, 36px); font-weight: 600; line-height: 1.1; text-transform: uppercase; text-wrap: balance; }
+.signature { margin-top: 12px; font-size: 16px; line-height: 1.5; text-wrap: pretty; }
+.bottom { margin-top: auto; padding-top: 24px; }
+.price { margin-bottom: 8px; font-size: 16px; line-height: 1.5; font-variant-numeric: tabular-nums; }
+.discover { display: flex; min-height: 44px; align-items: center; justify-content: space-between; gap: 8px; border-top: 1px solid rgb(64 32 12 / 25%); font-size: 16px; line-height: 1.4; }
+.preview .discover { color: rgb(64 32 12 / 75%); }
+.card:focus-visible { outline: 2px solid var(--button); outline-offset: 6px; }
+.more { display: flex; width: fit-content; min-height: 44px; align-items: center; gap: 24px; margin: 48px auto 0; border-bottom: 1px solid rgb(64 32 12 / 30%); font-size: 16px; }
+@media (hover: hover) and (pointer: fine) {
+  a.card:hover .botanical { transform: translateY(-4px); }
+  a.card:hover .discover { text-decoration: underline; text-underline-offset: 4px; }
+}
+@media (min-width: 600px) and (max-width: 1199px) {
+  .collection { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 32px 20px; }
+  .collection > li { grid-column: span 2; }
+  .collection > li:nth-child(4) { grid-column: 2 / 4; }
+  .collection > li:nth-child(5) { grid-column: 4 / 6; }
+}
+@media (max-width: 599px) {
+  .collection { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 16px; }
+  .botanical { padding: 36px 8px 48px; }
+  .number { top: 10px; left: 10px; font-size: 28px; }
+  .copy { padding-top: 16px; }
+  .family { right: 6px; left: 6px; }
+  .header > p:last-child { font-size: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .botanical { transition: none; }
+  a.card:hover .botanical { transform: none; }
+}

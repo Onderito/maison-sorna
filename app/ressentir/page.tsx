@@ -46,21 +46,21 @@ export default function RessentirPage() {
         <StoryIntroduction
           id="le-regard"
           title="Le regard"
-          subtitle="Grandir dans une région de vin laisse des habitudes."
+          subtitle="Grandir au milieu des vignes laisse des habitudes : goûter avant de juger, et ne jamais séparer un goût de son lieu."
         />
         <RegardSections />
         <AuthenticitySection />
         <StoryIntroduction
           id="a-l-origine-de-la-maison"
           title={<>À l’origine de<br />la Maison</>}
-          subtitle="Deux parcours liés à Sancerre, réunis autour d’une même manière de regarder et de faire."
+          subtitle="Deux parcours. L’un est venu par le goût du vin, l’autre par le travail de la vigne."
           multiline
         />
         <FoundersSection />
         <StoryIntroduction
-          id="ceux-qui-font-le-reste"
-          title={<>Ceux qui font<br />le reste</>}
-          subtitle={<>Parce qu’une Maison se construit aussi avec ceux qui lui<br className="hidden sm:block" />{" "}donnent une voix, une image et une présence.</>}
+          id="ceux-qui-l-accompagnent"
+          title={<>Ceux qui<br />l’accompagnent</>}
+          subtitle="Une maison se construit aussi avec ceux qui lui donnent une voix, une image et une présence."
           multiline
         />
         <ContributorsSection />

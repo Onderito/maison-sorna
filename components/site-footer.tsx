@@ -6,17 +6,17 @@ const groups = [
   {
     title: "Infuser",
     links: [
-      { label: "Le savoir faire", href: "/infuser#infuser" },
-      { label: "Les cinq sommets", href: "/infuser#la-carte" },
-      { label: "Le rituel", href: "/infuser" },
-      { label: "L’art de l’accord", href: "/infuser" },
+      { label: "Les Cinq Sommets", href: "/infuser#la-carte" },
+      { label: "Le geste", href: "/infuser#le-geste" },
+      { label: "Le rituel", href: "/infuser#le-rituel" },
+      { label: "L’art de l’accord", href: "/infuser#l-art-de-l-accord" },
     ],
   },
   {
     title: "Appliquer",
     links: [
-      { label: "Le savoir faire", href: "/appliquer" },
-      { label: "Nos crèmes", href: "/appliquer#le-second-versant" },
+      { label: "Le savoir-faire", href: "/appliquer" },
+      { label: "Nos soins", href: "/appliquer#le-second-versant" },
     ],
   },
   {
@@ -24,8 +24,9 @@ const groups = [
     links: [
       { label: "Les origines", href: "/ressentir#les-origines" },
       { label: "Le regard", href: "/ressentir#le-regard" },
-      { label: "À l’origine de la maison", href: "/ressentir" },
-      { label: "Ceux qui font le reste", href: "/ressentir" },
+      { label: "La preuve", href: "/ressentir#la-preuve" },
+      { label: "À l’origine de la Maison", href: "/ressentir#a-l-origine-de-la-maison" },
+      { label: "Ceux qui l’accompagnent", href: "/ressentir#ceux-qui-l-accompagnent" },
     ],
   },
 ];

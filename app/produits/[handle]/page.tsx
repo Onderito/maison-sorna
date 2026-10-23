@@ -1,10 +1,12 @@
-import { getProductQuery, shopifyFetch } from "@/app/lib/shopify";
-import type { ShopifyProduct } from "@/app/lib/shopify-types";
+import { getProduct } from "@/app/lib/shopify/products";
 import { getCart } from "@/app/actions/cart";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import ProductVariantSelector from "@/components/product-variant-selector";
 import Link from "next/link";
+import TeaCard from "@/app/infuser/_components/tea-card";
+import { getTeaCardEntry } from "@/app/infuser/tea-editions";
+import SiteFooter from "@/components/site-footer";
 
 export default async function ProductPage({
   params,
@@ -13,20 +15,25 @@ export default async function ProductPage({
 }) {
   const { handle } = await params;
 
-  const response = await shopifyFetch(getProductQuery, {
-    handle,
-  });
-
-  if (!response.data || !("product" in response.data)) {
-    throw new Error(
-      "La réponse Shopify ne contient pas le champ product attendu.",
-    );
-  }
-
-  const product: ShopifyProduct | null = response.data.product;
+  const product = await getProduct(handle);
 
   if (product === null) {
     notFound();
+  }
+
+  const teaEntry = getTeaCardEntry(product);
+  if (teaEntry) {
+    return <>
+      <main className="pt-4">
+        <div className="site-container flex flex-wrap items-center justify-between gap-4 px-1 pb-2 text-base">
+          <Link href="/infuser#les-cuvees" className="inline-flex min-h-11 items-center gap-3 underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-4"><span aria-hidden="true">←</span> Les cinq cuvées</Link>
+          <p className="font-display text-xl uppercase text-[#838d76]">Les Cinq Sommets</p>
+        </div>
+        <h1 className="sr-only">{product.title}</h1>
+        <TeaCard entry={teaEntry} />
+      </main>
+      <SiteFooter />
+    </>;
   }
 
   const cart = await getCart();
