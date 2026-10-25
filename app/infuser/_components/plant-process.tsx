@@ -13,12 +13,14 @@ export default function PlantProcess({
     <div id="infuser" className={styles.process}>
       <ProcessIntroduction />
       <ProcessTransitions className={styles.panels}>
-        {steps.map((step) =>
+        {steps.map((step, index) =>
           step.description && step.images ? (
             <section
               key={step.number}
               className={styles.step}
               data-process-panel
+              data-process-stacked={index > 0 || undefined}
+              style={{ zIndex: index + 1 }}
               aria-labelledby={`process-step-${step.number}`}
             >
               <div className={styles.editorial}>
@@ -72,6 +74,7 @@ export default function PlantProcess({
                   className="object-cover"
                 />
               </div>
+              <span className={styles.cover} data-process-shade aria-hidden="true" />
             </section>
           ) : null,
         )}

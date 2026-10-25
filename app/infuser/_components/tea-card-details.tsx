@@ -2,18 +2,14 @@
 
 import Image from "next/image";
 import { useId, useState, useTransition } from "react";
-import { motion, useReducedMotion } from "motion/react";
 import { useRouter } from "next/navigation";
 import { addToCart } from "@/app/actions/cart";
 import type { AddToCartResult } from "@/app/lib/shopify-types";
 import styles from "./tea-card.module.css";
 import type { TeaCardEntry } from "./tea-card-data";
-import { contentEntrance, useTeaCardEntrance } from "./tea-card-entrance";
 
-export default function TeaCardDetails({ entry }: { entry: TeaCardEntry }) {
+export default function TeaCardDetails({ entry, presentation = "page" }: { entry: TeaCardEntry; presentation?: "page" | "dialog" }) {
   const { product, handle } = entry;
-  const { controls: entrance } = useTeaCardEntrance();
-  const reducedMotion = useReducedMotion();
   const variants = product?.variants.nodes ?? [];
   const initialVariant = variants.find((variant) => variant.availableForSale) ?? variants[0];
   const [selection, setSelection] = useState({ handle, id: initialVariant?.id });
@@ -43,20 +39,20 @@ export default function TeaCardDetails({ entry }: { entry: TeaCardEntry }) {
   }
 
   return (
-    <div className={styles.panel}>
+    <div className={`${styles.panel} ${presentation === "dialog" ? styles.dialogPanel : ""}`}>
       <div className={styles.card}>
-        <header className={styles.heading}>
-          <motion.h2 id={`tea-${handle}-title`} initial="entranceHidden" animate={entrance} variants={contentEntrance}>{entry.title}</motion.h2>
+        <header className={styles.heading} data-product-reveal>
+          <h2 id={`tea-${handle}-title`}>{entry.title}</h2>
           <Image src="/figma/infuser/product/title-rule.svg" alt="" width={155} height={1} className={styles.titleRule} />
-          <motion.p className={styles.label} initial="entranceHidden" animate={entrance} variants={contentEntrance}>Lot n°</motion.p>
-          <motion.p className={styles.number} initial="entranceHidden" animate={entrance} variants={contentEntrance}>{entry.lot}</motion.p>
+          <p className={styles.label}>Lot n°</p>
+          <p className={styles.number}>{entry.lot}</p>
         </header>
-        <div className={styles.detailRow}>
-          <motion.div className={styles.cell} initial="entranceHidden" animate={entrance} variants={contentEntrance}>
+        <div className={styles.detailRow} data-product-reveal>
+          <div className={styles.cell}>
             <p className={styles.label}>Type de thé</p>
             <p className={styles.serifValue}>{entry.teaType}</p>
-          </motion.div>
-          <motion.div className={styles.cell} initial="entranceHidden" animate={entrance} variants={contentEntrance}>
+          </div>
+          <div className={styles.cell}>
             <p id={formatId} className={styles.label}>Format</p>
             {variants.length > 1 ? (
               <div className={styles.formatButtons} role="group" aria-labelledby={formatId}>
@@ -79,51 +75,51 @@ export default function TeaCardDetails({ entry }: { entry: TeaCardEntry }) {
                 ))}
               </div>
             ) : <p className={styles.number}>{selected ? selected.title === "Default Title" ? "Format unique" : selected.title : "—"}</p>}
-          </motion.div>
+          </div>
           <span className={styles.rowRule} aria-hidden="true" />
           <span className={styles.detailDivider} aria-hidden="true" />
         </div>
-        <div className={styles.detailRow}>
-          <motion.div className={styles.cell} initial="entranceHidden" animate={entrance} variants={contentEntrance}>
+        <div className={styles.detailRow} data-product-reveal>
+          <div className={styles.cell}>
             <p className={styles.label}>Origine</p>
             <p className={styles.serifValue}>{entry.origin}</p>
-          </motion.div>
-          <motion.div className={styles.cell} initial="entranceHidden" animate={entrance} variants={contentEntrance}>
+          </div>
+          <div className={styles.cell}>
             <p className={styles.label}>Millésime</p>
             <p className={styles.number}>{entry.vintage}</p>
-          </motion.div>
+          </div>
           <span className={styles.rowRule} aria-hidden="true" />
           <span className={styles.detailDivider} aria-hidden="true" />
         </div>
-        <div className={styles.landscape}>
-          <motion.div className={`${styles.landscapeCrop} image-grain`} initial="entranceHidden" animate={entrance} variants={contentEntrance}>
+        <div className={styles.landscape} data-product-reveal>
+          <div className={`${styles.landscapeCrop} image-grain`}>
             <Image src="/figma/infuser/product/wuyi.png" alt="Illustration des montagnes Wuyi à l’encre." width={1254} height={1254} quality={95} loading="eager" sizes="(max-width: 1024px) calc(100vw - 40px), 40vw" className={styles.landscapeImage} />
-          </motion.div>
+          </div>
           <span className={styles.landscapeRule} aria-hidden="true" />
         </div>
-        <div className={styles.priceRow}>
-          <motion.div className={styles.cell} initial="entranceHidden" animate={entrance} variants={contentEntrance}>
+        <div className={styles.priceRow} data-product-reveal>
+          <div className={styles.cell}>
             <p className={styles.label}>Récolte</p>
             <p className={styles.number}>{entry.harvest}</p>
-          </motion.div>
-          <motion.div className={styles.cell} initial="entranceHidden" animate={entrance} variants={contentEntrance}>
+          </div>
+          <div className={styles.cell}>
             <p className={styles.label}>Prix</p>
             <p className={styles.price} aria-live="polite">{price}</p>
-          </motion.div>
+          </div>
           <span className={styles.bottomRule} aria-hidden="true" />
           <span className={styles.priceDivider} aria-hidden="true" />
         </div>
-        <div className={styles.region}>
-          <motion.p initial="entranceHidden" animate={entrance} variants={contentEntrance}>{entry.region}</motion.p>
+        <div className={styles.region} data-product-reveal>
+          <p>{entry.region}</p>
           <span className={styles.bottomRule} aria-hidden="true" />
         </div>
       </div>
-      <motion.div className={styles.purchase} initial="entranceHidden" animate={entrance} variants={contentEntrance}>
-        <motion.button type="button" className={styles.addButton} whileHover={!pending && selected?.availableForSale ? { opacity: 0.85 } : undefined} whileTap={!reducedMotion && !pending && selected?.availableForSale ? { scale: 0.96 } : undefined} transition={{ duration: reducedMotion ? 0 : 0.15 }} onClick={handleAdd} disabled={pending || !selected?.availableForSale} aria-busy={pending}>
+      <div className={styles.purchase} data-product-reveal>
+        <button type="button" className={styles.addButton} onClick={handleAdd} disabled={pending || !selected?.availableForSale} aria-busy={pending}>
           <span>{pending ? "Ajout en cours…" : selected?.availableForSale ? "Ajouter au panier" : "Indisponible"}</span>
           {!pending && selected?.availableForSale && <span aria-hidden="true">→</span>}
-        </motion.button>
-      </motion.div>
+        </button>
+      </div>
       <div className={styles.feedback} role="status" aria-atomic="true">
         {(feedback?.handle === handle ? feedback.message : null) ?? (!product ? "Ce cru est momentanément indisponible." : "")}
       </div>

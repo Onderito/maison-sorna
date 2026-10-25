@@ -3,7 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useSyncExternalStore } from "react";
+import { useSiteNavigation } from "@/animations/use-site-navigation";
 import { createPortal } from "react-dom";
 
 import CustomerAccountLink from "@/components/customer-account-link";
@@ -28,52 +29,8 @@ type SiteNavigationProps = {
 export default function SiteNavigation({ overlay = false, tone = "auto" }: SiteNavigationProps) {
   const pathname = usePathname();
   const hydrated = useSyncExternalStore(subscribeToHydration, clientSnapshot, serverSnapshot);
-  const headerRef = useRef<HTMLElement>(null);
-  const [scrollState, setScrollState] = useState({ docked: !overlay, surface: false, hidden: false });
-
-  useEffect(() => {
-    let previousY = Math.max(0, window.scrollY);
-    let direction = 0;
-    let accumulated = 0;
-    let hidden = false;
-    let frame = 0;
-
-    const update = () => {
-      frame = 0;
-      const maxY = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
-      const y = Math.min(maxY, Math.max(0, window.scrollY));
-      const delta = y - previousY;
-      const nextDirection = Math.sign(delta);
-      if (nextDirection && nextDirection !== direction) {
-        direction = nextDirection;
-        accumulated = 0;
-      }
-      accumulated += Math.abs(delta);
-      if (y <= 48) hidden = false;
-      else if (accumulated >= 24) hidden = direction > 0;
-      // Keep links available while the user is navigating with the keyboard.
-      if (headerRef.current?.contains(document.activeElement)) hidden = false;
-      previousY = y;
-      const docked = !overlay || y > 48;
-      const surface = overlay ? y >= Math.max(48, window.innerHeight - 88) : y > 48;
-      setScrollState((current) => current.docked === docked && current.surface === surface && current.hidden === hidden
-        ? current : { docked, surface, hidden });
-    };
-    const schedule = () => {
-      if (!frame) frame = window.requestAnimationFrame(update);
-    };
-    schedule();
-    window.addEventListener("scroll", schedule, { passive: true });
-    window.addEventListener("resize", schedule);
-    return () => {
-      window.cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", schedule);
-      window.removeEventListener("resize", schedule);
-    };
-  }, [overlay, pathname]);
-
-  const hidden = scrollState.hidden;
-  const surface = pathname !== "/panier" && scrollState.surface;
+  const { headerRef, barRef, surfaceRef, state: scrollState } = useSiteNavigation(overlay, pathname, hydrated);
+  const { hidden, surface } = scrollState;
   const light = !surface && tone === "light";
   const assets = light ? "/figma/ressenti-hero" : "/figma/hero";
   const header = (
@@ -84,9 +41,9 @@ export default function SiteNavigation({ overlay = false, tone = "auto" }: SiteN
       data-surface={surface}
       data-hidden={hidden}
       data-light={light}
-      onFocusCapture={() => setScrollState((current) => current.hidden ? { ...current, hidden: false } : current)}
     >
-      <div className={styles.bar}>
+      <span ref={surfaceRef} className={styles.surface} aria-hidden="true" />
+      <div ref={barRef} className={styles.bar}>
         <Link href="/" className={styles.logo} aria-label="SÖRNA, accueil">SÖRNA</Link>
         <MobileNavigation pathname={pathname} items={navigation} />
         <nav className={styles.primary} aria-label="Navigation principale">

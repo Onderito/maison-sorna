@@ -1,6 +1,4 @@
 .section {
-  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
-  --faq-toggle-duration: 200ms;
   position: relative;
   z-index: 1;
   display: flex;
@@ -72,22 +70,12 @@
   border-top: 1px solid rgb(64 32 12 / 30%);
 }
 
-.item::before {
+.highlight {
   position: absolute;
   inset: 0;
   background: rgb(64 32 12 / 4%);
   opacity: 0;
-  transition: opacity 160ms ease;
   pointer-events: none;
-  content: "";
-}
-
-.item:has(.question:active)::before,
-.item:has(.question:focus-visible)::before { opacity: 1; }
-
-@media (hover: hover) and (pointer: fine) {
-  .item:hover::before { opacity: 0.7; }
-  .item:has(.question:active)::before { opacity: 1; }
 }
 
 .questionHeading { flex: none; font: inherit; }
@@ -143,7 +131,6 @@
 
 .indicatorVertical {
   transform: rotate(90deg);
-  transition: transform var(--faq-toggle-duration) var(--ease-out), opacity var(--faq-toggle-duration) var(--ease-out);
 }
 
 .item[data-expanded="true"] .indicatorVertical { transform: rotate(0deg); opacity: 0; }
@@ -151,8 +138,10 @@
 .answer {
   flex: none;
   overflow: hidden;
-  transition: height var(--faq-toggle-duration) var(--ease-out);
+  height: 0;
 }
+
+.item[data-expanded="true"] .answer { height: auto; }
 
 .answerContent {
   padding-top: 12px;
@@ -164,13 +153,11 @@
   text-wrap: pretty;
   opacity: 0;
   transform: translateY(4px);
-  transition: opacity 120ms var(--ease-out), transform var(--faq-toggle-duration) var(--ease-out);
 }
 
 .item[data-expanded="true"] .answerContent {
   opacity: 1;
   transform: translateY(0);
-  transition-duration: 160ms, var(--faq-toggle-duration);
 }
 
 .answer p { max-width: 33em; }
@@ -189,34 +176,6 @@
   font-weight: 300;
   line-height: 1.375;
 }
-
-@keyframes faqEnter {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes faqFade {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-.section[data-entrance="pending"] :is(.title, .introduction, .photograph, .item, .contact) {
-  opacity: 0;
-  transform: translateY(8px);
-}
-
-.section[data-entrance="visible"] :is(.title, .introduction, .photograph, .item, .contact) {
-  animation: faqEnter 360ms var(--ease-out) both;
-}
-
-.section[data-entrance="visible"] .introduction { animation-delay: 50ms; }
-.section[data-entrance="visible"] .photograph { animation-delay: 100ms; animation-duration: 600ms; }
-.section[data-entrance="visible"] .item:nth-child(1) { animation-delay: 150ms; }
-.section[data-entrance="visible"] .item:nth-child(2) { animation-delay: 200ms; }
-.section[data-entrance="visible"] .item:nth-child(3) { animation-delay: 250ms; }
-.section[data-entrance="visible"] .item:nth-child(4) { animation-delay: 300ms; }
-.section[data-entrance="visible"] .item:nth-child(5) { animation-delay: 350ms; }
-.section[data-entrance="visible"] .contact { animation-delay: 400ms; }
 
 @media (min-width: 768px) and (max-width: 1199px) {
   .title { font-size: min(4vw, 5.014svh); }
@@ -250,11 +209,5 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .indicatorVertical { transition: opacity 120ms ease; }
-  .item::before { transition-duration: 120ms; }
-  .answer { transition: none; }
-  .answerContent,
-  .item[data-expanded="true"] .answerContent { transform: none; transition: opacity 120ms ease; }
-  .section[data-entrance="pending"] :is(.title, .introduction, .photograph, .item, .contact) { opacity: 1; transform: none; }
-  .section[data-entrance="visible"] :is(.title, .introduction, .photograph, .item, .contact) { animation: faqFade 120ms ease both; }
+  .answerContent { transform: none; }
 }

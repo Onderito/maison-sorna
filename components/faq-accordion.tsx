@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
+import { useFaqItem } from "@/animations/use-faq-item";
 import styles from "./faq-section.module.css";
 
 type FaqQuestion = {
@@ -16,23 +17,11 @@ function FaqItem({
   expanded,
   onToggle,
 }: FaqQuestion & { expanded: boolean; onToggle: () => void }) {
-  const contentRef = useRef<HTMLDivElement>(null);
-  const [contentHeight, setContentHeight] = useState<number | null>(null);
-
-  useEffect(() => {
-    const content = contentRef.current;
-    if (!content) return;
-
-    // Keep the transition accurate when the text wraps or the fonts finish loading.
-    const observer = new ResizeObserver(() => {
-      setContentHeight(content.getBoundingClientRect().height);
-    });
-    observer.observe(content);
-    return () => observer.disconnect();
-  }, []);
+  const { itemRef, answerRef, contentRef, indicatorRef, highlightRef, interaction } = useFaqItem(expanded);
 
   return (
-    <div className={styles.item} data-expanded={expanded}>
+    <div ref={itemRef} className={styles.item} data-faq-item data-expanded={expanded} {...interaction}>
+      <span ref={highlightRef} className={styles.highlight} aria-hidden="true" />
       <h3 className={styles.questionHeading}>
         <button
           id={`faq-question-${id}`}
@@ -45,18 +34,18 @@ function FaqItem({
           <span>{question}</span>
           <span className={styles.indicator} aria-hidden="true">
             <span className={styles.indicatorHorizontal} />
-            <span className={styles.indicatorVertical} />
+            <span ref={indicatorRef} className={styles.indicatorVertical} />
           </span>
         </button>
       </h3>
       <div
+        ref={answerRef}
         id={`faq-answer-${id}`}
         role="region"
         aria-labelledby={`faq-question-${id}`}
         aria-hidden={!expanded}
         inert={!expanded}
         className={styles.answer}
-        style={{ height: expanded ? contentHeight ?? "auto" : 0 }}
       >
         <div ref={contentRef} className={styles.answerContent}>
           <p>{answer}</p>
@@ -70,7 +59,7 @@ export default function FaqAccordion({ questions }: { questions: readonly FaqQue
   const [openId, setOpenId] = useState<string | null>(questions[0]?.id ?? null);
 
   return (
-    <div className={styles.accordion}>
+    <div data-faq-accordion className={styles.accordion}>
       {questions.map((question) => (
         <FaqItem
           key={question.id}

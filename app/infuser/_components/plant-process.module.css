@@ -16,23 +16,16 @@
 
 
 .step {
-  position: sticky;
-  top: 0;
+  position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   grid-template-rows: minmax(0, 58svh) minmax(0, 42svh);
   height: 100svh;
   overflow: hidden;
   color: var(--text-on-light);
-  /* Sticky panels must stay opaque as they overlap during scrolling. */
+  /* Pinned panels must stay opaque as they overlap during scrolling. */
   background: var(--paper-background);
 }
-
-.step:nth-child(1) { z-index: 1; }
-.step:nth-child(2) { z-index: 2; }
-.step:nth-child(3) { z-index: 3; }
-.step:nth-child(4) { z-index: 4; }
-.step:nth-child(5) { z-index: 5; }
 
 .panels {
   position: relative;
@@ -40,23 +33,22 @@
   clip-path: inset(-64px 0 0);
 }
 
-.step::after {
-  content: "";
+.cover {
   position: absolute;
   inset: 0;
   z-index: 2;
   pointer-events: none;
   background: #000;
-  opacity: var(--cover-opacity, 0);
+  opacity: 0;
 }
 
-.step + .step {
+.step[data-process-stacked] {
   box-shadow: 0 -16px 40px rgb(0 0 0 / 12%), 0 -2px 8px rgb(0 0 0 / 5%);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .step::after { display: none; }
-  .step + .step { box-shadow: none; }
+  .cover { display: none; }
+  .step[data-process-stacked] { box-shadow: none; }
 }
 
 .editorial {

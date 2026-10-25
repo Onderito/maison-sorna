@@ -35,13 +35,13 @@ export default function FaqSection() {
   return (
     <FaqEntrance>
       <header className={styles.header}>
-        <h2 id="faq-title" className={styles.title}>SÖRNA vous répond</h2>
-        <p className={styles.introduction}>
+        <h2 data-faq-title id="faq-title" className={styles.title}>SÖRNA vous répond</h2>
+        <p data-faq-introduction className={styles.introduction}>
           Origine, préparation, conservation. L’essentiel pour choisir, servir et garder nos thés.
         </p>
       </header>
       <div className={styles.content}>
-        <div className={`${styles.photograph} image-grain`}>
+        <div data-faq-photograph className={`${styles.photograph} image-grain`}>
           <Image
             src="/figma/faq/tea-leaves.png"
             alt="Jeunes feuilles de thé couvertes de rosée."
@@ -55,6 +55,7 @@ export default function FaqSection() {
           <FaqAccordion questions={questions} />
           <button
             type="button"
+            data-faq-contact
             className={styles.contact}
             disabled
             title="Le contact sera bientôt disponible"

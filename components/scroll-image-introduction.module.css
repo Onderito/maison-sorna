@@ -1,12 +1,11 @@
 .introduction {
   position: relative;
   isolation: isolate;
-  height: 220svh;
+  height: 190svh;
 }
 
 .introductionViewport {
-  position: sticky;
-  top: 0;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -18,14 +17,10 @@
 }
 
 .introductionMedia {
-  --geste-start-scale: 0.26;
-  --geste-start-inset: 0%;
   position: absolute;
   inset: 0;
   isolation: isolate;
   overflow: hidden;
-  transform: scale(var(--geste-start-scale));
-  clip-path: inset(var(--geste-start-inset));
   transform-origin: center;
 }
 
@@ -34,7 +29,7 @@
   inset: 0;
   z-index: 31;
   background: #000;
-  opacity: 0;
+  opacity: 0.25;
   pointer-events: none;
 }
 
@@ -43,78 +38,23 @@
   z-index: 1;
   width: 100%;
   max-width: 1640px;
-  opacity: 0;
 }
 
-@keyframes expandPhotograph {
-  from { transform: scale(var(--geste-start-scale)); clip-path: inset(var(--geste-start-inset)); }
-  to { transform: scale(1); clip-path: inset(0%); }
+/* A single static mask; GSAP moves the complete heading inside it. */
+.introductionTitle [data-introduction-heading-mask] {
+  display: block;
+  overflow: clip;
+  padding-block: 0.16em;
+  margin-block: -0.16em;
 }
 
-@keyframes expandPhotographMobile {
-  from { transform: scale(1); clip-path: inset(var(--geste-start-inset)); }
-  35% { transform: scale(1); clip-path: inset(var(--geste-wide-inset)); }
-  to { transform: scale(1); clip-path: inset(0%); }
-}
-
-@keyframes revealIntroductionTitle {
-  from { opacity: 0; transform: translateY(16px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes dimIntroductionPhotograph {
-  from { opacity: 0; }
-  to { opacity: 0.25; }
-}
-
-@supports (animation-timeline: view()) and (animation-range: entry 75% contain 85%) {
-  .introduction { view-timeline-name: --geste; view-timeline-axis: block; }
-  .introductionMedia {
-    animation-name: expandPhotograph;
-    animation-duration: auto;
-    animation-timing-function: linear;
-    animation-fill-mode: both;
-    animation-timeline: --geste;
-    animation-range: entry 75% contain 85%;
-  }
-  .introductionTitle {
-    animation-name: revealIntroductionTitle;
-    animation-duration: auto;
-    animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
-    animation-fill-mode: both;
-    animation-timeline: --geste;
-    animation-range: contain 55% contain 80%;
-  }
-  .introductionShade {
-    animation-name: dimIntroductionPhotograph;
-    animation-duration: auto;
-    animation-timing-function: linear;
-    animation-fill-mode: both;
-    animation-timeline: --geste;
-    animation-range: contain 45% contain 80%;
-  }
-}
+.introductionTitle [data-introduction-heading] { display: block; }
 
 @media (min-width: 768px) {
   .introductionViewport { padding: 0 44px; }
 }
 
-@media (max-width: 767px) {
-  .introductionMedia {
-    --geste-start-scale: 1;
-    --geste-start-inset: max(0px, calc(50% - 23.75vw)) 12%;
-    --geste-wide-inset: max(0px, calc(50% - 23.75vw)) 0%;
-  }
-  @supports (animation-timeline: view()) and (animation-range: entry 75% contain 85%) {
-    .introductionMedia { animation-name: expandPhotographMobile; }
-  }
-}
-
+/* Static layout also serves no-JavaScript and reduced-motion visitors. */
 @media (prefers-reduced-motion: reduce) {
   .introduction { height: 100svh; }
-  .introductionViewport { position: relative; }
-  .introductionMedia, .introductionTitle, .introductionShade { animation: none !important; }
-  .introductionMedia { transform: none !important; clip-path: none !important; }
-  .introductionTitle { opacity: 1 !important; transform: none !important; }
-  .introductionShade { opacity: 0.25 !important; }
 }
