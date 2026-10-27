@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useRef, useState } from "react";
 import styles from "./authenticity-section.module.css";
+import { useAuthenticityReveal } from "@/animations/use-authenticity-reveal";
 
 const commitments = [
   { text: "Chaque formule de soin est publiée en entier, proportions et origines comprises.", image: "formule" },
@@ -12,10 +13,12 @@ const commitments = [
 ];
 
 export default function AuthenticitySection() {
+  const { sectionRef, revealImmediately } = useAuthenticityReveal();
   const trackRef = useRef<HTMLOListElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
   function goToCard(index: number) {
+    revealImmediately();
     const track = trackRef.current;
     const card = track?.children.item(index);
     if (!track || !(card instanceof HTMLElement)) return;
@@ -27,14 +30,22 @@ export default function AuthenticitySection() {
   }
 
   return (
-    <section id="la-preuve" className={styles.section} aria-labelledby="authenticity-title">
+    <section ref={sectionRef} id="la-preuve" className={styles.section} aria-labelledby="authenticity-title"
+      onFocusCapture={(event) => {
+        if (event.target.matches(":focus-visible")) revealImmediately();
+      }}
+    >
       <header className={styles.header}>
-        <h2 id="authenticity-title" className={styles.title}>La preuve</h2>
-        <p>Nous ne revendiquons que ce qui a été mesuré.</p>
+        <h2 id="authenticity-title" className={styles.title}>
+          <span className={styles.titleMask}><span data-proof-title>La preuve</span></span>
+        </h2>
+        <p data-proof-introduction>Nous ne revendiquons que ce qui a été mesuré.</p>
       </header>
       <ol
         id="authenticity-cards"
         ref={trackRef}
+        data-proof-track
+        onPointerDown={revealImmediately}
         className={styles.cards}
         tabIndex={0}
         aria-label="Nos quatre engagements"
@@ -56,8 +67,8 @@ export default function AuthenticitySection() {
       >
         {commitments.map((commitment) => (
           <li key={commitment.image} className={styles.card}>
-            <p>{commitment.text}</p>
-            <div className={styles.photograph}>
+            <p data-proof-copy>{commitment.text}</p>
+            <div className={styles.photograph} data-proof-photo>
               <Image
                 src={`/figma/ressentir/authenticite/${commitment.image}.png`}
                 alt=""

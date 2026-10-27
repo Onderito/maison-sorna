@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import { TransitionLink as Link } from "@/components/page-transition";
 import { usePathname } from "next/navigation";
 import { useSyncExternalStore } from "react";
 import { useSiteNavigation } from "@/animations/use-site-navigation";
@@ -9,6 +9,8 @@ import { createPortal } from "react-dom";
 
 import CustomerAccountLink from "@/components/customer-account-link";
 import MobileNavigation from "@/components/mobile-navigation";
+import NavigationSubmenu from "@/components/navigation-submenu";
+import { getNavigationSubmenuLinks } from "./navigation-submenu-links";
 import styles from "./site-navigation.module.css";
 
 const navigation = [
@@ -47,11 +49,16 @@ export default function SiteNavigation({ overlay = false, tone = "auto" }: SiteN
         <Link href="/" className={styles.logo} aria-label="SÖRNA, accueil">SÖRNA</Link>
         <MobileNavigation pathname={pathname} items={navigation} />
         <nav className={styles.primary} aria-label="Navigation principale">
-          {navigation.map((item) => (
+          {navigation.map((item) => {
+            const links = getNavigationSubmenuLinks(item.href);
+            return links ? (
+              <NavigationSubmenu key={`${item.href}:${pathname}`} current={pathname === item.href} label={item.label} href={item.href} links={links} />
+            ) : (
             <Link key={item.href} href={item.href} className={styles.navLink} aria-current={pathname === item.href ? "page" : undefined}>
               {item.label}
             </Link>
-          ))}
+            );
+          })}
         </nav>
         <div className={styles.actions}>
           <button type="button" disabled title="Le changement de langue sera disponible ultérieurement" aria-label="Langue : français" className={styles.language}>

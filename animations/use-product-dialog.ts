@@ -41,10 +41,15 @@ export function useProductDialog() {
   const [isOpen, setIsOpen] = useState(false);
   const lenis = useLenis();
   function finishClose(dialog: HTMLDialogElement) {
+    // Hide the complete surface, including borders outside the stagger, before
+    // the native dialog leaves the top layer and queues its close event.
+    gsap.set([sheetRef.current, backdropRef.current], { autoAlpha: 0 });
     // The native close event is queued. Restore the real bitmap BEFORE leaving
     // the top layer, in the same frame as removing its animated duplicate.
     restoreImageRef.current?.();
     restoreImageRef.current = null;
+    // Native dialog.close() may restore focus before the queued onClose event.
+    if (openerRef.current) openerRef.current.dataset.dialogReturnFocus = "true";
     dialog.close();
   }
 
@@ -103,6 +108,9 @@ export function useProductDialog() {
       closeButtonRef.current?.focus({ preventScroll: true });
       animationRef.current?.kill();
       const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const desktop = window.matchMedia("(min-width: 768px)").matches;
+      const detailsDelay = reduced ? 0 : desktop ? 0.42 : 0.27;
+      const surfaceDelay = !reduced && desktop ? 0.42 : 0;
       sheet.scrollTop = 0;
       sheet.querySelector("[data-product-reveal]")?.closest("[data-product-scroll]")?.scrollTo(0, 0);
       const destination = imageBounds(target, ratio);
@@ -124,7 +132,7 @@ export function useProductDialog() {
         scale: reduced ? 1 : origin.width / destination.width, autoAlpha: 1 });
       gsap.set(imageRef.current, { visibility: "hidden" });
       gsap.set(elements, { opacity: 0, x: reduced ? 0 : -16 });
-      gsap.set(sheet, { opacity: 1 });
+      gsap.set(sheet, { autoAlpha: 1 });
       animationRef.current = gsap.timeline({
         defaults: { ease: productEase },
         onComplete: () => {
@@ -132,11 +140,11 @@ export function useProductDialog() {
           gsap.set(moving, { visibility: "hidden" });
         },
       })
-        .fromTo(backdrop, { opacity: 0 }, { opacity: 1, duration: reduced ? 0 : 0.3 }, 0)
-        .fromTo(sheet.querySelector("[data-product-scroll]"), { opacity: 0 }, { opacity: 1, duration: reduced ? 0 : 0.3 }, 0)
+        .fromTo(backdrop, { autoAlpha: 0 }, { autoAlpha: 1, duration: reduced ? 0 : 0.3 }, 0)
+        .fromTo(sheet.querySelector("[data-product-scroll]"), { autoAlpha: 0 }, { autoAlpha: 1, duration: reduced ? 0 : 0.3 }, surfaceDelay)
         .fromTo(sheet.querySelector("[data-product-visual]"), { opacity: 0 }, { opacity: 1, duration: reduced ? 0 : 0.3 }, 0)
         .to(moving, { x: 0, y: 0, scale: 1, duration: reduced ? 0 : 0.3 }, 0)
-        .to(elements, { opacity: 1, x: 0, duration: reduced ? 0 : 0.25, stagger: reduced ? 0 : 0.025 }, reduced ? 0 : 0.27);
+        .to(elements, { opacity: 1, x: 0, duration: reduced ? 0 : 0.25, stagger: reduced ? 0 : 0.025 }, detailsDelay);
       // The shared image lives above the right background, not inside its fade.
       gsap.set(closeButtonRef.current, { opacity: 1 });
     })();
@@ -179,9 +187,10 @@ export function useProductDialog() {
         onComplete: () => finishClose(dialog),
       })
         .to(elements ?? [], { opacity: 0, x: -16, duration: 0.12, stagger: { each: 0.01, from: "end" } }, 0)
+        .to(sheetRef.current?.querySelector("[data-product-scroll]") ?? [], { autoAlpha: 0, duration: 0.16 }, 0)
         .to(moving, { x: origin.x - baseX, y: origin.y - baseY,
           scale: origin.width / baseWidth, duration: 0.22 }, 0.08)
-        .to([backdropRef.current, sheetRef.current], { opacity: 0, duration: 0.22 }, 0.08);
+        .to([backdropRef.current, sheetRef.current], { autoAlpha: 0, duration: 0.22 }, 0.08);
     })();
   }
 
@@ -193,7 +202,10 @@ export function useProductDialog() {
     releaseScrollRef.current = null;
     closing.current = false;
     setIsOpen(false);
-    if (openerRef.current?.isConnected) openerRef.current.focus({ preventScroll: true });
+    if (openerRef.current?.isConnected) {
+      openerRef.current.dataset.dialogReturnFocus = "true";
+      openerRef.current.focus({ preventScroll: true });
+    }
   }
 
   function onOutsidePointerDown(target: EventTarget) {

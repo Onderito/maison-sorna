@@ -34,7 +34,7 @@ export default function PlantProcess({
                     </span>{" "}
                     {step.title}
                   </h2>
-                  <p className="font-sans text-[18px] leading-normal font-light text-text-on-light/80 md:text-[20px]">
+                  <p className="font-sans text-[16px] leading-normal font-light text-text-on-light/80 md:text-[20px]">
                     {step.description}
                   </p>
                 </div>

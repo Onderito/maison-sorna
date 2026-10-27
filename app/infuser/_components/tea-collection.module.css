@@ -2,6 +2,8 @@
 .header { margin-bottom: clamp(32px, 4vw, 64px); text-align: center; }
 .eyebrow { margin-bottom: 16px; font-size: 16px; letter-spacing: 0.12em; text-transform: uppercase; }
 .header h2 { color: #838d76; font-size: clamp(40px, 5.5vw, 88px); font-weight: 400; line-height: 1; text-transform: uppercase; text-wrap: balance; }
+.titleMask { display: block; overflow: clip; padding-block: 0.12em; margin-block: -0.12em; }
+.titleMask > span { display: block; }
 .header > p:last-child { margin: 20px auto 0; max-width: 32em; font-size: 18px; line-height: 1.5; text-wrap: pretty; }
 .collection { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 20px; list-style: none; padding: 0; }
 .collection > li { min-width: 0; }
@@ -28,6 +30,10 @@
   .collection > li { grid-column: span 2; }
   .collection > li:nth-child(4) { grid-column: 2 / 4; }
   .collection > li:nth-child(5) { grid-column: 4 / 6; }
+}
+@media (max-width: 767px) {
+  .header > p:last-child { font-size: 16px; }
+  .header h2 { font-size: var(--section-title-mobile-compact); }
 }
 @media (max-width: 599px) {
   .collection { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 16px; }

@@ -1,6 +1,6 @@
 .section {
   display: grid;
-  grid-template-rows: minmax(0, 293fr) minmax(0, 541fr) minmax(0, 163fr);
+  grid-template-rows: minmax(min-content, 293fr) minmax(0, 541fr) auto;
   gap: 24px;
   height: 100vh;
   height: 100svh;
@@ -8,13 +8,15 @@
   color: var(--text-on-light);
 }
 
-.header { display: flex; flex-direction: row; align-items: flex-start; justify-content: space-between; gap: min(1.85185vw, 2.86482svh); min-height: 0; }
+.header { display: flex; flex-direction: row; align-items: flex-end; align-self: start; justify-content: space-between; gap: min(1.85185vw, 2.86482svh); min-height: 0; }
 .title { font-size: min(10.41667vw, 16.11459svh); line-height: 0.95556; font-weight: 600; text-transform: uppercase; }
-.introduction { width: 25.5%; max-width: 45.3vw; margin-top: min(4.28241vw, 6.62489svh); text-align: right; font-size: min(1.15741vw, 1.79051svh); line-height: 1.4; }
+.titleMask { display: block; overflow: clip; padding-block: 0.14em; margin-block: -0.14em; }
+.titleMask > span { display: block; }
+.introduction { width: 36%; max-width: 36em; margin-top: 0; text-align: right; font-size: 18px; line-height: 1.4; }
 .photograph { position: relative; min-height: 0; width: 79.8%; justify-self: center; overflow: hidden; }
 .image { object-fit: cover; object-position: center 28.75%; }
 .notes { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; min-height: 0; }
-.note { width: 21.6%; font-size: min(1.04167vw, 1.61146svh); line-height: 1.4; }
+.note { width: 21.6%; font-size: 16px; line-height: 1.4; }
 .note:last-child { text-align: right; }
 .note h3 { margin-bottom: 8px; color: #838d76; font-family: var(--font-manrope), Arial, sans-serif; font-size: inherit; font-weight: 700; text-transform: uppercase; }
 .note strong { color: #838d76; font-weight: 700; }
@@ -30,12 +32,12 @@
     height: auto;
     padding: var(--space-3) 0;
   }
-  .header, .care .header { flex-direction: column; gap: var(--space-2); padding: 0 var(--space-1) calc(var(--space-unit) * 7); }
+  .header, .care .header { flex-direction: column; align-items: stretch; align-self: stretch; gap: var(--space-2); padding: 0 var(--space-1) calc(var(--space-unit) * 7); }
   .title { font-family: var(--font-cormorant-garamond), Georgia, serif; font-size: var(--section-title-mobile-paper); font-weight: 400; }
-  .introduction, .care .introduction { width: 100%; max-width: 100%; margin: 0; text-align: left; font-size: 4vw; }
+  .introduction, .care .introduction { width: 100%; max-width: 100%; margin: 0; text-align: left; font-size: 16px; }
   .photograph { width: 100%; aspect-ratio: 670 / 612; flex-shrink: 0; }
   .notes { flex-direction: column; align-items: stretch; gap: var(--space-6); padding: var(--space-6) var(--space-1) 0; }
-  .note { width: 100%; font-size: 4vw; }
-  .note h3 { margin-bottom: var(--space-2); font-size: 4.5vw; }
+  .note { width: 100%; font-size: 16px; }
+  .note h3 { margin-bottom: var(--space-2); font-size: 16px; }
   .note strong { color: var(--accent); }
 }

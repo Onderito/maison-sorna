@@ -1,9 +1,20 @@
 "use client";
 
-import { ReactLenis } from "lenis/react";
+import { ReactLenis, useLenis } from "lenis/react";
+import { ScrollTrigger } from "@/animations/scroll-trigger";
 import { useSyncExternalStore, type ReactNode } from "react";
 
 const reducedMotionQuery = "(prefers-reduced-motion: reduce)";
+
+function updateScrollTriggers() {
+  ScrollTrigger.update();
+}
+
+function ScrollAnimationSync() {
+  // Lenis owns the only RAF; all scenes share one ScrollTrigger update.
+  useLenis(updateScrollTriggers);
+  return null;
+}
 
 function subscribeToReducedMotion(onChange: () => void) {
   const preference = window.matchMedia(reducedMotionQuery);
@@ -38,6 +49,7 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
         stopInertiaOnNavigate: true,
       }}
     >
+      <ScrollAnimationSync />
       {children}
     </ReactLenis>
   );

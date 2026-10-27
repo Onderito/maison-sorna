@@ -26,11 +26,13 @@ export default function ProductDialog({
       ref={openerRef}
       href={href}
       prefetch={false}
-      className={triggerClassName}
+      className={`${triggerClassName} ${styles.trigger}`}
       aria-haspopup="dialog"
       aria-expanded={isOpen}
       aria-controls={dialogId}
       onNavigate={(event) => { event.preventDefault(); open(); }}
+      onBlur={(event) => { delete event.currentTarget.dataset.dialogReturnFocus; }}
+      onKeyDown={(event) => { delete event.currentTarget.dataset.dialogReturnFocus; }}
     >
       {trigger}
     </Link>

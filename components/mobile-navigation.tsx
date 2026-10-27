@@ -1,10 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import { TransitionLink as Link } from "@/components/page-transition";
 import { useEffect, useRef, useState } from "react";
 
 import CustomerAccountLink from "@/components/customer-account-link";
+import { getNavigationSubmenuLinks } from "./navigation-submenu-links";
 import styles from "./site-navigation.module.css";
 
 const easing = "cubic-bezier(0.23, 1, 0.32, 1)";
@@ -26,6 +27,12 @@ export default function MobileNavigation({ pathname, items }: MobileNavigationPr
     if (previousOverflow.current === null) return;
     document.documentElement.style.overflow = previousOverflow.current;
     previousOverflow.current = null;
+  };
+
+  const closeForNavigation = () => {
+    // Release the menu's lock before the page transition acquires its own.
+    restoreScroll();
+    dialogRef.current?.close();
   };
 
   const showMenu = () => {
@@ -105,22 +112,34 @@ export default function MobileNavigation({ pathname, items }: MobileNavigationPr
         onClick={(event) => { if (event.target === dialogRef.current) closeMenu(); }}
       >
         <div className={styles.dialogHeader}>
-          <Link href="/" className={styles.logo} aria-label="SÖRNA, accueil" onClick={() => dialogRef.current?.close()}>SÖRNA</Link>
+          <Link href="/" className={styles.logo} aria-label="SÖRNA, accueil" onClick={closeForNavigation}>SÖRNA</Link>
           <button ref={closeButtonRef} type="button" className={styles.menuButton} aria-label="Fermer le menu" onClick={closeMenu}>
             <span className={`${styles.burger} ${styles.burgerOpen}`} aria-hidden="true"><span /><span /></span>
           </button>
         </div>
         <nav aria-label="Navigation mobile" className={styles.mobileNavigation}>
-          {items.map((item) => (
-            <Link key={item.href} href={item.href} className={styles.mobileLink} aria-current={pathname === item.href ? "page" : undefined} onClick={() => dialogRef.current?.close()}>
-              {item.label}
-            </Link>
-          ))}
+          {items.map((item) => {
+            const links = getNavigationSubmenuLinks(item.href);
+            return (
+            <div key={item.href}>
+              <Link href={item.href} className={styles.mobileLink} aria-current={pathname === item.href ? "page" : undefined} onClick={closeForNavigation}>
+                {item.label}
+              </Link>
+              {links && (
+                <ul className={styles.mobileSubmenu}>
+                  {links.map((link) => (
+                    <li key={link.href}><Link href={link.href} onClick={closeForNavigation}>{link.label}</Link></li>
+                  ))}
+                </ul>
+              )}
+            </div>
+            );
+          })}
         </nav>
         <div className={styles.mobileUtilities}>
           <div className={styles.mobileCommerce}>
             <CustomerAccountLink />
-            <Link href="/panier" prefetch={false} className={styles.mobileCart} onClick={() => dialogRef.current?.close()}>
+            <Link href="/panier" prefetch={false} className={styles.mobileCart} onClick={closeForNavigation}>
               Panier
             </Link>
           </div>

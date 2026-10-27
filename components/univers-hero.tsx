@@ -69,7 +69,7 @@ export function UniversHero({
             >
               {title}
             </h1>
-            {subtitle && <p className="max-w-[36em] px-4 font-sans text-[clamp(0.875rem,1.16vw,1.25rem)] leading-[1.4]">{subtitle}</p>}
+            {subtitle && <p className="max-w-[36em] px-4 font-sans text-[16px] md:text-[18px] lg:text-[20px] leading-[1.4]">{subtitle}</p>}
           </div>
 
         </div>

@@ -4,16 +4,18 @@
 
 .profile { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.15741vw; }
 .profile + .profile { margin-top: 9.14352vw; }
-.portrait { position: relative; aspect-ratio: 854 / 959; }
+.portrait { position: relative; aspect-ratio: 854 / 959; overflow: hidden; }
 .image { object-fit: cover; }
 .biography { display: flex; flex-direction: column; min-width: 0; padding: 0.92593vw 2.31481vw 0; text-align: right; }
 .name { margin-bottom: 1.85185vw; color: #838d76; font-family: var(--font-cormorant-garamond), Georgia, serif; font-size: 40px; line-height: 1.2; font-weight: 700; text-transform: uppercase; }
+.nameMask { display: block; overflow: clip; padding-block: 0.14em; margin-block: -0.14em; }
+.nameMask > span { display: block; }
 .copy, .role { line-height: 1.4; }
 .copy { display: flex; flex-direction: column; gap: 1.4em; font-size: 20px; }
 .role { margin-top: 40px; color: #838d76; font-size: 16px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; }
 .profile:nth-child(even) .portrait { grid-column: 2; grid-row: 1; aspect-ratio: 854 / 943; }
 .profile:nth-child(even) .biography { grid-column: 1; grid-row: 1; padding-top: 2.08333vw; text-align: left; }
-.editorialPhoto { display: none; }
+.editorialPhoto { display: none; overflow: hidden; }
 
 @media (min-width: 1024px) {
   .editorialPhoto { display: block; position: relative; width: 62%; aspect-ratio: 4 / 3; flex-shrink: 0; align-self: flex-start; margin: max(40px, 4vw) 0 3vw -6.5vw; }
@@ -26,6 +28,7 @@
   .portrait, .profile:nth-child(even) .portrait { grid-column: 1; grid-row: 1; }
   .biography, .profile:nth-child(even) .biography { grid-column: 1; grid-row: 2; padding: 24px 16px; }
   .name { margin-bottom: 20px; font-size: 28px; }
-  .copy, .role { font-size: 15px; }
+  .copy { font-size: 16px; }
+  .role { font-size: 15px; }
   .role { margin-top: 32px; }
 }

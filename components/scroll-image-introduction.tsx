@@ -18,13 +18,15 @@ export default function ScrollImageIntroduction({ id, imageSrc, children }: Scro
     <section ref={sectionRef} id={id} className={styles.introduction} aria-labelledby={`${id}-title`}>
       <div ref={viewportRef} className={styles.introductionViewport}>
         <div ref={photographRef} className={styles.introductionMedia} aria-hidden="true">
-          <Image
-            src={imageSrc}
-            alt=""
-            fill
-            sizes="100vw"
-            className="object-cover"
-          />
+          <div data-introduction-image className={styles.introductionImage}>
+            <Image
+              src={imageSrc}
+              alt=""
+              fill
+              sizes="100vw"
+              className="object-cover"
+            />
+          </div>
           <span className="image-grain-overlay" />
           <div ref={shadeRef} className={styles.introductionShade} />
         </div>

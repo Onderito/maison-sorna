@@ -1,18 +1,11 @@
 "use client";
 
 import { useRef } from "react";
-import { useLenis } from "lenis/react";
 import { gsap, useGSAP } from "./gsap";
 import { ScrollTrigger } from "./scroll-trigger";
 
-function updateScrollTriggers() {
-  ScrollTrigger.update();
-}
-
 export function useProcessTransitions() {
   const containerRef = useRef<HTMLDivElement>(null);
-
-  useLenis(updateScrollTriggers);
 
   useGSAP(() => {
     const container = containerRef.current;

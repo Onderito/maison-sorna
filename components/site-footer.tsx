@@ -1,35 +1,7 @@
 import Image from "next/image";
-import Link from "next/link";
+import { TransitionLink as Link } from "@/components/page-transition";
 import styles from "./site-footer.module.css";
-
-const groups = [
-  {
-    title: "Infuser",
-    links: [
-      { label: "Les Cinq Sommets", href: "/infuser#la-carte" },
-      { label: "Le geste", href: "/infuser#le-geste" },
-      { label: "Le rituel", href: "/infuser#le-rituel" },
-      { label: "L’art de l’accord", href: "/infuser#l-art-de-l-accord" },
-    ],
-  },
-  {
-    title: "Appliquer",
-    links: [
-      { label: "Le savoir-faire", href: "/appliquer" },
-      { label: "Nos soins", href: "/appliquer#le-second-versant" },
-    ],
-  },
-  {
-    title: "Ressentir",
-    links: [
-      { label: "Les origines", href: "/ressentir#les-origines" },
-      { label: "Le regard", href: "/ressentir#le-regard" },
-      { label: "La preuve", href: "/ressentir#la-preuve" },
-      { label: "À l’origine de la Maison", href: "/ressentir#a-l-origine-de-la-maison" },
-      { label: "Ceux qui l’accompagnent", href: "/ressentir#ceux-qui-l-accompagnent" },
-    ],
-  },
-];
+import { footerNavigationGroups } from "./navigation-submenu-links";
 
 const linkClass = "w-fit underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current";
 
@@ -39,14 +11,14 @@ export default function SiteFooter() {
       <div className={styles.paper}>
         <div className={styles.columns}>
           <div className={styles.newsletter}>
-            <label htmlFor="footer-email" className={styles.heading}>S’inscrire à notre newsletter</label>
+            <label htmlFor="footer-email" className={`${styles.heading} uppercase`}>S’inscrire à notre newsletter</label>
             <div className={styles.email}>
-              <input id="footer-email" type="email" autoComplete="email" placeholder="Votre adresse email" className="min-w-0 flex-1 bg-transparent px-0.5 placeholder:text-text-on-dark focus-visible:outline-2 focus-visible:outline-button" />
+              <input id="footer-email" type="email" autoComplete="email" placeholder="Votre adresse email" className="min-w-0 flex-1 bg-transparent px-0.5 placeholder:text-text-on-dark focus:outline-none" />
               <button type="button" disabled title="L’inscription à la newsletter sera bientôt disponible" aria-label="S’inscrire à la newsletter, bientôt disponible" className="h-full w-[48px] shrink-0 cursor-not-allowed bg-text-on-dark text-xl text-button">→</button>
             </div>
             <p className={styles.description}>Quelques nouvelles de SÖRNA, lorsque le moment est juste.</p>
           </div>
-          {groups.map((group) => (
+          {footerNavigationGroups.map((group) => (
             <nav key={group.title} aria-label={group.title}>
               <h2 className={`${styles.heading} uppercase`}>{group.title}</h2>
               <ul className={styles.links}>

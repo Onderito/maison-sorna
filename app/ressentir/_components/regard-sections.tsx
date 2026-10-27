@@ -1,6 +1,7 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
 import styles from "./regard-sections.module.css";
+import RegardSectionReveal from "./regard-section-reveal";
 
 type RegardSection = {
   id: string;
@@ -38,24 +39,26 @@ const sections: RegardSection[] = [
 
 export default function RegardSections() {
   return sections.map((section) => (
-    <section key={section.id} id={section.id} className={`${styles.section} ${section.id === "le-soin" ? styles.care : ""}`} aria-labelledby={`${section.id}-title`}>
+    <RegardSectionReveal key={section.id} id={section.id} className={`${styles.section} ${section.id === "le-soin" ? styles.care : ""}`} aria-labelledby={`${section.id}-title`}>
       <header className={styles.header}>
-        <h2 id={`${section.id}-title`} className={styles.title}>{section.title}</h2>
-        <p className={styles.introduction}>{section.introduction}</p>
+        <h2 id={`${section.id}-title`} className={styles.title}>
+          <span className={styles.titleMask}><span data-regard-title>{section.title}</span></span>
+        </h2>
+        <p className={styles.introduction} data-regard-introduction>{section.introduction}</p>
       </header>
-      <div className={`${styles.photograph} image-grain`}>
+      <div className={`${styles.photograph} image-grain`} data-regard-photo>
         <Image src={section.image} alt="" fill sizes="(max-width: 767px) 100vw, 78vw" className={styles.image} />
       </div>
       <div className={styles.notes}>
-        <div className={styles.note}>
+        <div className={styles.note} data-regard-note>
           <h3>{section.leftTitle}</h3>
           <p>{section.leftText}</p>
         </div>
-        <div className={styles.note}>
+        <div className={styles.note} data-regard-note>
           <h3>{section.rightTitle}</h3>
           <p>{section.rightText}</p>
         </div>
       </div>
-    </section>
+    </RegardSectionReveal>
   ));
 }

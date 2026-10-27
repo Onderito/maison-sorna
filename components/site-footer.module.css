@@ -37,7 +37,7 @@
   margin-top: 12px;
   padding: 4px;
   border: 1px solid var(--text-on-dark);
-  font-size: 13px;
+  font-size: 16px;
 }
 .description {
   max-width: 412px;
@@ -49,7 +49,7 @@
   display: flex;
   flex-direction: column;
   margin-top: 8px;
-  font-size: 12px;
+  font-size: 16px;
   line-height: 1.4;
 }
 .links a { padding-block: 3px; }
@@ -59,14 +59,14 @@
   align-items: flex-start;
   gap: 8px;
   font-family: var(--font-manrope), Arial, sans-serif;
-  font-size: 10px;
+  font-size: 14px;
   line-height: 1.2;
   text-transform: uppercase;
 }
 .copyright {
   margin-top: 4px;
   font-family: var(--font-manrope), Arial, sans-serif;
-  font-size: 11px;
+  font-size: 14px;
 }
 .photo {
   position: relative;
@@ -99,10 +99,10 @@
   .heading { font-size: 18px; }
   .email { margin-top: 8px; height: 38px; }
   .description { font-size: 11px; }
-  .links { margin-top: 6px; font-size: 11px; }
+  .links { margin-top: 6px; font-size: 16px; }
   .links a { padding-block: 2px; }
-  .legal { font-size: 9px; }
-  .copyright { font-size: 10px; }
+  .legal { font-size: 14px; }
+  .copyright { font-size: 14px; }
 }
 
 @media (min-width: 1024px) {
@@ -125,23 +125,35 @@
   .email { height: 49px; margin-top: 18px; font-size: 14px; font-weight: 400; }
   .description {
     margin-top: 12px;
-    font-size: 13px;
+    font-size: 16px;
     font-weight: 300;
     line-height: 1.6;
   }
   .links {
     margin-top: 18px;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 400;
     line-height: 1.5;
   }
   .links a { padding-block: 4px; }
-  .legal { font-size: 12px; }
-  .copyright { margin-top: 6px; font-size: 10px; }
+  .legal { font-size: 14px; }
+  .copyright { margin-top: 6px; font-size: 14px; }
   .signature { right: 20px; font-size: clamp(100px, 11.58vw, 240px); }
 }
 
 /* Preserve access to every link in short landscape windows or with zoom. */
 @media (max-height: 500px) {
   .footer { height: auto; min-height: 100svh; grid-template-rows: auto 200px; }
+}
+
+@media (max-width: 767px) {
+  .footer { height: auto; min-height: 100svh; grid-template-rows: auto minmax(220px, 1fr); }
+  .paper { gap: 40px; padding-block: 28px; }
+  .columns { row-gap: 32px; }
+  .newsletter { margin-bottom: 16px; }
+  .heading { font-size: 18px; }
+  .email { font-size: 16px; }
+  .description { font-size: 16px; }
+  .links { font-size: 16px; }
+  .legal, .copyright { font-size: 14px; }
 }

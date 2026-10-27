@@ -5,6 +5,7 @@ import { cookies } from "next/headers";
 import { CUSTOMER_AUTH_COOKIES } from "@/app/lib/shopify/customers";
 import { CustomerSessionProvider } from "@/components/customer-session-provider";
 import { SmoothScroll } from "@/components/smooth-scroll";
+import { PageTransition } from "@/components/page-transition";
 
 import "lenis/dist/lenis.css";
 import "./globals.css";
@@ -34,7 +35,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="fr" className={`${manrope.variable} ${cormorantGaramond.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
         <CustomerSessionProvider initialAuthenticated={initialAuthenticated}>
-          <SmoothScroll>{children}</SmoothScroll>
+          <SmoothScroll><PageTransition>{children}</PageTransition></SmoothScroll>
         </CustomerSessionProvider>
       </body>
     </html>

@@ -184,8 +184,8 @@
 @media (max-width: 767px) {
   .section { padding: 20px var(--layout-margin) 12px; }
   .header { margin-bottom: 16px; }
-  .title { font-size: var(--section-title-mobile-paper); line-height: 1.1; text-wrap: balance; }
-  .introduction { max-width: 360px; margin: 10px auto 0; font-family: var(--font-manrope), Arial, sans-serif; font-size: 18px; line-height: 1.5; }
+  .title { font-size: var(--section-title-mobile-compact); line-height: 1.1; text-wrap: balance; }
+  .introduction { max-width: 360px; margin: 10px auto 0; font-family: var(--font-manrope), Arial, sans-serif; font-size: 16px; line-height: 1.5; }
   .lineBreak { display: none; }
   .content { min-height: 0; grid-template-columns: minmax(0, 1fr); grid-template-rows: clamp(200px, 28svh, 320px) auto; gap: 24px; }
   .image { object-position: center 58%; }

@@ -26,6 +26,7 @@ html { scroll-padding-top: 96px; }
   --space-unit: 8px;
   --section-title-mobile-paper: calc(var(--space-unit) * 7);
   --section-title-mobile-media: calc(var(--space-unit) * 6);
+  --section-title-mobile-compact: calc(var(--space-unit) * 5);
   --hero-title-mobile: calc(var(--space-unit) * 7);
   --space-1: var(--space-unit);
   --space-2: calc(var(--space-unit) * 2);

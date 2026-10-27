@@ -4,6 +4,7 @@ import { getProduct } from "@/app/lib/shopify/products";
 import { getTeaCardEntry, teaEditions } from "../tea-editions";
 import ProductDialog from "@/components/product-dialog";
 import TeaCardDetails from "./tea-card-details";
+import TeaCollectionEntrance from "./tea-collection-entrance";
 import styles from "./tea-collection.module.css";
 
 export default async function TeaCollection() {
@@ -17,11 +18,11 @@ export default async function TeaCollection() {
   }));
 
   return (
-    <section id="les-cuvees" className={styles.section} aria-labelledby="collection-title">
-      <header className={styles.header}>
-        <p className={styles.eyebrow}>La collection</p>
-        <h2 id="collection-title">À chacun son sommet</h2>
-        <p>Cinq cuvées, cinq façons de découvrir la feuille.</p>
+    <TeaCollectionEntrance>
+      <header data-collection-header className={styles.header}>
+        <p data-collection-eyebrow className={styles.eyebrow}>La collection</p>
+        <h2 id="collection-title"><span className={styles.titleMask}><span data-collection-title>À chacun son sommet</span></span></h2>
+        <p data-collection-introduction>Cinq cuvées, cinq façons de découvrir la feuille.</p>
       </header>
       <ul className={styles.collection}>
         {entries.map(({ edition, product, failed }, index) => {
@@ -49,7 +50,7 @@ export default async function TeaCollection() {
               </div>
             </div>
           </>;
-          return <li key={edition.handle}>
+          return <li key={edition.handle} data-collection-card>
             {product && teaEntry ? (
               <ProductDialog href={`/produits/${product.handle}`} title={product.title} trigger={contents} triggerClassName={styles.card} image={
                 <Image src={edition.photograph} alt={edition.photographAlt} fill loading="eager" sizes="(min-width: 768px) 50vw, 100vw" className="object-contain" />
@@ -61,6 +62,6 @@ export default async function TeaCollection() {
         })}
       </ul>
       <Link href="#le-geste" className={styles.more}>De la feuille à la tasse <span aria-hidden="true">↓</span></Link>
-    </section>
+    </TeaCollectionEntrance>
   );
 }

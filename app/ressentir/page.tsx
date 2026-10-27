@@ -52,14 +52,14 @@ export default function RessentirPage() {
         <AuthenticitySection />
         <StoryIntroduction
           id="a-l-origine-de-la-maison"
-          title={<>À l’origine de<br />la Maison</>}
+          title={["À l’origine de", "la Maison"]}
           subtitle="Deux parcours. L’un est venu par le goût du vin, l’autre par le travail de la vigne."
           multiline
         />
         <FoundersSection />
         <StoryIntroduction
           id="ceux-qui-l-accompagnent"
-          title={<>Ceux qui<br />l’accompagnent</>}
+          title={["Ceux qui", "l’accompagnent"]}
           subtitle="Une maison se construit aussi avec ceux qui lui donnent une voix, une image et une présence."
           multiline
         />

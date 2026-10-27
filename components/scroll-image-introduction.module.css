@@ -24,6 +24,16 @@
   transform-origin: center;
 }
 
+.introductionImage { position: absolute; inset: 0; }
+
+.introduction[data-static="true"] { height: auto; }
+.introduction[data-static="true"] .introductionViewport {
+  height: auto;
+  min-height: 100svh;
+  padding-block: 64px;
+}
+.introduction[data-static="true"] h2 { white-space: normal; overflow-wrap: anywhere; }
+
 .introductionShade {
   position: absolute;
   inset: 0;
