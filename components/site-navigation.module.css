@@ -111,7 +111,7 @@
 .mobileSubmenu { list-style: none; margin: 0 0 16px; padding: 0 0 0 16px; border-left: 1px solid rgb(64 32 12 / 20%); }
 .mobileSubmenu a { display: flex; align-items: center; min-height: 44px; font-family: var(--font-manrope), Arial, sans-serif; font-size: 16px; }
 .actions { display: none; align-items: center; gap: 0; flex-shrink: 0; }
-.mobileControls { margin-left: auto; }
+.mobileControls { display: flex; align-items: center; gap: 8px; margin-left: auto; }
 .menuButton, .language, .cart {
   display: inline-flex;
   align-items: center;
@@ -143,23 +143,32 @@
   background: var(--nav-background);
   color: var(--text-on-light);
   box-shadow: 0 2px 6px rgb(0 0 0 / 4%), 0 8px 24px rgb(0 0 0 / 8%);
-  overflow-y: auto;
+  overflow: hidden;
   overscroll-behavior: contain;
 }
 .mobileDialog[open] { display: flex; flex-direction: column; }
 .mobileDialog::backdrop { background: rgb(64 32 12 / 16%); }
-.dialogHeader { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.dialogHeader { display: flex; flex: none; align-items: center; justify-content: space-between; gap: 24px; }
 .dialogHeader .logo { font-size: 24px; }
 .mobileNavigation {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  flex: 1 0 auto;
+  justify-content: flex-start;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   gap: 8px;
-  padding-block: 40px;
+  padding-block: 24px;
 }
+.mobileGroupTrigger { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.mobileSubmenuToggle { display: inline-flex; flex: none; align-items: center; justify-content: center; width: 44px; height: 44px; cursor: pointer; }
+.mobileSubmenuToggle svg { transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1); }
+.mobileSubmenuToggle[aria-expanded="true"] svg { transform: rotate(180deg); }
+.mobileSubmenuToggle:focus-visible svg { transition: none; }
 .mobileLink {
   display: flex;
+  flex: 1;
   align-items: center;
   min-height: 72px;
   font-family: var(--font-cormorant-garamond), Georgia, serif;
@@ -167,10 +176,9 @@
   text-transform: uppercase;
 }
 .mobileLink[aria-current="page"] { color: #68745d; }
-.mobileUtilities { display: flex; flex-direction: column; gap: 16px; border-top: 1px solid rgb(64 32 12 / 20%); padding-top: 24px; }
+.mobileUtilities { display: flex; flex: none; flex-direction: column; gap: 16px; border-top: 1px solid rgb(64 32 12 / 20%); padding-top: 24px; }
 .mobileCommerce { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
-.mobileCart, .mobileLanguage { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; font-family: var(--font-manrope), Arial, sans-serif; font-size: 12px; text-transform: uppercase; }
-.mobileLanguage { align-self: flex-start; }
+.mobileCart { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; font-family: var(--font-manrope), Arial, sans-serif; font-size: 12px; text-transform: uppercase; }
 .cart, .mobileCart {
   font-size: 12px;
   line-height: 16px;
@@ -235,5 +243,5 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .navLink { transition: none; }
+  .navLink, .mobileSubmenuToggle svg { transition: none; }
 }
