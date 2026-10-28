@@ -71,3 +71,10 @@
 /* SplitText adds a static overflow mask around each measured line. */
 .letterChapter :global(.origin-copy-line-mask) { overflow: clip; }
 .letterChapter :global(.origin-copy-line) { overflow: visible; }
+
+.photoReveal, .photoReveal > .photoContent { position: absolute; inset: 0; }
+.photoReveal { overflow: hidden; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .letterChapter[data-origin-pending] :is([data-origin-copy], [data-origin-photo]) { visibility: hidden; }
+}

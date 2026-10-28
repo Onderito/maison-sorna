@@ -5,7 +5,7 @@ import { CustomEase } from "gsap/CustomEase";
 import { SplitText } from "gsap/SplitText";
 import { gsap, useGSAP } from "./gsap";
 import { ScrollTrigger } from "./scroll-trigger";
-import { createEditorialTextReveal } from "./create-editorial-text-reveal";
+import { appendEditorialTextReveal } from "./create-editorial-text-reveal";
 
 gsap.registerPlugin(CustomEase, SplitText);
 const storyEase = CustomEase.create("story-text-reveal", "0.431,0.012,0.519,1.122");
@@ -59,11 +59,14 @@ export function useStoryTextReveal() {
               0,
             );
           }
-          // The paragraph starts after the last title word has landed.
-          // Returning the parent sequence lets autoSplit clean up both parts.
-          sequence.add(createEditorialTextReveal(self, () => {
-            copyStarted.current = true;
-          }).paused(false), ">");
+          // Preserve the measured lines after entry: reverting here lets
+          // text-pretty reflow the paragraph and shifts the centered title.
+          // autoSplit still rebuilds visible lines on font/width changes.
+          const copyReveal = appendEditorialTextReveal(gsap.timeline({
+            onStart: () => { copyStarted.current = true; },
+            onComplete: () => { gsap.set(self.words, { clearProps: "transform" }); },
+          }), self.lines, self.words);
+          sequence.addLabel("paragraphe", 0.2).add(copyReveal, "paragraphe");
           return sequence;
         },
       });

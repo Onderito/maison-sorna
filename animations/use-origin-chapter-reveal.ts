@@ -4,7 +4,6 @@ import { useRef } from "react";
 import { SplitText } from "gsap/SplitText";
 import { gsap, useGSAP } from "./gsap";
 import { ScrollTrigger } from "./scroll-trigger";
-import { createEditorialTextReveal } from "./create-editorial-text-reveal";
 
 gsap.registerPlugin(SplitText);
 
@@ -25,6 +24,7 @@ export function useOriginChapterReveal() {
       if (context.conditions?.reduced) {
         section.querySelectorAll<HTMLElement>("[data-origin-header], [data-origin-copy], [data-origin-photo]")
           .forEach((element) => revealed.current.add(element));
+        delete section.dataset.originPending;
         return;
       }
 
@@ -35,18 +35,19 @@ export function useOriginChapterReveal() {
         .map((block) => ({ block, top: block.getBoundingClientRect().top }))
         .sort((a, b) => a.top - b.top);
       let nextEntranceAt = 0;
+      const mobile = Boolean(context.conditions?.mobile);
       const splits: SplitText[] = [];
 
       function playEntrance(entrance: gsap.core.Timeline, block: HTMLElement, isHeader: boolean) {
-        revealed.current.add(block);
         const now = performance.now() / 1000;
-        const delay = Math.min(0.65, Math.max(0, nextEntranceAt - now));
+        const delay = Math.min(mobile ? 0.12 : 0.32, Math.max(0, nextEntranceAt - now));
         if (block.getBoundingClientRect().bottom <= 0) {
+          revealed.current.add(block);
           entrance.progress(1).pause();
           return;
         }
         entrance.delay(delay).play();
-        nextEntranceAt = now + delay + (isHeader ? 0.65 : 0.32);
+        nextEntranceAt = now + delay + (isHeader ? 0.2 : 0.12);
       }
 
       blocks.forEach(({ block }) => {
@@ -55,17 +56,30 @@ export function useOriginChapterReveal() {
         if (!isHeader && !isPhoto) {
           const paragraph = block.querySelector("p");
           if (!paragraph) return;
+          let copyTrigger: ScrollTrigger | null = null;
           splits.push(SplitText.create(paragraph, {
-            type: "lines,words",
+            type: "lines",
             mask: "lines",
             linesClass: "origin-copy-line",
             autoSplit: true,
             deepSlice: true,
             aria: "none",
+            onRevert: () => { copyTrigger?.kill(); copyTrigger = null; },
             onSplit: (split) => {
               // Once reading has begun, resizing must never hide the copy again.
               if (revealed.current.has(block)) return;
-              const entrance = createEditorialTextReveal(split);
+              // Move complete lines, not nested word fragments. autoAlpha
+              // guarantees no glyph is visible outside its reveal phase.
+              gsap.set(split.lines, { yPercent: 115, autoAlpha: 0 });
+              const entrance = gsap.timeline({
+                paused: true,
+                onStart: () => { revealed.current.add(block); },
+                onComplete: () => {
+                  gsap.set(split.lines, { clearProps: "transform,opacity,visibility" });
+                },
+              }).to(split.lines, {
+                yPercent: 0, autoAlpha: 1, duration: 0.8, stagger: 0.08, ease: "power2.out",
+              });
               let started = false;
               const reveal = () => {
                 if (started) return;
@@ -75,10 +89,8 @@ export function useOriginChapterReveal() {
               const revealReachedCopy = () => {
                 if (block.getBoundingClientRect().top <= window.innerHeight * 0.82) reveal();
               };
-              ScrollTrigger.create({
+              copyTrigger = ScrollTrigger.create({
                 trigger: block, start: "top 82%", once: true,
-                animation: entrance,
-                toggleActions: "none none none none",
                 onEnter: reveal,
                 onRefresh: revealReachedCopy,
               });
@@ -88,7 +100,10 @@ export function useOriginChapterReveal() {
           }));
           return;
         }
-        const entrance = gsap.timeline({ paused: true, defaults: { ease: "power2.out" } });
+        const entrance = gsap.timeline({
+          paused: true, defaults: { ease: "power2.out" },
+          onStart: () => { revealed.current.add(block); },
+        });
 
         if (isHeader) {
           const characters = block.querySelectorAll<HTMLElement>("[data-origin-character]");
@@ -101,9 +116,15 @@ export function useOriginChapterReveal() {
               yPercent: 0, duration: 1, stagger: 0.055, clearProps: "transform",
             }, 0.12);
         } else if (isPhoto) {
-          entrance.fromTo(block, { opacity: 0, y: 18 }, {
-            opacity: 1, y: 0, duration: 1.4, clearProps: "opacity,transform",
-          });
+          const revealWindow = block.querySelector("[data-origin-photo-reveal]");
+          const content = block.querySelector("[data-origin-photo-content]");
+          if (!revealWindow || !content) return;
+          gsap.set(revealWindow, { xPercent: -100 });
+          gsap.set(content, { xPercent: 100 });
+          // The moving overflow window uncovers a stationary photograph.
+          entrance
+            .to(revealWindow, { xPercent: 0, duration: 0.85, clearProps: "transform" }, 0)
+            .to(content, { xPercent: 0, duration: 0.85, clearProps: "transform" }, 0);
         }
 
         ScrollTrigger.create({
@@ -113,7 +134,11 @@ export function useOriginChapterReveal() {
           onEnter: () => playEntrance(entrance, block, isHeader),
         });
       });
-      return () => { splits.forEach((split) => split.revert()); };
+      delete section.dataset.originPending;
+      return () => {
+        section.dataset.originPending = "";
+        splits.forEach((split) => split.revert());
+      };
     }, section);
 
     let active = true;

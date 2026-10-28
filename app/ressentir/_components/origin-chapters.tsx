@@ -1,5 +1,5 @@
 import Image from "next/image";
-import type { ReactNode } from "react";
+import { Fragment, type ReactNode } from "react";
 import styles from "./origin-chapters.module.css";
 import OriginChapterReveal from "./origin-chapter-reveal";
 
@@ -41,7 +41,7 @@ function SentenceParagraph({ sentences }: { sentences: ReactNode[] }) {
   return (
     <p>
       {sentences.map((sentence, index) => (
-        <span key={index} data-origin-sentence>{sentence}{index < sentences.length - 1 ? " " : ""}</span>
+        <Fragment key={index}>{sentence}{index < sentences.length - 1 ? " " : ""}</Fragment>
       ))}
     </p>
   );
@@ -73,27 +73,39 @@ function LetterChapter({ chapter }: { chapter: Chapter }) {
           </h2>
         </div>
       </header>
-      <div className={`${styles.mainPhoto} image-grain`} data-origin-photo>
-        <Image
-          src={`${photoRoot}/${chapter.id}-photo-${isLandscape ? "panoramique" : "gauche"}.png`}
-          alt=""
-          fill
-          sizes="(max-width: 767px) 100vw, 65vw"
-          className="object-cover"
-        />
+      <div className={styles.mainPhoto} data-origin-photo>
+        <div className={styles.photoReveal} data-origin-photo-reveal>
+          <div className={`${styles.photoContent} image-grain`} data-origin-photo-content>
+            <Image
+              src={`${photoRoot}/${chapter.id}-photo-${isLandscape ? "panoramique" : "gauche"}.png`}
+              alt=""
+              fill
+              sizes="(max-width: 767px) 100vw, 65vw"
+              className="object-cover"
+            />
+          </div>
+        </div>
       </div>
       <div className={styles.letterIntroduction} data-origin-copy><SentenceParagraph sentences={chapter.introduction} /></div>
-      <div className={`${styles.insetPhoto} image-grain`} data-origin-photo>
-        <Image
-          src={`${photoRoot}/${chapter.id}-photo-${isLandscape ? "gauche" : "panoramique"}.png`}
-          alt=""
-          fill
-          sizes="(max-width: 767px) 75vw, 50vw"
-          className="object-cover"
-        />
+      <div className={styles.insetPhoto} data-origin-photo>
+        <div className={styles.photoReveal} data-origin-photo-reveal>
+          <div className={`${styles.photoContent} image-grain`} data-origin-photo-content>
+            <Image
+              src={`${photoRoot}/${chapter.id}-photo-${isLandscape ? "gauche" : "panoramique"}.png`}
+              alt=""
+              fill
+              sizes="(max-width: 767px) 75vw, 50vw"
+              className="object-cover"
+            />
+          </div>
+        </div>
       </div>
-      <div className={`${styles.detailPhoto} image-grain`} data-origin-photo>
-        <Image src={`${photoRoot}/${chapter.id}-photo-droite.png`} alt="" fill sizes="(max-width: 767px) 42vw, 25vw" className="object-cover" />
+      <div className={styles.detailPhoto} data-origin-photo>
+        <div className={styles.photoReveal} data-origin-photo-reveal>
+          <div className={`${styles.photoContent} image-grain`} data-origin-photo-content>
+            <Image src={`${photoRoot}/${chapter.id}-photo-droite.png`} alt="" fill sizes="(max-width: 767px) 42vw, 25vw" className="object-cover" />
+          </div>
+        </div>
       </div>
       <div className={styles.letterDescription} data-origin-copy><SentenceParagraph sentences={chapter.description} /></div>
     </OriginChapterReveal>
