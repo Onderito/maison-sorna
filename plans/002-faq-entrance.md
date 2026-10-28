@@ -1,10 +1,12 @@
 # 002 — Donner une entrée discrète à la FAQ
 
-- **Status**: DONE
+- **Status**: SUPERSEDED — 28 octobre 2026
 - **Commit**: 6ab5175
 - **Severity**: LOW
 - **Category**: Missed opportunities
 - **Estimated scope**: 3 files
+
+> Remplacé par la simplification documentée dans `animations/README.md` : pas de hauteur animée, de ResizeObserver ni de refresh au clic ; image fixe et entrée courte. Ne pas réappliquer ce plan historique.
 
 ## Problem
 

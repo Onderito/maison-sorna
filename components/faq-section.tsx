@@ -43,11 +43,10 @@ export default function FaqSection() {
       <div className={styles.content}>
         <div data-faq-photograph className={`${styles.photograph} image-grain`}>
           <Image
-            src="/figma/faq/tea-leaves.png"
+            src="/figma/faq/tea-leaves.webp"
             alt="Jeunes feuilles de thé couvertes de rosée."
             fill
             sizes="(max-width: 767px) 100vw, 50vw"
-            loading="eager"
             className={styles.image}
           />
         </div>

@@ -60,8 +60,8 @@ export function useAuthenticityReveal() {
       });
       photographs.forEach((element, index) => {
         if (revealed.current.has(element)) return;
-        cards.fromTo(element, { clipPath: "inset(0% 100% 0% 0%)" }, {
-          clipPath: "inset(0% 0% 0% 0%)", duration: 1.3, clearProps: "clipPath",
+        cards.fromTo(element, { opacity: 0, y: 18 }, {
+          opacity: 1, y: 0, duration: 1.3, clearProps: "opacity,transform",
           onStart: () => { revealed.current.add(element); },
         }, start + 0.3 + (desktop ? index * 0.12 : 0));
       });

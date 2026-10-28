@@ -7,8 +7,8 @@ type Chapter = {
   id: string;
   title: string;
   label: string;
-  introduction?: ReactNode;
-  description?: ReactNode;
+  introduction: ReactNode[];
+  description: ReactNode[];
 };
 
 const chapters: Chapter[] = [
@@ -16,26 +16,36 @@ const chapters: Chapter[] = [
     id: "sancerre",
     title: "Sancerre",
     label: "S pour Sancerre",
-    introduction: <>Le S, c’est <strong>Sancerre</strong>. Le vignoble où le fondateur a grandi, et la terre où <strong>SÖRNA</strong> garde ses racines.</>,
-    description: <>Sur ces coteaux, entre terres blanches, caillottes et silex, on apprend tôt qu’un même sauvignon ne donne jamais deux fois le même vin. La parcelle, le sol et l’année décident. C’est ce regard, tourné vers le lieu avant le produit, que <strong>SÖRNA</strong> porte sur chaque thé et chaque soin.</>,
+    introduction: [<>Le S, c’est <strong>Sancerre</strong>.</>, <>Le vignoble où le fondateur a grandi, et la terre où <strong>SÖRNA</strong> garde ses racines.</>],
+    description: [<>Sur ces coteaux, entre terres blanches, caillottes et silex, on apprend tôt qu’un même sauvignon ne donne jamais deux fois le même vin.</>, <>La parcelle, le sol et l’année décident.</>, <>C’est ce regard, tourné vers le lieu avant le produit, que <strong>SÖRNA</strong> porte sur chaque thé et chaque soin.</>],
   },
   {
     id: "ile",
     title: "L’Île",
     label: "Ö pour l’île",
-    introduction: <>Le Ö, c’est <strong>l’île</strong>. En suédois, cette seule lettre suffit à la nommer.</>,
-    description: <>Sur une île, on vit avec l’essentiel. <strong>SÖRNA</strong> en a fait une exigence : ne garder que ce qui sert, et laisser à chaque chose sa juste place. Cette sobriété ne retire rien, elle donne plus de poids à ce qui reste.</>,
+    introduction: [<>Le Ö, c’est <strong>l’île</strong>.</>, <>En suédois, cette seule lettre suffit à la nommer.</>],
+    description: [<>Sur une île, on vit avec l’essentiel.</>, <><strong>SÖRNA</strong> en a fait une exigence : ne garder que ce qui sert, et laisser à chaque chose sa juste place.</>, <>Cette sobriété ne retire rien, elle donne plus de poids à ce qui reste.</>],
   },
   {
     id: "orna",
     title: "Orna",
     label: "ORNA pour orner",
-    introduction: <>ORNA vient du latin <em>ornare</em>, orner. Le mot s’ouvre sur le même <strong>Ö</strong>, celui de l’île.</>,
-    description: <>Orner, d’ordinaire, c’est ajouter. <strong>SÖRNA</strong> l’entend autrement : révéler ce qui est déjà là, sans le masquer. Pour un thé, ne rien ajouter à la feuille. Pour un soin, ne rien parfumer, pour ne rien cacher.</>,
+    introduction: [<>ORNA vient du latin <em>ornare</em>, orner.</>, <>Le mot s’ouvre sur le même <strong>Ö</strong>, celui de l’île.</>],
+    description: [<>Orner, d’ordinaire, c’est ajouter.</>, <><strong>SÖRNA</strong> l’entend autrement : révéler ce qui est déjà là, sans le masquer.</>, <>Pour un thé, ne rien ajouter à la feuille.</>, <>Pour un soin, ne rien parfumer, pour ne rien cacher.</>],
   },
 ];
 
 const photoRoot = "/figma/ressentir/histoire";
+
+function SentenceParagraph({ sentences }: { sentences: ReactNode[] }) {
+  return (
+    <p>
+      {sentences.map((sentence, index) => (
+        <span key={index} data-origin-sentence>{sentence}{index < sentences.length - 1 ? " " : ""}</span>
+      ))}
+    </p>
+  );
+}
 
 function LetterChapter({ chapter }: { chapter: Chapter }) {
   const isSancerre = chapter.id === "sancerre";
@@ -72,7 +82,7 @@ function LetterChapter({ chapter }: { chapter: Chapter }) {
           className="object-cover"
         />
       </div>
-      <div className={styles.letterIntroduction} data-origin-copy>{chapter.introduction && <p>{chapter.introduction}</p>}</div>
+      <div className={styles.letterIntroduction} data-origin-copy><SentenceParagraph sentences={chapter.introduction} /></div>
       <div className={`${styles.insetPhoto} image-grain`} data-origin-photo>
         <Image
           src={`${photoRoot}/${chapter.id}-photo-${isLandscape ? "gauche" : "panoramique"}.png`}
@@ -85,7 +95,7 @@ function LetterChapter({ chapter }: { chapter: Chapter }) {
       <div className={`${styles.detailPhoto} image-grain`} data-origin-photo>
         <Image src={`${photoRoot}/${chapter.id}-photo-droite.png`} alt="" fill sizes="(max-width: 767px) 42vw, 25vw" className="object-cover" />
       </div>
-      <div className={styles.letterDescription} data-origin-copy>{chapter.description && <p>{chapter.description}</p>}</div>
+      <div className={styles.letterDescription} data-origin-copy><SentenceParagraph sentences={chapter.description} /></div>
     </OriginChapterReveal>
   );
 }

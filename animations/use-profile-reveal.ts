@@ -41,8 +41,8 @@ export function useProfileReveal() {
         if (revealed.current.has(image)) return;
         gsap.timeline({
           scrollTrigger: { trigger: image, start: "top 78%", once: true },
-        }).fromTo(image, { clipPath: "inset(0% 100% 0% 0%)" }, {
-          clipPath: "inset(0% 0% 0% 0%)", duration: 1.3, ease: "power2.out", clearProps: "clipPath",
+        }).fromTo(image, { opacity: 0, y: 18 }, {
+          opacity: 1, y: 0, duration: 1.3, ease: "power2.out", clearProps: "opacity,transform",
           onStart: () => { revealed.current.add(image); },
         });
       }

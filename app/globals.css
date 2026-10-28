@@ -24,6 +24,7 @@ html { scroll-padding-top: 96px; }
   --layout-margin: 10px;
   --layout-gutter: 20px;
   --space-unit: 8px;
+  --section-title-compact: calc(var(--space-unit) * 5);
   --section-title-mobile-paper: calc(var(--space-unit) * 7);
   --section-title-mobile-media: calc(var(--space-unit) * 6);
   --section-title-mobile-compact: calc(var(--space-unit) * 5);
@@ -42,6 +43,7 @@ html { scroll-padding-top: 96px; }
 
 @media (min-width: 768px) {
   :root {
+    --section-title-compact: calc(var(--space-unit) * 6);
     --layout-columns: 6;
     --layout-margin: 20px;
   }
@@ -83,6 +85,10 @@ body {
 }
 
 @layer base {
+  p {
+    text-wrap: pretty;
+  }
+
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-cormorant-garamond), Georgia, serif;
   }

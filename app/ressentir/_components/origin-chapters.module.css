@@ -67,3 +67,7 @@
   .ile .detailPhoto { grid-column: 8 / -1; grid-row: 5; margin-top: 0; }
   .ile .letterDescription { grid-column: 1 / 8; grid-row: 5; align-self: end; font-size: 16px; }
 }
+
+/* SplitText adds a static overflow mask around each measured line. */
+.letterChapter :global(.origin-copy-line-mask) { overflow: clip; }
+.letterChapter :global(.origin-copy-line) { overflow: visible; }

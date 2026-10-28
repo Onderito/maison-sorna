@@ -11,6 +11,7 @@ export default function FaqEntrance({ children }: { children: ReactNode }) {
     <section
       ref={sectionRef}
       id="faq"
+      data-faq-pending=""
       className={styles.section}
       aria-labelledby="faq-title"
       onFocusCapture={(event) => {
@@ -18,6 +19,7 @@ export default function FaqEntrance({ children }: { children: ReactNode }) {
         revealImmediately();
       }}
     >
+      <noscript><style>{`#faq[data-faq-pending] [data-faq-title], #faq[data-faq-pending] [data-faq-introduction], #faq[data-faq-pending] [data-faq-photograph], #faq[data-faq-pending] [data-faq-item], #faq[data-faq-pending] [data-faq-contact] { visibility: visible; }`}</style></noscript>
       {children}
     </section>
   );

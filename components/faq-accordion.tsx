@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useFaqItem } from "@/animations/use-faq-item";
 import styles from "./faq-section.module.css";
 
 type FaqQuestion = {
@@ -16,12 +15,10 @@ function FaqItem({
   answer,
   expanded,
   onToggle,
-}: FaqQuestion & { expanded: boolean; onToggle: () => void }) {
-  const { itemRef, answerRef, contentRef, indicatorRef, highlightRef, interaction } = useFaqItem(expanded);
-
+}: FaqQuestion & { expanded: boolean; onToggle: (keyboard: boolean) => void }) {
   return (
-    <div ref={itemRef} className={styles.item} data-faq-item data-expanded={expanded} {...interaction}>
-      <span ref={highlightRef} className={styles.highlight} aria-hidden="true" />
+    <div className={styles.item} data-faq-item data-expanded={expanded}>
+      <span className={styles.highlight} aria-hidden="true" />
       <h3 className={styles.questionHeading}>
         <button
           id={`faq-question-${id}`}
@@ -29,17 +26,16 @@ function FaqItem({
           aria-expanded={expanded}
           aria-controls={`faq-answer-${id}`}
           className={styles.question}
-          onClick={onToggle}
+          onClick={(event) => onToggle(event.detail === 0)}
         >
           <span>{question}</span>
           <span className={styles.indicator} aria-hidden="true">
             <span className={styles.indicatorHorizontal} />
-            <span ref={indicatorRef} className={styles.indicatorVertical} />
+            <span className={styles.indicatorVertical} />
           </span>
         </button>
       </h3>
       <div
-        ref={answerRef}
         id={`faq-answer-${id}`}
         role="region"
         aria-labelledby={`faq-question-${id}`}
@@ -47,7 +43,7 @@ function FaqItem({
         inert={!expanded}
         className={styles.answer}
       >
-        <div ref={contentRef} className={styles.answerContent}>
+        <div className={styles.answerContent}>
           <p>{answer}</p>
         </div>
       </div>
@@ -56,16 +52,22 @@ function FaqItem({
 }
 
 export default function FaqAccordion({ questions }: { questions: readonly FaqQuestion[] }) {
-  const [openId, setOpenId] = useState<string | null>(questions[0]?.id ?? null);
+  const [{ openId, keyboard }, setSelection] = useState<{ openId: string | null; keyboard: boolean }>({
+    openId: questions[0]?.id ?? null,
+    keyboard: false,
+  });
 
   return (
-    <div data-faq-accordion className={styles.accordion}>
+    <div data-faq-accordion data-instant={keyboard || undefined} className={styles.accordion}>
       {questions.map((question) => (
         <FaqItem
           key={question.id}
           {...question}
           expanded={openId === question.id}
-          onToggle={() => setOpenId((current) => current === question.id ? null : question.id)}
+          onToggle={(keyboard) => setSelection((current) => ({
+            openId: current.openId === question.id ? null : question.id,
+            keyboard,
+          }))}
         />
       ))}
     </div>

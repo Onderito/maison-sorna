@@ -1,8 +1,12 @@
 "use client";
 
 import { useRef } from "react";
+import { SplitText } from "gsap/SplitText";
 import { gsap, useGSAP } from "./gsap";
 import { ScrollTrigger } from "./scroll-trigger";
+import { createEditorialTextReveal } from "./create-editorial-text-reveal";
+
+gsap.registerPlugin(SplitText);
 
 export function useRegardSectionReveal() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -28,6 +32,46 @@ export function useRegardSectionReveal() {
         return;
       }
 
+      const splits: SplitText[] = [];
+      const desktop = Boolean(context.conditions?.desktop);
+
+      function revealCopy(element: HTMLElement, at: number) {
+        if (revealed.current.has(element)) return;
+        const targets = element.matches("p") ? [element] : Array.from(element.querySelectorAll("h3, p"));
+        const triggerElement = desktop ? section : element === introduction ? heading?.parentElement : element;
+        if (!triggerElement || !targets.length) return;
+        const threshold = desktop ? 0.65 : element === introduction ? 0.8 : 0.82;
+        splits.push(SplitText.create(targets, {
+          type: "lines,words", mask: "lines", linesClass: "regard-copy-line",
+          autoSplit: true, deepSlice: true, aria: "none",
+          onSplit: (split) => {
+            if (revealed.current.has(element)) return;
+            const entrance = createEditorialTextReveal(split, () => { revealed.current.add(element); });
+            let started = false;
+            const reveal = () => {
+              if (started) return;
+              started = true;
+              if (element.getBoundingClientRect().bottom <= 0) {
+                revealed.current.add(element);
+                entrance.progress(1).pause();
+              } else {
+                entrance.delay(at).play();
+              }
+            };
+            const revealReachedCopy = () => {
+              if (triggerElement.getBoundingClientRect().top <= window.innerHeight * threshold) reveal();
+            };
+            ScrollTrigger.create({
+              trigger: triggerElement, start: `top ${threshold * 100}%`, once: true,
+              animation: entrance, toggleActions: "none none none none",
+              onEnter: reveal, onRefresh: revealReachedCopy,
+            });
+            revealReachedCopy();
+            return entrance;
+          },
+        }));
+      }
+
       function reveal(timeline: gsap.core.Timeline, element: HTMLElement, at: number) {
         if (revealed.current.has(element)) return;
         const shared = { onStart: () => { revealed.current.add(element); } };
@@ -36,26 +80,22 @@ export function useRegardSectionReveal() {
             ...shared, yPercent: 0, duration: 0.9, clearProps: "transform",
           }, at);
         } else if (element === photograph) {
-          timeline.fromTo(element, { clipPath: "inset(0% 100% 0% 0%)" }, {
-            ...shared, clipPath: "inset(0% 0% 0% 0%)", duration: 1.3, clearProps: "clipPath",
-          }, at);
-        } else {
-          timeline.fromTo(element, { opacity: 0, y: 12 }, {
-            ...shared, opacity: 1, y: 0, duration: 0.75, clearProps: "opacity,transform",
+          timeline.fromTo(element, { opacity: 0, y: 18 }, {
+            ...shared, opacity: 1, y: 0, duration: 1.3, clearProps: "opacity,transform",
           }, at);
         }
       }
 
-      if (context.conditions?.desktop) {
+      if (desktop) {
         // One composition, with room between starts and a gentle overlap.
         const timeline = gsap.timeline({
           defaults: { ease: "power2.out" },
           scrollTrigger: { trigger: section, start: "top 65%", once: true },
         });
         reveal(timeline, heading, 0);
-        reveal(timeline, introduction, 0.3);
+        revealCopy(introduction, 0.3);
         reveal(timeline, photograph, 0.65);
-        notes.forEach((note, index) => reveal(timeline, note, 1.3 + index * 0.16));
+        notes.forEach((note, index) => revealCopy(note, 1.3 + index * 0.16));
       } else {
         // Mobile uses a taller natural layout. Never spend an entrance on
         // an image or paragraph that is still below the viewport.
@@ -64,8 +104,8 @@ export function useRegardSectionReveal() {
           scrollTrigger: { trigger: heading.parentElement, start: "top 80%", once: true },
         });
         reveal(header, heading, 0);
-        reveal(header, introduction, 0.3);
-        [photograph, ...notes].forEach((element) => {
+        revealCopy(introduction, 0.3);
+        [photograph].forEach((element) => {
           if (revealed.current.has(element)) return;
           const entrance = gsap.timeline({
             defaults: { ease: "power2.out" },
@@ -73,7 +113,9 @@ export function useRegardSectionReveal() {
           });
           reveal(entrance, element, 0);
         });
+        notes.forEach((note) => revealCopy(note, 0));
       }
+      return () => { splits.forEach((split) => split.revert()); };
     }, section);
 
     let active = true;

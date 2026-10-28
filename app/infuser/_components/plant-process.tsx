@@ -27,14 +27,14 @@ export default function PlantProcess({
                 <div className={styles.copy}>
                   <h2
                     id={`process-step-${step.number}`}
-                    className="font-display text-[clamp(1.5rem,1.852vw,2rem)] leading-normal font-normal uppercase"
+                    className="font-display text-[32px] leading-normal font-normal uppercase"
                   >
                     <span className="tabular-nums">
                       {String(step.number).padStart(2, "0")}-
                     </span>{" "}
                     {step.title}
                   </h2>
-                  <p className="font-sans text-[16px] leading-normal font-light text-text-on-light/80 md:text-[20px]">
+                  <p className="font-sans text-[18px] leading-normal font-light text-text-on-light/80">
                     {step.description}
                   </p>
                 </div>

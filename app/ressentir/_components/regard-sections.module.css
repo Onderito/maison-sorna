@@ -41,3 +41,7 @@
   .note h3 { margin-bottom: var(--space-2); font-size: 16px; }
   .note strong { color: var(--accent); }
 }
+
+/* Static line masks; only the words inside receive transforms. */
+.section :global(.regard-copy-line-mask) { overflow: clip; }
+.section :global(.regard-copy-line) { overflow: visible; }

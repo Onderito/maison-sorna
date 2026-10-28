@@ -1,4 +1,5 @@
 .section {
+  --faq-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   position: relative;
   z-index: 1;
   display: flex;
@@ -15,7 +16,7 @@
 }
 
 .title {
-  font-size: min(3.241vw, 5.014svh);
+  font-size: var(--section-title-compact);
   font-weight: 600;
   line-height: 1.2143;
   letter-spacing: -0.02em;
@@ -76,6 +77,14 @@
   background: rgb(64 32 12 / 4%);
   opacity: 0;
   pointer-events: none;
+  transition: opacity 160ms var(--faq-ease-out);
+}
+
+.item:has(.question:focus-visible) .highlight,
+.item:has(.question:active) .highlight { opacity: 1; }
+
+@media (hover: hover) and (pointer: fine) {
+  .item:hover .highlight { opacity: 0.7; }
 }
 
 .questionHeading { flex: none; font: inherit; }
@@ -131,17 +140,17 @@
 
 .indicatorVertical {
   transform: rotate(90deg);
+  transition: transform 160ms var(--faq-ease-out), opacity 120ms var(--faq-ease-out);
 }
 
 .item[data-expanded="true"] .indicatorVertical { transform: rotate(0deg); opacity: 0; }
 
 .answer {
+  display: none;
   flex: none;
-  overflow: hidden;
-  height: 0;
 }
 
-.item[data-expanded="true"] .answer { height: auto; }
+.item[data-expanded="true"] .answer { display: block; }
 
 .answerContent {
   padding-top: 12px;
@@ -151,14 +160,21 @@
   line-height: 1.6;
   color: var(--text-on-light);
   text-wrap: pretty;
-  opacity: 0;
-  transform: translateY(4px);
-}
-
-.item[data-expanded="true"] .answerContent {
   opacity: 1;
   transform: translateY(0);
+  transition: opacity 160ms var(--faq-ease-out), transform 160ms var(--faq-ease-out);
 }
+
+/* Flow updates once; only the newly displayed answer text animates. */
+@starting-style {
+  .item[data-expanded="true"] .answerContent {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+.accordion[data-instant] .answerContent,
+.accordion[data-instant] .indicatorVertical { transition: none; }
 
 .answer p { max-width: 33em; }
 
@@ -177,14 +193,10 @@
   line-height: 1.375;
 }
 
-@media (min-width: 768px) and (max-width: 1199px) {
-  .title { font-size: min(4vw, 5.014svh); }
-}
-
 @media (max-width: 767px) {
   .section { padding: 20px var(--layout-margin) 12px; }
   .header { margin-bottom: 16px; }
-  .title { font-size: var(--section-title-mobile-compact); line-height: 1.1; text-wrap: balance; }
+  .title { line-height: 1.1; text-wrap: balance; }
   .introduction { max-width: 360px; margin: 10px auto 0; font-family: var(--font-manrope), Arial, sans-serif; font-size: 16px; line-height: 1.5; }
   .lineBreak { display: none; }
   .content { min-height: 0; grid-template-columns: minmax(0, 1fr); grid-template-rows: clamp(200px, 28svh, 320px) auto; gap: 24px; }
@@ -209,5 +221,16 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .answerContent, .indicatorVertical { transition: opacity 120ms var(--faq-ease-out); }
   .answerContent { transform: none; }
+  @starting-style {
+    .item[data-expanded="true"] .answerContent { transform: none; }
+  }
+}
+
+/* Avoid a visible-then-hidden frame before the GSAP layout effect runs. */
+@media (prefers-reduced-motion: no-preference) {
+  .section[data-faq-pending] :is([data-faq-title], [data-faq-introduction], [data-faq-photograph], [data-faq-item], [data-faq-contact]) {
+    visibility: hidden;
+  }
 }

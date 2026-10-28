@@ -426,6 +426,12 @@ Preserve them unless explicitly instructed otherwise.
 
 ---
 
+## Section Title Scale
+
+Use the existing 8px base (`--space-unit`) for section title sizes. Use discrete multiples of 8 rather than fluid font-size formulas that produce intermediate values such as 47px. Titles at the same hierarchy level must share a token.
+
+The collection title “À chacun son sommet” and FAQ title “SÖRNA vous répond” share `--section-title-compact`: 40px on mobile (5 × 8) and 48px from 768px (6 × 8). Preserve separately requested body text sizes (including 18px); do not apply this title rule to body copy or resize unrelated editorial/hero titles without authorization.
+
 ## Code Quality
 
 Prefer:

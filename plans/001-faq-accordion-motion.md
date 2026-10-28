@@ -1,10 +1,12 @@
 # 001 — Coordonner l’animation de l’accordéon FAQ
 
-- **Status**: DONE
+- **Status**: SUPERSEDED — 28 octobre 2026
 - **Commit**: 6ab5175
 - **Severity**: MEDIUM
 - **Category**: Interruptibility, physicality, cohesion
 - **Estimated scope**: 2 files
+
+> Remplacé par la simplification documentée dans `animations/README.md` : pas de hauteur animée, de ResizeObserver ni de refresh au clic ; image fixe et entrée courte. Ne pas réappliquer ce plan historique.
 
 ## Problem
 

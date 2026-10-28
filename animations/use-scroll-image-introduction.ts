@@ -64,18 +64,8 @@ export function useScrollImageIntroduction() {
       });
 
       if (context.conditions?.mobile) {
-        const inset = (horizontal: string) => {
-          const vertical = Math.max(0, viewport.clientHeight / 2 - window.innerWidth * 0.2375);
-          // Keep the browser's two-value serialization: top/bottom stay paired.
-          // Mixing that computed shorthand with a four-value target made GSAP
-          // treat the missing bottom value as zero when phase two started.
-          return `inset(${vertical}px ${horizontal})`;
-        };
-        scene
-          .fromTo(photograph, { clipPath: () => inset("12%") },
-            { clipPath: () => inset("0%"), duration: 0.69 * 0.35 }, 0)
-          .fromTo(photograph, { clipPath: () => inset("0%") },
-            { clipPath: "inset(0px 0%)", duration: 0.69 * 0.65, immediateRender: false });
+        scene.fromTo(photograph, { scale: 0.76 },
+          { scale: 1, duration: 0.69 }, 0);
       } else {
         scene.fromTo(photograph, { scale: 0.26 }, { scale: 1, duration: 0.69 }, 0);
         if (image) {

@@ -75,17 +75,29 @@ export function useTeaCollectionEntrance() {
           clearProps: "transform,opacity",
         });
         entrances.current.push(entrance);
+        let started = false;
+        const revealRow = () => {
+          if (started) return;
+          started = true;
+          // Products follow the heading, including when navigation lands
+          // beyond the trigger before ScrollTrigger's first refresh.
+          const remaining = headingEntrance ? headingEntrance.duration() - headingEntrance.time() : 0;
+          entrance.delay(Math.max(0, remaining - 0.12)).play();
+        };
+        const revealReachedRow = (trigger: ScrollTrigger) => {
+          if (trigger.scroll() >= trigger.start) revealRow();
+        };
         const trigger = ScrollTrigger.create({
           trigger: row[0],
           start: "top 88%",
           once: true,
-          onEnter: () => {
-            // Products follow the heading, with a small overlap rather than
-            // an arbitrary delay repeated for every row further down the page.
-            const remaining = headingEntrance ? headingEntrance.duration() - headingEntrance.time() : 0;
-            entrance.delay(Math.max(0, remaining - 0.12)).play();
-          },
+          onEnter: revealRow,
+          onEnterBack: revealRow,
+          // An anchor jump or restored scroll can skip the entry callback.
+          // Refresh and the initial check must also reveal reached rows.
+          onRefresh: revealReachedRow,
         });
+        revealReachedRow(trigger);
         triggers.current.push(trigger);
       });
     }, section);

@@ -30,7 +30,9 @@
 .panels {
   position: relative;
   /* Keep stacking shadows above the cards, without spilling into the FAQ below. */
-  clip-path: inset(-64px 0 0);
+  margin-top: -64px;
+  padding-top: 64px;
+  overflow: clip;
 }
 
 .cover {
@@ -110,7 +112,7 @@
 @media (max-width: 767px) {
   .copy { gap: 16px; padding: 20px; }
   .cuvees { right: 20px; left: 20px; }
-  .botanical { top: 55%; width: 160px; height: 140px; transform: translate(-50%, -15%); }
+  .botanical { display: none; }
 }
 
 @media (max-height: 650px) {
