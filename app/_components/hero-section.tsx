@@ -34,7 +34,11 @@ export function HeroSection({
           <SeamlessBackgroundVideo
             fadeDuration={videoFadeDuration}
             seamlessLoop={videoSrc === defaultVideoSrc}
-            poster={videoSrc === defaultVideoSrc ? "/figma/hero/mist-loop-v1-poster.jpg" : "/figma/hero/video-poster.jpg"}
+            poster={
+              videoSrc === defaultVideoSrc
+                ? "/figma/hero/mist-loop-v1-poster.jpg"
+                : "/figma/hero/video-poster.jpg"
+            }
             src={videoSrc}
           />
         )}
@@ -65,14 +69,16 @@ export function HeroSection({
             </h1>
           </div>
           <div className={styles.introduction}>
-            <p>Le thé et le soin,<br className="md:hidden" /> au plus près de la matière.</p>
+            <p>
+              Des thés de terroir,
+              <br className="md:hidden" /> des soins d’origine végétale.
+            </p>
             <TransitionLink href="/infuser#les-cuvees" className={styles.cta}>
               Découvrir les cuvées
             </TransitionLink>
           </div>
         </div>
       </div>
-
     </section>
   );
 }
