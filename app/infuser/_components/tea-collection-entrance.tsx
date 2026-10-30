@@ -6,7 +6,6 @@ import styles from "./tea-collection.module.css";
 
 export default function TeaCollectionEntrance({ children }: { children: ReactNode }) {
   const { sectionRef, revealImmediately } = useTeaCollectionEntrance();
-
   return (
     <section
       ref={sectionRef}

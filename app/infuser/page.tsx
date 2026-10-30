@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Image from "next/image";
+import SeamlessBackgroundVideo from "@/components/seamless-background-video";
 import UniversHero from "@/components/univers-hero";
 import SiteFooter from "@/components/site-footer";
 import FaqSection from "@/components/faq-section";
@@ -21,13 +21,9 @@ export default function InfuserPage() {
           subtitle="Cinq cuvées de thé"
           scrollTarget="#les-cuvees"
         >
-          <Image
-            src="/figma/infuser/hero-wuyi.png"
-            alt=""
-            fill
-            sizes="100vw"
-            preload
-            className="object-cover"
+          <SeamlessBackgroundVideo
+            src="/videos/infuser-tea-artisan.mp4"
+            className="size-full"
           />
         </UniversHero>
         <TeaCollection />
