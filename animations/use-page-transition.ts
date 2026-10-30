@@ -90,6 +90,11 @@ export function usePageTransition() {
         onComplete: () => {
           if (!destination) return;
           phase = "waiting";
+          // Reset under the opaque curtain, before the next page mounts:
+          // one-shot reveals must never observe the previous page's scroll.
+          // force is required because Lenis is stopped during the transition.
+          if (lenis) lenis.scrollTo(0, { immediate: true, force: true });
+          else window.scrollTo({ top: 0, left: 0, behavior: "instant" });
           router.push(`${destination.pathname}${destination.search}${destination.hash}`);
           // A slow or failed navigation must never leave an opaque curtain trapping the user.
           watchdog = window.setTimeout(finish, 8000);

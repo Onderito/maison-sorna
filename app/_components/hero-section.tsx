@@ -69,10 +69,7 @@ export function HeroSection({
             </h1>
           </div>
           <div className={styles.introduction}>
-            <p>
-              Des thés de terroir,
-              <br className="md:hidden" /> des soins d’origine végétale.
-            </p>
+            <p>Des thés de terroir, des soins d’origine végétale.</p>
             <TransitionLink href="/infuser#les-cuvees" className={styles.cta}>
               Découvrir les cuvées
             </TransitionLink>
