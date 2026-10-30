@@ -7,6 +7,7 @@ import { addToCart } from "@/app/actions/cart";
 import type { AddToCartResult } from "@/app/lib/shopify-types";
 import styles from "./tea-card.module.css";
 import type { TeaCardEntry } from "./tea-card-data";
+import TeaProductDescription from "./tea-product-description";
 
 export default function TeaCardDetails({ entry, presentation = "page" }: { entry: TeaCardEntry; presentation?: "page" | "dialog" }) {
   const { product, handle } = entry;
@@ -22,6 +23,10 @@ export default function TeaCardDetails({ entry, presentation = "page" }: { entry
     style: "currency", currency: selected.price.currencyCode, maximumFractionDigits: 2,
     minimumFractionDigits: 0,
   }).format(Number(selected.price.amount)) : "—";
+  const reference = selected?.unitPriceMeasurement;
+  const unitPrice = selected?.unitPrice && reference?.referenceUnit && reference.referenceValue > 0
+    ? `${new Intl.NumberFormat("fr-FR", { style: "currency", currency: selected.unitPrice.currencyCode, maximumFractionDigits: 2 }).format(Number(selected.unitPrice.amount))}/${reference.referenceValue === 1 ? "" : reference.referenceValue}${reference.referenceUnit.toLowerCase()}`
+    : null;
 
   function handleAdd() {
     if (!selected?.availableForSale || pending) return;
@@ -33,19 +38,20 @@ export default function TeaCardDetails({ entry, presentation = "page" }: { entry
         setFeedback({ ...result, handle });
         if (result.status !== "error") router.refresh();
       } catch {
-        setFeedback({ handle, status: "error", message: "Impossible d’ajouter ce cru. Réessaie dans un instant." });
+        setFeedback({ handle, status: "error", message: "Impossible d’ajouter cette cuvée. Réessaie dans un instant." });
       }
     });
   }
 
   return (
     <div className={`${styles.panel} ${presentation === "dialog" ? styles.dialogPanel : ""}`}>
+      <div className={styles.detailsScroll} data-lenis-prevent
+        {...(presentation === "page" ? { tabIndex: 0, role: "region", "aria-label": `Informations sur ${entry.title}` } : {})}>
       <div className={styles.card}>
         <header className={styles.heading} data-product-reveal>
           <h2 id={`tea-${handle}-title`}>{entry.title}</h2>
           <Image src="/figma/infuser/product/title-rule.svg" alt="" width={155} height={1} className={styles.titleRule} />
-          <p className={styles.label}>Lot n°</p>
-          <p className={styles.number}>{entry.lot}</p>
+          {entry.cuvee && <><p className={styles.label}>Cuvée</p><p className={styles.number}>{entry.cuvee}</p></>}
         </header>
         <div className={styles.detailRow} data-product-reveal>
           <div className={styles.cell}>
@@ -82,11 +88,11 @@ export default function TeaCardDetails({ entry, presentation = "page" }: { entry
         <div className={styles.detailRow} data-product-reveal>
           <div className={styles.cell}>
             <p className={styles.label}>Origine</p>
-            <p className={styles.serifValue}>{entry.origin}</p>
+            <p className={styles.serifValue}>{entry.origin ?? "—"}</p>
           </div>
           <div className={styles.cell}>
-            <p className={styles.label}>Millésime</p>
-            <p className={styles.number}>{entry.vintage}</p>
+            <p className={styles.label}>{entry.vintage ? "Millésime" : "Oxydation"}</p>
+            <p className={styles.number}>{entry.vintage ?? entry.oxidation ?? "—"}</p>
           </div>
           <span className={styles.rowRule} aria-hidden="true" />
           <span className={styles.detailDivider} aria-hidden="true" />
@@ -99,12 +105,13 @@ export default function TeaCardDetails({ entry, presentation = "page" }: { entry
         </div>
         <div className={styles.priceRow} data-product-reveal>
           <div className={styles.cell}>
-            <p className={styles.label}>Récolte</p>
-            <p className={styles.number}>{entry.harvest}</p>
+            <p className={styles.label}>{entry.harvest ? "Récolte" : "Torréfaction"}</p>
+            <p className={`${styles.number} ${styles.harvestValue}`}>{entry.harvest ?? entry.roasting ?? "—"}</p>
           </div>
           <div className={styles.cell}>
             <p className={styles.label}>Prix</p>
             <p className={styles.price} aria-live="polite">{price}</p>
+            {unitPrice && <p className={styles.unitPrice}>{unitPrice}</p>}
           </div>
           <span className={styles.bottomRule} aria-hidden="true" />
           <span className={styles.priceDivider} aria-hidden="true" />
@@ -114,6 +121,8 @@ export default function TeaCardDetails({ entry, presentation = "page" }: { entry
           <span className={styles.bottomRule} aria-hidden="true" />
         </div>
       </div>
+      <TeaProductDescription sections={entry.sections} />
+      </div>
       <div className={styles.purchase} data-product-reveal>
         <button type="button" className={styles.addButton} onClick={handleAdd} disabled={pending || !selected?.availableForSale} aria-busy={pending}>
           <span>{pending ? "Ajout en cours…" : selected?.availableForSale ? "Ajouter au panier" : "Indisponible"}</span>
@@ -121,7 +130,7 @@ export default function TeaCardDetails({ entry, presentation = "page" }: { entry
         </button>
       </div>
       <div className={styles.feedback} role="status" aria-atomic="true">
-        {(feedback?.handle === handle ? feedback.message : null) ?? (!product ? "Ce cru est momentanément indisponible." : "")}
+        {(feedback?.handle === handle ? feedback.message : null) ?? (!product ? "Cette cuvée est momentanément indisponible." : "")}
       </div>
     </div>
   );

@@ -14,7 +14,9 @@ export default function TeaCollectionEntrance({ children }: { children: ReactNod
       className={styles.section}
       aria-labelledby="collection-title"
       onFocusCapture={(event) => {
-        if (event.target.matches(":focus-visible")) revealImmediately();
+        // Next.js focuses the section itself after hash navigation. Only
+        // finish the entrance when a product receives keyboard focus.
+        if (event.target.matches(":focus-visible") && event.target.closest("[data-collection-card]")) revealImmediately();
       }}
       onPointerDownCapture={(event) => {
         if (event.target instanceof Element && event.target.closest("[data-collection-card]")) revealImmediately();

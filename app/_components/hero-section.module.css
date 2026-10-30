@@ -1,0 +1,34 @@
+.introduction {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  max-width: 32em;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  border-bottom: 1px solid currentColor;
+  font-size: 14px;
+  transition: opacity 200ms var(--ease-out, cubic-bezier(0.23, 1, 0.32, 1));
+}
+
+.cta:focus-visible { outline: 2px solid currentColor; outline-offset: 6px; }
+
+@media (min-width: 768px) {
+  .introduction { gap: var(--space-4); font-size: 18px; }
+  .cta { font-size: 16px; }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .cta:hover { opacity: 0.7; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cta { transition: none; }
+}

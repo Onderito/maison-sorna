@@ -26,7 +26,10 @@ export default async function TeaCollection() {
       </header>
       <ul className={styles.collection}>
         {entries.map(({ edition, product, failed }, index) => {
+          const isSignature = edition.handle === "sourcil-dor";
           const teaEntry = product ? getTeaCardEntry(product) : null;
+          const photograph = teaEntry?.photograph ?? edition.photograph;
+          const photographAlt = teaEntry?.photographAlt ?? edition.photographAlt;
           const variants = product?.variants.nodes ?? [];
           const available = variants.filter((variant) => variant.availableForSale);
           const prices = (available.length ? available : variants).map((variant) => variant.price);
@@ -37,23 +40,23 @@ export default async function TeaCollection() {
           }).format(Number(minimum.amount)) : null;
           const contents = <>
             <div className={styles.artwork} data-product-artwork>
-              <span className={styles.number} aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
-              <Image src={edition.photograph} alt={edition.photographAlt} fill sizes="(min-width: 1200px) 18vw, (min-width: 600px) 30vw, 45vw" className={styles.botanical} />
-              <span className={styles.family}>{edition.family}</span>
+              <span className={styles.number} aria-hidden="true">{teaEntry?.cuvee ?? String(index + 1).padStart(2, "0")}</span>
+              {isSignature && <span className={styles.signatureLabel}>Notre thé signature</span>}
+              <Image src={photograph} alt={photographAlt} fill sizes="(min-width: 1200px) 18vw, (min-width: 600px) 30vw, 45vw" className={styles.botanical} />
+              <span className={styles.family}>{teaEntry?.teaType || edition.family}</span>
             </div>
             <div className={styles.copy}>
               <h3>{product?.title ?? edition.title}</h3>
-              <p className={styles.signature}>{edition.signature}</p>
               <div className={styles.bottom}>
                 {price && <p className={styles.price}>{available.length ? "À partir de" : "Épuisé ·"} {price}</p>}
-                <span className={styles.discover}>{product ? "Découvrir la cuvée" : failed ? "Indisponible pour le moment" : "Présentation à venir"}{product && <span aria-hidden="true">↗</span>}</span>
+                <span className={styles.discover}>{product ? "Découvrir la cuvée" : failed ? "Indisponible pour le moment" : "Présentation à venir"}{product && <span className={styles.discoverArrow} aria-hidden="true">↗</span>}</span>
               </div>
             </div>
           </>;
-          return <li key={edition.handle} data-collection-card>
+          return <li key={edition.handle} data-collection-card data-signature={isSignature || undefined}>
             {product && teaEntry ? (
               <ProductDialog href={`/produits/${product.handle}`} title={product.title} trigger={contents} triggerClassName={styles.card} image={
-                <Image src={edition.photograph} alt={edition.photographAlt} fill loading="eager" sizes="(min-width: 768px) 50vw, 100vw" className="object-contain" />
+                <Image src={photograph} alt={photographAlt} fill loading="eager" sizes="(min-width: 768px) 50vw, 100vw" className="object-contain" />
               }>
                 <TeaCardDetails entry={teaEntry} presentation="dialog" />
               </ProductDialog>

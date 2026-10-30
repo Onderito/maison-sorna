@@ -2,6 +2,8 @@ import Image from "next/image";
 import type { ReactNode } from "react";
 import SeamlessBackgroundVideo from "@/components/seamless-background-video";
 import SiteNavigation from "@/components/site-navigation";
+import { TransitionLink } from "@/components/page-transition";
+import styles from "./hero-section.module.css";
 
 const defaultVideoSrc = "/figma/hero/mist-loop-v1.mp4";
 
@@ -62,7 +64,12 @@ export function HeroSection({
               SÖRNA
             </h1>
           </div>
-
+          <div className={styles.introduction}>
+            <p>Le thé et le soin,<br className="md:hidden" /> au plus près de la matière.</p>
+            <TransitionLink href="/infuser#les-cuvees" className={styles.cta}>
+              Découvrir les cuvées
+            </TransitionLink>
+          </div>
         </div>
       </div>
 

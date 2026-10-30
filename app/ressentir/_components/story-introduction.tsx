@@ -49,7 +49,7 @@ export default function StoryIntroduction({ id, title, subtitle, multiline = fal
             </span>
           </h2>
         </div>
-        <p data-story-copy className="max-w-[36em] font-sans text-[16px] md:text-[18px] lg:text-[20px] leading-[1.4] font-normal uppercase">
+        <p data-story-copy className="max-w-[36em] font-sans text-[16px] md:text-[18px] lg:text-[20px] leading-[1.4] font-normal">
           {subtitle}
         </p>
       </StoryTextReveal>

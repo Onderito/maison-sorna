@@ -50,7 +50,7 @@ export default function ProductDialog({
     >
       <div ref={backdropRef} className={styles.backdrop} aria-hidden="true" />
       <div ref={sheetRef} className={styles.sheet}>
-        <div className={styles.content} data-product-scroll>{children}</div>
+        <div className={styles.content} data-product-scroll tabIndex={0} role="region" aria-label={`Informations sur ${title}`}>{children}</div>
         <div className={styles.visual} data-product-visual>
           <div ref={imageRef} className={styles.image}>{image}</div>
         </div>

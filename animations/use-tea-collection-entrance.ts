@@ -31,10 +31,17 @@ export function useTeaCollectionEntrance() {
       entrances.current = [];
       triggers.current = [];
       if (context.conditions?.reduced) {
+        gsap.set([eyebrow, title, introduction, ...cards], { clearProps: "transform,opacity" });
         seenHeading.current = true;
         cards.forEach((card) => seenCards.current.add(card));
         return;
       }
+
+      // A context rebuild can restore an interrupted tween's hidden snapshot.
+      // Completed elements stay visible; unfinished entrances are built again.
+      const completedCards = cards.filter((card) => seenCards.current.has(card));
+      if (completedCards.length) gsap.set(completedCards, { clearProps: "transform,opacity" });
+      if (seenHeading.current) gsap.set([eyebrow, title, introduction], { clearProps: "transform,opacity" });
 
       // Read the complete grid before writing any animation styles. Keep row
       // grouping in step with the existing 5 / 3+2 / 2+2+1 responsive layout.
@@ -51,7 +58,7 @@ export function useTeaCollectionEntrance() {
       if (!seenHeading.current) {
         headingEntrance = gsap.timeline({
           defaults: { ease: "power2.out" },
-          onStart: () => { seenHeading.current = true; },
+          onComplete: () => { seenHeading.current = true; },
           scrollTrigger: { trigger: header, start: "top 80%", once: true },
         })
           .fromTo(eyebrow, { opacity: 0, y: 6 }, { opacity: 1, y: 0, duration: 0.35 }, 0)
@@ -65,7 +72,7 @@ export function useTeaCollectionEntrance() {
         gsap.set(row, { opacity: 0, y: 18 });
         const entrance = gsap.timeline({
           paused: true,
-          onStart: () => { row.forEach((card) => seenCards.current.add(card)); },
+          onComplete: () => { row.forEach((card) => seenCards.current.add(card)); },
         }).to(row, {
           opacity: 1,
           y: 0,

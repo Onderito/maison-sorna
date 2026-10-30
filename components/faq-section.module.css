@@ -87,8 +87,6 @@
   .item:hover .highlight { opacity: 0.7; }
 }
 
-.questionHeading { flex: none; font: inherit; }
-
 .question {
   display: flex;
   width: 100%;
@@ -103,8 +101,14 @@
   text-align: left;
   color: var(--text-on-light);
   cursor: pointer;
+  list-style: none;
+  overflow-wrap: anywhere;
 }
 
+.question::-webkit-details-marker { display: none; }
+.question > span:first-child { min-width: 0; }
+
+/* Extend the native disclosure target across the whole FAQ item. */
 .question::after {
   position: absolute;
   inset: 0;
@@ -143,14 +147,13 @@
   transition: transform 160ms var(--faq-ease-out), opacity 120ms var(--faq-ease-out);
 }
 
-.item[data-expanded="true"] .indicatorVertical { transform: rotate(0deg); opacity: 0; }
+.item[open] .indicatorVertical { transform: rotate(0deg); opacity: 0; }
 
 .answer {
-  display: none;
   flex: none;
 }
 
-.item[data-expanded="true"] .answer { display: block; }
+.answer { overflow-wrap: anywhere; }
 
 .answerContent {
   padding-top: 12px;
@@ -167,7 +170,7 @@
 
 /* Flow updates once; only the newly displayed answer text animates. */
 @starting-style {
-  .item[data-expanded="true"] .answerContent {
+  .item[open] .answerContent {
     opacity: 0;
     transform: translateY(4px);
   }
@@ -224,7 +227,7 @@
   .answerContent, .indicatorVertical { transition: opacity 120ms var(--faq-ease-out); }
   .answerContent { transform: none; }
   @starting-style {
-    .item[data-expanded="true"] .answerContent { transform: none; }
+    .item[open] .answerContent { transform: none; }
   }
 }
 

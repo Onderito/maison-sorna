@@ -11,12 +11,17 @@ type TriggerOptions = {
   onEnterBack: () => void;
   onRefresh: (trigger: Trigger) => void;
 };
+type TimelineOptions = {
+  onStart?: () => void;
+  onComplete?: () => void;
+};
 
 const harness = vi.hoisted(() => ({
   setup: null as (() => unknown) | null,
   scroll: 0,
   triggers: [] as { options: TriggerOptions; trigger: Trigger }[],
   timelines: [] as {
+    options: TimelineOptions;
     play: ReturnType<typeof vi.fn>;
     delay: ReturnType<typeof vi.fn>;
     progress: ReturnType<typeof vi.fn>;
@@ -32,8 +37,9 @@ vi.mock("./gsap", () => ({
       add: (_conditions: unknown, setup: (context: unknown) => void) => setup({ conditions: { desktop: true } }),
       revert: vi.fn(),
     }),
-    timeline: () => {
+    timeline: (options: TimelineOptions) => {
       const timeline = {
+        options,
         fromTo: vi.fn().mockReturnThis(), to: vi.fn().mockReturnThis(),
         duration: () => 0.69, time: () => 0,
         delay: vi.fn().mockReturnThis(), play: vi.fn().mockReturnThis(),
@@ -55,8 +61,10 @@ vi.mock("./scroll-trigger", () => ({
 }));
 
 import { useTeaCollectionEntrance } from "./use-tea-collection-entrance";
+import { gsap } from "./gsap";
 
 beforeEach(() => {
+  vi.clearAllMocks();
   harness.scroll = 0;
   harness.triggers = [];
   harness.timelines = [];
@@ -102,5 +110,32 @@ describe("collection entrance after anchor navigation", () => {
     expect(harness.timelines[1].play).not.toHaveBeenCalled();
     options.onEnter();
     expect(harness.timelines[1].play).toHaveBeenCalledOnce();
+  });
+
+  it("rebuilds a started but unfinished entrance after React effect cleanup", () => {
+    harness.scroll = 1200;
+    useTeaCollectionEntrance();
+    const cleanup = harness.setup?.() as () => void;
+    harness.timelines.forEach((timeline) => timeline.options.onStart?.());
+    // Strict Mode preserves refs while tearing down and rebuilding the scene.
+    cleanup();
+    harness.setup?.();
+    expect(harness.timelines).toHaveLength(4);
+    expect(harness.timelines[3].play).toHaveBeenCalledOnce();
+  });
+
+  it("clears reverted hidden styles for completed cards when rebuilding", () => {
+    harness.scroll = 1200;
+    useTeaCollectionEntrance();
+    const cleanup = harness.setup?.() as () => void;
+    harness.timelines.forEach((timeline) => timeline.options.onComplete?.());
+    cleanup();
+    vi.mocked(gsap.set).mockClear();
+    harness.setup?.();
+    expect(harness.timelines).toHaveLength(2);
+    expect(gsap.set).toHaveBeenCalledWith(
+      expect.arrayContaining([expect.objectContaining({ offsetTop: 300 })]),
+      { clearProps: "transform,opacity" },
+    );
   });
 });

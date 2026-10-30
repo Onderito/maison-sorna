@@ -83,6 +83,8 @@ query GetProduct($handle: String!) {
     title
     handle
     description
+    descriptionHtml
+    productType
 
     featuredImage {
       url
@@ -105,6 +107,15 @@ query GetProduct($handle: String!) {
         price {
           amount
           currencyCode
+        }
+
+        unitPrice {
+          amount
+          currencyCode
+        }
+        unitPriceMeasurement {
+          referenceUnit
+          referenceValue
         }
 
         selectedOptions {

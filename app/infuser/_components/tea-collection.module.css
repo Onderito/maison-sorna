@@ -10,11 +10,12 @@
 .card { display: flex; height: 100%; flex-direction: column; color: inherit; text-decoration: none; }
 .artwork { position: relative; aspect-ratio: 4 / 5; border: 1px solid rgb(64 32 12 / 20%); overflow: hidden; }
 .number { position: absolute; top: 12px; left: 16px; color: #838d76; font-family: var(--font-cormorant-garamond), Georgia, serif; font-size: 32px; line-height: 1; }
+.collection > li[data-signature] .artwork { border-color: rgb(64 32 12 / 45%); background: rgb(131 141 118 / 4%); }
+.signatureLabel { position: absolute; z-index: 1; top: 16px; right: 12px; max-width: calc(100% - 64px); font-size: 12px; line-height: 1.4; letter-spacing: 0.04em; text-align: right; text-transform: uppercase; text-wrap: balance; }
 .botanical { object-fit: contain; padding: 38px 20px 52px; transition: transform 250ms var(--ease-out, cubic-bezier(0.23, 1, 0.32, 1)); }
 .family { position: absolute; right: 12px; bottom: 16px; left: 12px; font-size: 16px; line-height: 1.4; text-align: center; }
 .copy { display: flex; flex: 1; flex-direction: column; padding: 20px 0 0; }
 .copy h3 { color: #838d76; font-size: 28px; font-weight: 600; line-height: 1.1; text-transform: uppercase; text-wrap: balance; }
-.signature { margin-top: 12px; font-size: 16px; line-height: 1.5; text-wrap: pretty; }
 .bottom { margin-top: auto; padding-top: 24px; }
 .price { margin-bottom: 8px; font-size: 16px; line-height: 1.5; font-variant-numeric: tabular-nums; }
 .discover { display: flex; min-height: 44px; align-items: center; justify-content: space-between; gap: 8px; border-top: 1px solid rgb(64 32 12 / 25%); font-size: 16px; line-height: 1.4; }
@@ -32,6 +33,7 @@
   .collection > li:nth-child(5) { grid-column: 4 / 6; }
 }
 @media (max-width: 767px) {
+  .discoverArrow { display: none; }
   .header > p:last-child { font-size: 16px; }
 }
 @media (max-width: 599px) {

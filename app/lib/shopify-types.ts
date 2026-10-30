@@ -22,6 +22,11 @@ export type ShopifyVariant = {
   availableForSale: boolean;
   price: ShopifyMoney;
   quantityRule: ShopifyQuantityRule;
+  unitPrice?: ShopifyMoney | null;
+  unitPriceMeasurement?: {
+    referenceUnit: string | null;
+    referenceValue: number;
+  } | null;
 };
 
 export type ShopifyProduct = {
@@ -29,6 +34,8 @@ export type ShopifyProduct = {
   handle: string;
   title: string;
   description: string;
+  descriptionHtml: string;
+  productType: string;
   featuredImage: ShopifyImage | null;
   variants: {
     nodes: ShopifyVariant[];

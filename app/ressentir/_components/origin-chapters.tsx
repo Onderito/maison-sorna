@@ -31,7 +31,7 @@ const chapters: Chapter[] = [
     title: "Orna",
     label: "ORNA pour orner",
     introduction: [<>ORNA vient du latin <em>ornare</em>, orner.</>, <>Le mot s’ouvre sur le même <strong>Ö</strong>, celui de l’île.</>],
-    description: [<>Orner, d’ordinaire, c’est ajouter.</>, <><strong>SÖRNA</strong> l’entend autrement : révéler ce qui est déjà là, sans le masquer.</>, <>Pour un thé, ne rien ajouter à la feuille.</>, <>Pour un soin, ne rien parfumer, pour ne rien cacher.</>],
+    description: [<>Orner, d’ordinaire, c’est ajouter.<br /></>, <><strong>SÖRNA</strong> l’entend autrement : révéler ce qui est déjà là, sans le masquer.<br /></>, <>Pour un thé, ne rien ajouter à la feuille.</>, <>Pour un soin, ne rien parfumer, pour ne rien cacher.</>],
   },
 ];
 

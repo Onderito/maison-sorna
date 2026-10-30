@@ -36,6 +36,27 @@
   padding: 0;
 }
 
+.detailsScroll { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: rgb(64 32 12 / 35%) transparent; }
+.detailsScroll:focus-visible { outline: 1px solid var(--text-on-light); outline-offset: -3px; }
+.detailsScroll .card { min-height: calc(100svh - 128px); }
+.harvestValue { max-width: 25ch; padding-inline: 12px; font-size: clamp(16px, 1.2vw, 20px); text-wrap: pretty; }
+.unitPrice { font-size: 14px; line-height: 1.4; font-variant-numeric: tabular-nums; }
+.region p { padding: 8px 16px; text-wrap: balance; }
+.description { padding: 24px; border: 1px solid var(--text-on-light); border-top: 0; font-size: 18px; line-height: 1.6; text-wrap: pretty; }
+.descriptionSection > * + * { margin-top: 12px; }
+.descriptionSection h3 { color: #838d76; font-family: var(--font-cormorant-garamond), Georgia, serif; font-size: 24px; font-weight: 600; line-height: 1.2; text-wrap: balance; }
+.descriptionSection ul { padding-left: 20px; list-style: disc; }
+.descriptionSection li + li { margin-top: 12px; }
+.description > .descriptionSection + .descriptionSection { margin-top: 24px; }
+.descriptionDisclosure { margin-top: 24px; border-top: 1px solid rgb(64 32 12 / 25%); }
+.descriptionDisclosure + .descriptionDisclosure { margin-top: 0; }
+.descriptionDisclosure summary { display: flex; min-height: 56px; align-items: center; justify-content: space-between; gap: 16px; padding-block: 12px; cursor: pointer; list-style: none; }
+.descriptionDisclosure summary::-webkit-details-marker { display: none; }
+.descriptionDisclosure summary:focus-visible { outline: 2px solid var(--text-on-light); outline-offset: 3px; }
+.descriptionDisclosure > .descriptionSection { padding: 0 0 24px; }
+.disclosureMark { flex-shrink: 0; font-size: 24px; font-weight: 300; }
+.descriptionDisclosure[open] .disclosureMark { transform: rotate(45deg); }
+
 .card {
   flex: 1;
   min-height: 0;
@@ -166,6 +187,8 @@
   .photograph { flex: 0 0 max(0px, min(36%, calc(100% - var(--card-min-height) - 88px))); }
   .photograph img { object-position: center 75%; }
   .panel { flex: 1; }
+  .detailsScroll .card { min-height: var(--card-min-height); }
+  .description { padding: 20px; font-size: 16px; }
   .purchase, .addButton { height: 48px; }
   .card { grid-template-rows: var(--heading-row) var(--detail-row) var(--origin-row) minmax(var(--landscape-min-height), 1fr) var(--price-row) var(--region-row); }
   .titleRule { margin-block: 3px; }
@@ -242,19 +265,29 @@
 
 /* The product overlay keeps the label artwork on the left and its image fixed on the right. */
 .dialogPanel {
-  --label-size: 16px;
-  --value-size: clamp(20px, 1.85vw, 27px);
-  --title-size: clamp(28px, 3.2vw, 48px);
+  --label-size: 12px;
+  --value-size: 20px;
+  --title-size: 48px;
   gap: 0;
   min-height: 100%;
 }
+.dialogPanel .detailsScroll { flex: none; overflow: visible; }
 .dialogPanel .card {
   flex: none;
+  min-height: 0;
   grid-template-columns: minmax(0, 1fr);
   grid-template-rows: 160px 120px 120px clamp(180px, 28svh, 240px) 100px 80px;
 }
 .dialogPanel .heading { display: flex; grid-column: auto; padding: 12px; }
-.dialogPanel .heading h2 { white-space: normal; }
+.dialogPanel .heading h2 { font-weight: 500; white-space: normal; text-wrap: balance; }
+.dialogPanel .label { font-family: var(--font-manrope), Arial, sans-serif; font-weight: 500; letter-spacing: 0.08em; line-height: 1.4; }
+.dialogPanel .number, .dialogPanel .serifValue { font-family: var(--font-manrope), Arial, sans-serif; font-size: var(--value-size); font-weight: 400; letter-spacing: normal; line-height: 1.4; text-transform: none; }
+.dialogPanel .heading .number { margin-top: 8px; font-family: var(--font-cormorant-garamond), Georgia, serif; font-size: 24px; font-weight: 500; line-height: 1.2; }
+.dialogPanel .cell { gap: 8px; padding-inline: 12px; }
+.dialogPanel .serifValue::first-letter, .dialogPanel .region p::first-letter { text-transform: uppercase; }
+.dialogPanel .harvestValue { font-size: 18px; }
+.dialogPanel .price { font-size: 32px; font-weight: 500; }
+.dialogPanel .unitPrice, .dialogPanel .region { font-family: var(--font-manrope), Arial, sans-serif; font-size: 14px; font-weight: 400; letter-spacing: normal; line-height: 1.4; text-transform: none; }
 .dialogPanel .titleRule { display: block; margin-block: 8px; }
 .dialogPanel .detailRow, .dialogPanel .priceRow, .dialogPanel .region { grid-column: auto; grid-row: auto; border-left: 0; }
 .dialogPanel .landscape { display: block; }
@@ -269,5 +302,8 @@
   }
 }
 @media (max-width: 767px) {
+  .dialogPanel { --title-size: 32px; --value-size: 18px; }
+  .dialogPanel .harvestValue { font-size: 16px; }
+  .dialogPanel .price { font-size: 24px; }
   .dialogPanel .purchase { position: sticky; right: auto; bottom: 12px; width: 100%; margin-top: 20px; }
 }
