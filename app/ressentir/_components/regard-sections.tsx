@@ -23,7 +23,7 @@ const sections: RegardSection[] = [
     leftTitle: "Le charme de la roche",
     leftText: <>Sur les oolongs de roche, le massif laisse une signature que l’on appelle là-bas <strong>yan yun</strong> : une minéralité qui persiste longtemps en bouche. Chaque falaise, chaque vallée imprime la sienne.</>,
     rightTitle: "Rien que la feuille",
-    rightText: <><strong>Cinq cuvées</strong> cueillies au printemps, sans assemblage <strong>ni arôme ajouté.</strong> Dans la tasse, ce que la feuille a reçu de son sol et de ceux qui l’ont travaillée.</>,
+    rightText: <><strong>Cinq crus</strong> cueillis au printemps, sans assemblage <strong>ni arôme ajouté.</strong> Dans la tasse, ce que la feuille a reçu de son sol et de ceux qui l’ont travaillée.</>,
   },
   {
     id: "le-soin",

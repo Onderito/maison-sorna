@@ -53,6 +53,7 @@
   flex-shrink: 0;
   font-family: var(--font-cormorant-garamond), Georgia, serif;
   font-size: 14px;
+  font-weight: 700;
   line-height: 1;
 }
 

@@ -18,7 +18,7 @@ export default function InfuserPage() {
         <UniversHero
           id="la-carte"
           title={<>Les Cinq<br />Sommets</>}
-          subtitle="Cinq cuvées de thé"
+          subtitle="Cinq crus de thé"
           scrollTarget="#les-cuvees"
         >
           <SeamlessBackgroundVideo

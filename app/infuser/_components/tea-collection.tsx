@@ -12,7 +12,7 @@ export default async function TeaCollection() {
     try {
       return { edition, product: await getProduct(edition.handle), failed: false };
     } catch {
-      console.error(`Impossible de charger la cuvée ${edition.handle} depuis Shopify.`);
+      console.error(`Impossible de charger le cru ${edition.handle} depuis Shopify.`);
       return { edition, product: null, failed: true };
     }
   }));
@@ -22,7 +22,7 @@ export default async function TeaCollection() {
       <header data-collection-header className={styles.header}>
         <p data-collection-eyebrow className={styles.eyebrow}>La collection</p>
         <h2 id="collection-title"><span className={styles.titleMask}><span data-collection-title>À chacun son sommet</span></span></h2>
-        <p data-collection-introduction>Cinq cuvées, cinq façons de découvrir la feuille.</p>
+        <p data-collection-introduction>Cinq crus, cinq façons de découvrir la feuille.</p>
       </header>
       <ul className={styles.collection}>
         {entries.map(({ edition, product, failed }, index) => {
@@ -49,7 +49,7 @@ export default async function TeaCollection() {
               <h3>{product?.title ?? edition.title}</h3>
               <div className={styles.bottom}>
                 {price && <p className={styles.price}>{available.length ? "À partir de" : "Épuisé ·"} {price}</p>}
-                <span className={styles.discover}>{product ? "Découvrir la cuvée" : failed ? "Indisponible pour le moment" : "Présentation à venir"}{product && <span className={styles.discoverArrow} aria-hidden="true">↗</span>}</span>
+                <span className={styles.discover}>{product ? "Découvrir le cru" : failed ? "Indisponible pour le moment" : "Présentation à venir"}{product && <span className={styles.discoverArrow} aria-hidden="true">↗</span>}</span>
               </div>
             </div>
           </>;

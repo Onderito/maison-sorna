@@ -1,5 +1,5 @@
 export const infuserNavigationLinks = [
-  { label: "Les cinq cuvées", href: "/infuser#les-cuvees" },
+  { label: "Les cinq crus", href: "/infuser#les-cuvees" },
   { label: "Le geste", href: "/infuser#le-geste" },
   { label: "Questions fréquentes", href: "/infuser#faq" },
 ] as const;

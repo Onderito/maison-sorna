@@ -7,12 +7,12 @@ const questions = [
   {
     id: "origine",
     question: "D’où viennent vos thés ?",
-    answer: "De Chine, principalement du Fujian. Le lieu et la récolte de chaque cuvée sont indiqués sur sa fiche.",
+    answer: "De Chine, principalement du Fujian. Le lieu et la récolte de chaque cru sont indiqués sur sa fiche.",
   },
   {
     id: "preparation",
-    question: "Comment préparer chaque cuvée ?",
-    answer: "Suivez les repères de votre cuvée pour la dose, la température et la durée, puis ajustez à votre goût. Les mêmes feuilles peuvent être infusées plusieurs fois, avec une tasse différente à chaque passage.",
+    question: "Comment préparer chaque cru ?",
+    answer: "Suivez les repères de votre cru pour la dose, la température et la durée, puis ajustez à votre goût. Les mêmes feuilles peuvent être infusées plusieurs fois, avec une tasse différente à chaque passage.",
   },
   {
     id: "aromes",

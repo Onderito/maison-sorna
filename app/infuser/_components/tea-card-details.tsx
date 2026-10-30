@@ -38,7 +38,7 @@ export default function TeaCardDetails({ entry, presentation = "page" }: { entry
         setFeedback({ ...result, handle });
         if (result.status !== "error") router.refresh();
       } catch {
-        setFeedback({ handle, status: "error", message: "Impossible d’ajouter cette cuvée. Réessaie dans un instant." });
+        setFeedback({ handle, status: "error", message: "Impossible d’ajouter ce cru. Réessaie dans un instant." });
       }
     });
   }
@@ -51,7 +51,7 @@ export default function TeaCardDetails({ entry, presentation = "page" }: { entry
         <header className={styles.heading} data-product-reveal>
           <h2 id={`tea-${handle}-title`}>{entry.title}</h2>
           <Image src="/figma/infuser/product/title-rule.svg" alt="" width={155} height={1} className={styles.titleRule} />
-          {entry.cuvee && <><p className={styles.label}>Cuvée</p><p className={styles.number}>{entry.cuvee}</p></>}
+          {entry.cuvee && <><p className={styles.label}>Cru</p><p className={styles.number}>{entry.cuvee}</p></>}
         </header>
         <div className={styles.detailRow} data-product-reveal>
           <div className={styles.cell}>
@@ -130,7 +130,7 @@ export default function TeaCardDetails({ entry, presentation = "page" }: { entry
         </button>
       </div>
       <div className={styles.feedback} role="status" aria-atomic="true">
-        {(feedback?.handle === handle ? feedback.message : null) ?? (!product ? "Cette cuvée est momentanément indisponible." : "")}
+        {(feedback?.handle === handle ? feedback.message : null) ?? (!product ? "Ce cru est momentanément indisponible." : "")}
       </div>
     </div>
   );

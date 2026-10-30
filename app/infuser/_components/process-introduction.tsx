@@ -9,7 +9,7 @@ export default function ProcessIntroduction() {
         </span>
       </h2>
       <p data-introduction-copy className="mx-auto mt-6 max-w-[36em] px-5 font-sans text-[16px] md:text-[clamp(0.875rem,1.16vw,1.25rem)] leading-[1.4] font-normal">
-        De la cueillette à la torréfaction, cinq gestes façonnent nos thés. Chaque cuvée les combine à sa façon, et c’est ce chemin qui la distingue.
+        De la cueillette à la torréfaction, cinq gestes façonnent nos thés. Chaque cru les combine à sa façon, et c’est ce chemin qui le distingue.
       </p>
     </ScrollImageIntroduction>
   );

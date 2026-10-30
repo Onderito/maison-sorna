@@ -26,7 +26,7 @@ export default function TeaProductDescription({ sections }: { sections: TeaDescr
         </section>;
       }
       return <details key={index} className={styles.descriptionDisclosure}>
-        <summary><span>{section.title}</span><span className={styles.disclosureMark} aria-hidden="true">+</span></summary>
+        <summary><span>{/^la cuvée$/i.test(section.title) ? "Le cru" : section.title}</span><span className={styles.disclosureMark} aria-hidden="true">+</span></summary>
         <div className={styles.descriptionSection}><Blocks blocks={section.blocks} /></div>
       </details>;
     })}

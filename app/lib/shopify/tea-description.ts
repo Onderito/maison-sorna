@@ -13,7 +13,7 @@ export type TeaDescriptionSection = {
 };
 
 const sectionTitles = new Set([
-  "notes de degustation", "la cuvee", "conseils de preparation",
+  "notes de degustation", "la cuvee", "le cru", "conseils de preparation",
   "format et composition", "conservation",
 ]);
 
@@ -53,7 +53,7 @@ export function parseTeaDescription(html: string, fallback = "") {
   visit(parseDocument(html).children);
   if (!blocks.length && fallback.trim()) blocks.push({ kind: "paragraph", text: fallback.trim() });
 
-  const metadata = blocks[0]?.text.match(/^Cuvée\s+([IVX]+|\d+)\s*(?:·|$)/i);
+  const metadata = blocks[0]?.text.match(/^(?:Cuvée|Cru)\s+([IVX]+|\d+)\s*(?:·|$)/i);
   const subtitle = metadata ? blocks.shift()!.text : "";
   const sections: TeaDescriptionSection[] = [];
   let current: TeaDescriptionSection = { title: "", blocks: [] };
@@ -65,7 +65,7 @@ export function parseTeaDescription(html: string, fallback = "") {
   }
   if (current.blocks.length) sections.push(current);
 
-  const facts = sections.find((section) => normalize(section.title) === "la cuvee")?.blocks ?? [];
+  const facts = sections.find((section) => ["la cuvee", "le cru"].includes(normalize(section.title)))?.blocks ?? [];
   function fact(label: string) {
     const block = facts.find((item) => normalize(item.text.split(":")[0]) === label);
     return block?.text.slice(block.text.indexOf(":") + 1).trim().replace(/\.$/, "") ?? null;

@@ -58,7 +58,7 @@ export default function PlantProcess({
                   />
                 </div>
                 <div className={styles.cuvees}>
-                  <p className={styles.cuveesLabel}>Cuvées concernées</p>
+                  <p className={styles.cuveesLabel}>Crus concernés</p>
                   <ul className={styles.cuveesList}>
                     {step.cuvees.map((cuvee) => <li key={cuvee}>{cuvee}</li>)}
                   </ul>

@@ -26,7 +26,7 @@ export const processSteps: readonly [
     title: "Récolte",
     cuvees: ["Pivoine Royale", "Brume des Cimes", "Écorce de Feu", "Miel d’Orchidée", "Sourcil d’Or"],
     description:
-      "Bourgeons seuls ou feuilles plus mûres : chaque cuvée appelle sa propre cueillette. Au printemps, le choix de la pousse et du moment donne au thé son premier caractère.",
+      "Bourgeons seuls ou feuilles plus mûres : chaque cru appelle sa propre cueillette. Au printemps, le choix de la pousse et du moment donne au thé son premier caractère.",
     images: {
       botanical: {
         src: "/figma/infuser/process/01-illu.webp",
@@ -43,7 +43,7 @@ export const processSteps: readonly [
     title: "Flétrissage",
     cuvees: ["Pivoine Royale", "Écorce de Feu", "Miel d’Orchidée", "Sourcil d’Or"],
     description:
-      "Étalées sur des claies, les feuilles perdent une part de leur eau et s’assouplissent. Premier geste après la cueillette pour la plupart de nos cuvées, le flétrissage est presque tout le travail de Pivoine Royale : un long repos à l’air, puis un séchage. Deux gestes seulement, pour préserver la délicatesse du thé blanc.",
+      "Étalées sur des claies, les feuilles perdent une part de leur eau et s’assouplissent. Premier geste après la cueillette pour la plupart de nos crus, le flétrissage est presque tout le travail de Pivoine Royale : un long repos à l’air, puis un séchage. Deux gestes seulement, pour préserver la délicatesse du thé blanc.",
     images: {
       botanical: {
         src: "/figma/infuser/process/02-illu.webp",
@@ -60,7 +60,7 @@ export const processSteps: readonly [
     title: "Oxydation",
     cuvees: ["Écorce de Feu", "Miel d’Orchidée", "Sourcil d’Or"],
     description:
-      "Au contact de l’air, la feuille brunit comme une pomme coupée, et ses arômes se transforment. Pour les oolongs Écorce de Feu et Miel d’Orchidée, les feuilles sont brassées, puis l’oxydation est arrêtée en cours de route. Pour le thé noir Sourcil d’Or, elle est menée jusqu’au bout. C’est elle qui donne à chaque cuvée sa couleur et une grande part de son goût.",
+      "Au contact de l’air, la feuille brunit comme une pomme coupée, et ses arômes se transforment. Pour les oolongs Écorce de Feu et Miel d’Orchidée, les feuilles sont brassées, puis l’oxydation est arrêtée en cours de route. Pour le thé noir Sourcil d’Or, elle est menée jusqu’au bout. C’est elle qui donne à chaque cru sa couleur et une grande part de son goût.",
     images: {
       botanical: {
         src: "/figma/infuser/process/03-illu.webp",

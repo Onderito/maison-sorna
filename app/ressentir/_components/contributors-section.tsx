@@ -7,7 +7,7 @@ const contributors = [
     role: "DIRECTION ARTISTIQUE & COMMUNICATION",
     paragraphs: [
       "J’ai lancé Solumia, un projet né de l’envie de réunir la communication digitale et la gastronomie, deux univers qui me passionnent.",
-      "J’ai choisi d’accompagner SÖRNA parce que je me retrouve dans cette façon de faire découvrir le thé autrement, à travers une sélection de cuvées botaniques.",
+      "J’ai choisi d’accompagner SÖRNA parce que je me retrouve dans cette façon de faire découvrir le thé autrement, à travers une sélection de crus botaniques.",
       "Mon rôle est de mettre tout cela en lumière par la direction artistique, la création de contenus photo et vidéo et le développement des réseaux sociaux, en gardant une communication humaine et fidèle à l’univers de SÖRNA.",
     ],
   },

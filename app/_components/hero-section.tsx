@@ -71,7 +71,7 @@ export function HeroSection({
           <div className={styles.introduction}>
             <p>Des thés de terroir, des soins anhydre.</p>
             <TransitionLink href="/infuser#les-cuvees" className={styles.cta}>
-              Découvrir les cuvées
+              Découvrir les crus
             </TransitionLink>
           </div>
         </div>

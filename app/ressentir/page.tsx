@@ -34,7 +34,7 @@ export default function RessentirPage() {
         <StoryIntroduction
           id="les-origines"
           title="Les origines"
-          subtitle="Un nom façonné par trois lieux, trois influences, une même manière de regarder la matière."
+          subtitle="Un nom façonné par deux lieux, une influence, une même manière de regarder la matière."
         />
         <OriginChapters />
         <StoryIntroduction

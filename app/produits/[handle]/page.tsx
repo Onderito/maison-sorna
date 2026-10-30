@@ -26,7 +26,7 @@ export default async function ProductPage({
     return <>
       <main className="pt-4">
         <div className="site-container flex flex-wrap items-center justify-between gap-4 px-1 pb-2 text-base">
-          <Link href="/infuser#les-cuvees" className="inline-flex min-h-11 items-center gap-3 underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-4"><span aria-hidden="true">←</span> Les cinq cuvées</Link>
+          <Link href="/infuser#les-cuvees" className="inline-flex min-h-11 items-center gap-3 underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-4"><span aria-hidden="true">←</span> Les cinq crus</Link>
           <p className="font-display text-xl uppercase text-[#838d76]">Les Cinq Sommets</p>
         </div>
         <h1 className="sr-only">{product.title}</h1>
