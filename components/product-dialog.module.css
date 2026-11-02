@@ -16,7 +16,7 @@
   isolation: isolate;
 }
 .dialog::backdrop { background: transparent; }
-.backdrop { position: absolute; inset: 0; background: var(--paper-background); }
+.backdrop { position: absolute; inset: 0; background: var(--background); }
 .sheet { position: absolute; inset: 0; z-index: 1; }
 .content { position: absolute; inset: 0 50% 0 0; overflow: auto; overscroll-behavior: contain; padding: 24px; scrollbar-width: thin; scrollbar-color: rgb(64 32 12 / 35%) transparent; }
 .content:focus-visible { outline: 1px solid var(--text-on-light); outline-offset: -8px; }
@@ -35,3 +35,7 @@
   .visual { position: absolute; top: 0; left: 0; right: 0; }
   .close { position: fixed; top: 12px; right: 12px; }
 }
+
+.dialogCart { position: absolute; top: 20px; right: 160px; z-index: 5; min-height: 44px; padding: 8px 12px; border: 1px solid rgb(64 32 12 / 24%); background: var(--background); font-size: 14px; font-variant-numeric: tabular-nums; cursor: pointer; }
+.dialogCart:focus-visible { outline: 2px solid var(--button); outline-offset: 3px; }
+@media (max-width: 767px) { .dialogCart { position: fixed; top: 12px; right: 146px; } }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { useCart } from "@/components/cart-provider";
 import { addToCart } from "@/app/actions/cart";
 import type { AddToCartResult, ShopifyVariant } from "@/app/lib/shopify-types";
 
@@ -13,7 +13,7 @@ export default function ProductVariantSelector({
   variants,
 }: ProductVariantSelectorProps) {
   const groupName = useId();
-  const router = useRouter();
+  const { openCart } = useCart();
   const [isPending, startTransition] = useTransition();
   const [feedback, setFeedback] = useState<AddToCartResult | null>(null);
   const defaultVariant =
@@ -34,8 +34,8 @@ export default function ProductVariantSelector({
     startTransition(async () => {
       try {
         const result = await addToCart(variant.id, variant.quantityRule.minimum);
-        setFeedback({ ...result, message: `${variant.title} : ${result.message}` });
-        if (result.status !== "error") router.refresh();
+        setFeedback(result.status === "success" ? null : { ...result, message: `${variant.title} : ${result.message}` });
+        if (result.status !== "error") await openCart(variant.id);
       } catch {
         setFeedback({
           status: "error",

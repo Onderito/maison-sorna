@@ -246,3 +246,11 @@
 @media (prefers-reduced-motion: reduce) {
   .navLink, .mobileSubmenuToggle svg { transition: none; }
 }
+
+/* One compact cart access takes over when the main navigation leaves. */
+.floatingCart { position: fixed; z-index: 101; top: 20px; right: max(20px, calc((100vw - 1601px) / 2)); display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-height: 44px; padding: 10px 18px; border: 1px solid rgb(64 32 12 / 24%); background: var(--background); color: var(--text-on-light); font-family: var(--font-manrope), sans-serif; font-size: 14px; font-variant-numeric: tabular-nums; cursor: pointer; opacity: 0; visibility: hidden; transform: translateY(-6px); transition: opacity 150ms ease, transform 200ms cubic-bezier(0.23, 1, 0.32, 1), visibility 0s 150ms; }
+.floatingVisible { opacity: 1; visibility: visible; transform: translateY(0); transition-delay: 150ms, 150ms, 0s; }
+.floatingCart:focus-visible { outline: 2px solid var(--button); outline-offset: 3px; }
+.cart { cursor: pointer; font-variant-numeric: tabular-nums; gap: 4px; }
+@media (max-width: 767px) { .floatingCart { top: 12px; right: 12px; } }
+@media (prefers-reduced-motion: reduce) { .floatingCart { transform: none; transition: opacity 150ms ease, visibility 0s 150ms; } .floatingVisible { transition-delay: 0s; } }

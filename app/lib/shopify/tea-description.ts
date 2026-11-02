@@ -86,3 +86,12 @@ export function parseTeaDescription(html: string, fallback = "") {
     sections,
   };
 }
+
+// The collection only needs the opening idea and the main tasting notes.
+// Keep preparation, packaging and technical facts in the full product sheet.
+export function getTeaCollectionDescription(sections: TeaDescriptionSection[]) {
+  const firstSentence = (text: string | undefined) => text?.match(/^.*?[.!?](?:\s|$)|^.+$/)?.[0].trim() ?? "";
+  const introduction = firstSentence(sections.find((section) => !section.title)?.blocks.find((block) => block.kind === "paragraph")?.text);
+  const tasting = firstSentence(sections.find((section) => normalize(section.title) === "notes de degustation")?.blocks.find((block) => block.kind === "paragraph")?.text);
+  return [introduction, tasting && !introduction.includes(tasting) ? tasting : ""].filter(Boolean).join(" ");
+}

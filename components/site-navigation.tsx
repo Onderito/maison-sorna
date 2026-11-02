@@ -7,6 +7,8 @@ import { useSyncExternalStore } from "react";
 import { useSiteNavigation } from "@/animations/use-site-navigation";
 import { createPortal } from "react-dom";
 
+import CartButton from "./cart-button";
+import { useCart } from "./cart-provider";
 import CustomerAccountLink from "@/components/customer-account-link";
 import MobileNavigation from "@/components/mobile-navigation";
 import NavigationSubmenu from "@/components/navigation-submenu";
@@ -30,6 +32,7 @@ type SiteNavigationProps = {
 
 export default function SiteNavigation({ overlay = false, tone = "auto" }: SiteNavigationProps) {
   const pathname = usePathname();
+  const { cart, isOpen } = useCart();
   const hydrated = useSyncExternalStore(subscribeToHydration, clientSnapshot, serverSnapshot);
   const { headerRef, barRef, surfaceRef, state: scrollState } = useSiteNavigation(overlay, pathname, hydrated);
   const { hidden, surface } = scrollState;
@@ -65,9 +68,7 @@ export default function SiteNavigation({ overlay = false, tone = "auto" }: SiteN
             Fr
             <Image src={`${assets}/chevron.svg`} alt="" width={10} height={5} />
           </button>
-          <Link href="/panier" prefetch={false} aria-label="Voir le panier" title="Panier" className={styles.cart}>
-            Panier
-          </Link>
+          <CartButton className={styles.cart} />
           <CustomerAccountLink />
         </div>
       </div>
@@ -77,7 +78,9 @@ export default function SiteNavigation({ overlay = false, tone = "auto" }: SiteN
   return (
     <>
       {!overlay && <div className={styles.spacer} aria-hidden="true" />}
-      {hydrated ? createPortal(header, document.body) : header}
+      {hydrated ? createPortal(<>{header}
+        {!!cart?.totalQuantity && <CartButton className={`${styles.floatingCart} ${hidden && !isOpen ? styles.floatingVisible : ""}`} />}
+      </>, document.body) : header}
     </>
   );
 }

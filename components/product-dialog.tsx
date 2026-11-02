@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useId, type ReactNode } from "react";
 import { useProductDialog } from "@/animations/use-product-dialog";
+import CartButton from "./cart-button";
+import { useCart } from "./cart-provider";
 import styles from "./product-dialog.module.css";
 
 export default function ProductDialog({
@@ -16,6 +18,7 @@ export default function ProductDialog({
   children: ReactNode;
 }) {
   const dialogId = useId();
+  const { cart } = useCart();
   const {
     dialogRef, sheetRef, backdropRef, openerRef, closeButtonRef, imageRef, movingImageRef,
     isOpen, open, close, onClosed, onOutsidePointerDown, onOutsideClick, onKeyDown,
@@ -54,6 +57,7 @@ export default function ProductDialog({
         <div className={styles.visual} data-product-visual>
           <div ref={imageRef} className={styles.image}>{image}</div>
         </div>
+        {!!cart?.totalQuantity && <CartButton className={styles.dialogCart} />}
         <button ref={closeButtonRef} type="button" className={styles.close} onClick={close} aria-label={`Fermer la fiche de ${title}`}>
           Fermer <span aria-hidden="true">×</span>
         </button>

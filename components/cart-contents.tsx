@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { useCart } from "./cart-provider";
 import { removeCartLine, updateCartLine } from "@/app/actions/cart-lines";
 import type { CartLineActionResult, CartView, ShopifyMoney } from "@/app/lib/shopify-types";
 
@@ -16,6 +17,7 @@ function formatMoney(money: ShopifyMoney) {
 
 export default function CartContents({ cart }: { cart: CartView | null }) {
   const router = useRouter();
+  const { refreshCart } = useCart();
   const [isPending, startTransition] = useTransition();
   const [feedback, setFeedback] = useState<CartLineActionResult | null>(null);
   const hasUnavailableLine = cart?.lines.some(
@@ -31,6 +33,7 @@ export default function CartContents({ cart }: { cart: CartView | null }) {
         const result = quantity === null
           ? await removeCartLine(lineId)
           : await updateCartLine(lineId, quantity);
+        await refreshCart();
         setFeedback(quantity === null && result.status === "success" ? null : result);
       } catch {
         setFeedback({ status: "error", message: "La réponse n’a pas pu être confirmée. Vérifiez votre connexion et le contenu du panier." });

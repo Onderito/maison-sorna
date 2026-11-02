@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { parseTeaDescription } from "./tea-description";
+import { getTeaCollectionDescription, parseTeaDescription } from "./tea-description";
 
 describe("parseTeaDescription", () => {
   it("récupère la cuvée, le terroir et la récolte réels sans les confondre avec le récit", () => {
@@ -56,5 +56,16 @@ describe("parseTeaDescription", () => {
     const empty = parseTeaDescription("");
     expect(empty).toMatchObject({ cuvee: null, origin: null, vintage: null, harvest: null, sections: [] });
     expect(parseTeaDescription("", "Présentation simple.").sections[0].blocks[0].text).toBe("Présentation simple.");
+  });
+});
+
+describe("getTeaCollectionDescription", () => {
+  it("keeps the opening idea and tasting notes without preparation or technical facts", () => {
+    const { sections } = parseTeaDescription(`<p>Cuvée I · Thé blanc</p><p>Un thé blanc floral. Longuement flétri puis séché.</p><h2>Notes de dégustation</h2><p>Pivoine, miel et amande. Une douceur sans amertume.</p><h2>Conseils de préparation</h2><p>Eau à 85 °C.</p>`);
+    expect(getTeaCollectionDescription(sections)).toBe("Un thé blanc floral. Pivoine, miel et amande.");
+  });
+  it("does not invent missing copy or repeat tasting notes", () => {
+    expect(getTeaCollectionDescription([])).toBe("");
+    expect(getTeaCollectionDescription(parseTeaDescription("<p>Miel et amande.</p><h2>Notes de dégustation</h2><p>Miel et amande.</p>").sections)).toBe("Miel et amande.");
   });
 });

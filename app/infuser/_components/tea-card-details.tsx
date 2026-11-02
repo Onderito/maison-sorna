@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useId, useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { useCart } from "@/components/cart-provider";
 import { addToCart } from "@/app/actions/cart";
 import type { AddToCartResult } from "@/app/lib/shopify-types";
 import styles from "./tea-card.module.css";
@@ -17,7 +17,7 @@ export default function TeaCardDetails({ entry, presentation = "page" }: { entry
   const selected = variants.find((variant) => selection.handle === handle && variant.id === selection.id) ?? initialVariant;
   const [feedback, setFeedback] = useState<(AddToCartResult & { handle: string }) | null>(null);
   const [pending, startTransition] = useTransition();
-  const router = useRouter();
+  const { openCart } = useCart();
   const formatId = useId();
   const price = selected ? new Intl.NumberFormat("fr-FR", {
     style: "currency", currency: selected.price.currencyCode, maximumFractionDigits: 2,
@@ -35,8 +35,8 @@ export default function TeaCardDetails({ entry, presentation = "page" }: { entry
     startTransition(async () => {
       try {
         const result = await addToCart(variant.id, variant.quantityRule.minimum);
-        setFeedback({ ...result, handle });
-        if (result.status !== "error") router.refresh();
+        setFeedback(result.status === "success" ? null : { ...result, handle });
+        if (result.status !== "error") await openCart(variant.id);
       } catch {
         setFeedback({ handle, status: "error", message: "Impossible d’ajouter ce cru. Réessaie dans un instant." });
       }

@@ -12,7 +12,8 @@ html { scroll-padding-top: 96px; }
 
 :root {
   --background: #e9e2d6;
-  --paper-background: var(--background) url("/figma/infuser/process/background.png") center top / 100% auto repeat-y;
+  /* One viewport-sized texture, shared by the page and opaque paper panels. */
+  --paper-background: var(--background) url("/figma/infuser/process/background.png") center top / cover no-repeat fixed;
   --foreground: #40200c;
   --accent: #a9823d;
   --button: #40200c;

@@ -3,6 +3,8 @@
 import { TransitionLink as Link } from "@/components/page-transition";
 import { useEffect, useRef, useState } from "react";
 
+import CartButton from "./cart-button";
+import { useCart } from "./cart-provider";
 import CustomerAccountLink from "@/components/customer-account-link";
 import { getNavigationSubmenuLinks } from "./navigation-submenu-links";
 import styles from "./site-navigation.module.css";
@@ -15,6 +17,8 @@ type MobileNavigationProps = {
 };
 
 export default function MobileNavigation({ pathname, items }: MobileNavigationProps) {
+  const { openCart } = useCart();
+  const cartAfterClose = useRef(false);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const animationRef = useRef<Animation | null>(null);
@@ -98,6 +102,7 @@ export default function MobileNavigation({ pathname, items }: MobileNavigationPr
         Fr
         <svg width="10" height="6" viewBox="0 0 10 6" fill="none" aria-hidden="true"><path d="m1 1 4 4 4-4" stroke="currentColor" /></svg>
       </button>
+      <CartButton className={styles.cart} />
       <button type="button" className={styles.menuButton} aria-label="Ouvrir le menu" aria-haspopup="dialog" aria-expanded={open} aria-controls="mobile-navigation" onClick={showMenu}>
         <span className={styles.burger} aria-hidden="true"><span /><span /></span>
       </button>
@@ -114,6 +119,10 @@ export default function MobileNavigation({ pathname, items }: MobileNavigationPr
           restoreScroll();
           setOpen(false);
           setExpandedGroup(null);
+          if (cartAfterClose.current) {
+            cartAfterClose.current = false;
+            void openCart();
+          }
         }}
         onClick={(event) => { if (event.target === dialogRef.current) closeMenu(); }}
       >
@@ -159,9 +168,10 @@ export default function MobileNavigation({ pathname, items }: MobileNavigationPr
         <div className={styles.mobileUtilities}>
           <div className={styles.mobileCommerce}>
             <CustomerAccountLink />
-            <Link href="/panier" prefetch={false} className={styles.mobileCart} onClick={closeForNavigation}>
-              Panier
-            </Link>
+            <CartButton className={styles.mobileCart} onClick={() => {
+              cartAfterClose.current = true;
+              closeForNavigation();
+            }} />
           </div>
         </div>
       </dialog>

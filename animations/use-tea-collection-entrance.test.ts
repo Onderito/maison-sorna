@@ -19,6 +19,10 @@ type TimelineOptions = {
 const harness = vi.hoisted(() => ({
   setup: null as (() => unknown) | null,
   scroll: 0,
+  reduced: false,
+  copy: false,
+  cards: [] as object[],
+  splits: [] as { revert: ReturnType<typeof vi.fn> }[],
   triggers: [] as { options: TriggerOptions; trigger: Trigger }[],
   timelines: [] as {
     options: TimelineOptions;
@@ -33,8 +37,9 @@ vi.mock("./gsap", () => ({
   useGSAP: (setup: () => unknown) => { harness.setup = setup; },
   gsap: {
     set: vi.fn(),
+    registerPlugin: vi.fn(),
     matchMedia: () => ({
-      add: (_conditions: unknown, setup: (context: unknown) => void) => setup({ conditions: { desktop: true } }),
+      add: (_conditions: unknown, setup: (context: unknown) => void) => setup({ conditions: { desktop: true, reduced: harness.reduced } }),
       revert: vi.fn(),
     }),
     timeline: (options: TimelineOptions) => {
@@ -47,6 +52,16 @@ vi.mock("./gsap", () => ({
       };
       harness.timelines.push(timeline);
       return timeline;
+    },
+  },
+}));
+vi.mock("gsap/SplitText", () => ({
+  SplitText: {
+    create: (_targets: unknown, options: { onSplit: (self: unknown) => void }) => {
+      const split = { lines: [{}, {}], isSplit: true, revert: vi.fn() };
+      harness.splits.push(split);
+      options.onSplit(split);
+      return split;
     },
   },
 }));
@@ -66,9 +81,13 @@ import { gsap } from "./gsap";
 beforeEach(() => {
   vi.clearAllMocks();
   harness.scroll = 0;
+  harness.reduced = false;
+  harness.copy = false;
   harness.triggers = [];
   harness.timelines = [];
-  const cards = Array.from({ length: 5 }, () => ({ offsetTop: 300 }));
+  const cards = Array.from({ length: 5 }, () => ({ offsetTop: 300, querySelector: () => harness.copy ? {} : null, querySelectorAll: () => harness.copy ? [{}] : [] }));
+  harness.cards = cards;
+  harness.splits = [];
   const section = {
     querySelector: () => ({}),
     querySelectorAll: () => cards,
@@ -137,5 +156,46 @@ describe("collection entrance after anchor navigation", () => {
       expect.arrayContaining([expect.objectContaining({ offsetTop: 300 })]),
       { clearProps: "transform,opacity" },
     );
+  });
+});
+
+describe("masked collection copy", () => {
+  it("restores the price and action AFTER SplitText reverts its timeline", async () => {
+    harness.copy = true;
+    useTeaCollectionEntrance();
+    harness.setup?.();
+    harness.timelines[2].options.onComplete?.();
+    await Promise.resolve();
+    const revertOrder = harness.splits[0].revert.mock.invocationCallOrder[0];
+    const clearOrder = vi.mocked(gsap.set).mock.invocationCallOrder.at(-1)!;
+    expect(revertOrder).toBeDefined();
+    expect(clearOrder).toBeGreaterThan(revertOrder);
+    expect(gsap.set).toHaveBeenLastCalledWith(expect.any(Array), { clearProps: "transform" });
+  });
+  it("waits for the copy itself to enter rather than revealing below-screen text with the image", () => {
+    harness.copy = true;
+    useTeaCollectionEntrance();
+    harness.setup?.();
+    // Heading, outer row, then each card's independently triggered copy.
+    harness.triggers[0].options.onEnter();
+    expect(harness.timelines[2].play).toHaveBeenCalledOnce();
+    expect(harness.timelines[1].play).not.toHaveBeenCalled();
+  });
+  it("settles the activated card without finishing later cards' text", () => {
+    harness.copy = true;
+    const { revealImmediately } = useTeaCollectionEntrance();
+    harness.setup?.();
+    revealImmediately(harness.cards[0] as HTMLElement);
+    expect(harness.timelines[2].progress).toHaveBeenCalledWith(1);
+    expect(harness.timelines[3].progress).not.toHaveBeenCalled();
+  });
+  it("keeps every card and its text visible with reduced motion", () => {
+    harness.reduced = true;
+    harness.copy = true;
+    useTeaCollectionEntrance();
+    harness.setup?.();
+    expect(harness.timelines).toHaveLength(0);
+    expect(harness.triggers).toHaveLength(0);
+    expect(gsap.set).toHaveBeenCalledWith(expect.any(Array), { clearProps: "transform,opacity" });
   });
 });
