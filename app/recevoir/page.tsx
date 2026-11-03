@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/app/lib/seo/site";
 import Image from "next/image";
 import UniversHero from "@/components/univers-hero";
 import SiteFooter from "@/components/site-footer";
@@ -6,10 +6,7 @@ import AccordSection from "./accord-section";
 import ReceptionForm from "./reception-form";
 import styles from "./recevoir.module.css";
 
-export const metadata: Metadata = {
-  title: "Professionnels, hôtellerie, restauration, bar | SÖRNA",
-  description: "Des crus de thé pour les restaurants, les pâtissiers, les bars et les hôtels. Dégustation sur place, sans engagement, et book sur demande.",
-};
+export const metadata = pageMetadata("/recevoir", "Thés pour hôtels, restaurants et bars | SÖRNA", "Des crus de thé pour les restaurants, les pâtissiers, les bars et les hôtels. Découvrez notre accompagnement et demandez une dégustation professionnelle.", "/recevoir/hero-table.png");
 
 const reasons = [
   { title: "Des crus, pas des mélanges.", text: "Cinq cuvées pures, sans arôme ajouté, chacune analysée par un laboratoire indépendant avant sa mise en vente." },

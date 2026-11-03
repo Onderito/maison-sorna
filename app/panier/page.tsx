@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { getCartDetails } from "@/app/lib/shopify/cart";
 import CartContents from "@/components/cart-contents";
 
-export const metadata: Metadata = { title: "Panier | SÖRNA" };
+export const metadata: Metadata = { robots: { index: false, follow: false }, title: "Panier | SÖRNA" };
 
 export default async function CartPage({
   searchParams,

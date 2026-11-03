@@ -35,6 +35,7 @@ export type ShopifyProduct = {
   title: string;
   description: string;
   descriptionHtml: string;
+  seo?: { title: string | null; description: string | null };
   productType: string;
   featuredImage: ShopifyImage | null;
   variants: {

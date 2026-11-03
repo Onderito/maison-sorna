@@ -84,6 +84,7 @@ query GetProduct($handle: String!) {
     handle
     description
     descriptionHtml
+    seo { title description }
     productType
 
     featuredImage {

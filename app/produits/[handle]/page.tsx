@@ -7,6 +7,20 @@ import Link from "next/link";
 import TeaCard from "@/app/infuser/_components/tea-card";
 import { getTeaCardEntry } from "@/app/infuser/tea-editions";
 import SiteFooter from "@/components/site-footer";
+import { pageMetadata } from "@/app/lib/seo/site";
+import { productStructuredData, serializeJsonLd } from "@/app/lib/seo/product";
+
+export async function generateMetadata({ params }: { params: Promise<{ handle: string }> }) {
+  const { handle } = await params;
+  const product = await getProduct(handle);
+  if (!product) notFound();
+  return pageMetadata(
+    `/produits/${encodeURIComponent(product.handle)}`,
+    `${product.seo?.title || product.title} | SÖRNA`,
+    product.seo?.description || product.description.replace(/\s+/g, " ").trim().slice(0, 160),
+    product.featuredImage?.url,
+  );
+}
 
 export default async function ProductPage({
   params,
@@ -22,8 +36,10 @@ export default async function ProductPage({
   }
 
   const teaEntry = getTeaCardEntry(product);
+  const structuredData = <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(productStructuredData(product)) }} />;
   if (teaEntry) {
     return <>
+      {structuredData}
       <main className="pt-4">
         <div className="site-container flex flex-wrap items-center justify-between gap-4 px-1 pb-2 text-base">
           <Link href="/infuser#les-cuvees" className="inline-flex min-h-11 items-center gap-3 underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-4"><span aria-hidden="true">←</span> Les cinq crus</Link>
@@ -40,6 +56,7 @@ export default async function ProductPage({
 
   return (
     <main className="mx-auto w-full max-w-3xl space-y-8 px-6 py-12">
+      {structuredData}
       <header className="space-y-4">
         <h1 className="text-3xl">{product.title}</h1>
         <p className="whitespace-pre-line opacity-80">{product.description}</p>

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { getSiteUrl, isIndexable } from "@/app/lib/seo/site";
 import { Cormorant_Garamond, Manrope } from "next/font/google";
 import { cookies } from "next/headers";
 
@@ -25,7 +26,9 @@ const cormorantGaramond = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
+  metadataBase: getSiteUrl(),
   title: "SÖRNA",
+  robots: { index: isIndexable(), follow: true },
   description: "Infuser, appliquer, ressentir — SÖRNA.",
 };
 

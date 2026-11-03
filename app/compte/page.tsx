@@ -14,7 +14,7 @@ import {
 } from "@/app/lib/shopify/customers";
 import Link from "next/link";
 
-export const metadata: Metadata = { title: "Compte | SÖRNA" };
+export const metadata: Metadata = { robots: { index: false, follow: false }, title: "Compte | SÖRNA" };
 
 function capitalize(value: string) {
   return value.charAt(0).toLocaleUpperCase("fr-FR") + value.slice(1);

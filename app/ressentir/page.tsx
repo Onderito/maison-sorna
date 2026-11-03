@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/app/lib/seo/site";
 import Image from "next/image";
 import UniversHero from "@/components/univers-hero";
 import SiteFooter from "@/components/site-footer";
@@ -9,9 +9,7 @@ import AuthenticitySection from "./_components/authenticity-section";
 import FoundersSection from "./_components/founders-section";
 import ContributorsSection from "./_components/contributors-section";
 
-export const metadata: Metadata = {
-  title: "Ressentir | SÖRNA",
-};
+export const metadata = pageMetadata("/ressentir", "La Maison, nos origines et nos convictions | SÖRNA", "De Sancerre aux monts Wuyi, découvrez les origines de SÖRNA, ses fondateurs et son regard sur le terroir, le thé et le soin.", "/figma/ressentir/hero-fenetre.png");
 
 export default function RessentirPage() {
   return (

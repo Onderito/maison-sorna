@@ -1,11 +1,9 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/app/lib/seo/site";
 import Image from "next/image";
 import UniversHero from "@/components/univers-hero";
 import SiteFooter from "@/components/site-footer";
 
-export const metadata: Metadata = {
-  title: "Appliquer | SÖRNA",
-};
+export const metadata = pageMetadata("/appliquer", "Appliquer, le second versant du soin | SÖRNA", "Découvrez le second versant de SÖRNA : une approche du soin attentive à la matière et aux gestes, dans le prolongement de notre regard sur le thé.", "/figma/appliquer/hero-soin.png");
 
 export default function AppliquerPage() {
   return (

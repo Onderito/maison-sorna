@@ -12,7 +12,7 @@ html { scroll-padding-top: 96px; }
 
 :root {
   --background: #e9e2d6;
-  /* One viewport-sized texture, shared by the page and opaque paper panels. */
+  /* Shared paper texture for the page and opaque panels. */
   --paper-background: var(--background) url("/figma/infuser/process/background.png") center top / cover no-repeat fixed;
   --foreground: #40200c;
   --accent: #a9823d;
@@ -40,6 +40,14 @@ html { scroll-padding-top: 96px; }
   --space-10: calc(var(--space-unit) * 10);
   --space-12: calc(var(--space-unit) * 12);
   --space-16: calc(var(--space-unit) * 16);
+}
+
+@media (max-width: 767px) {
+  :root {
+    /* 1536 source pixels at 512 CSS pixels preserve detail on 3x screens.
+       Repeat at a stable scale instead of stretching over a tall page. */
+    --paper-background: var(--background) url("/figma/infuser/process/background.png") center top / 512px auto repeat scroll;
+  }
 }
 
 @media (min-width: 768px) {
