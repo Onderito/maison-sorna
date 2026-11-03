@@ -29,11 +29,15 @@ export default function TeaCollectionStatement({ children, className }: {
         onSplit: (self) => {
           // SplitText's nested blocks inherit text-indent. Keep it only on
           // each paragraph's first line, so splitting and reverting agree.
-          self.masks.forEach((mask) => { mask.style.textIndent = "0"; });
-          self.lines.forEach((line) => { line.style.textIndent = "0"; });
+          self.masks.forEach((mask) => {
+            if (mask instanceof HTMLElement) mask.style.textIndent = "0";
+          });
+          self.lines.forEach((line) => {
+            if (line instanceof HTMLElement) line.style.textIndent = "0";
+          });
           fields.forEach((field, index) => {
             const firstLine = self.lines.find((line) => field.contains(line));
-            if (firstLine) firstLine.style.textIndent = indents[index];
+            if (firstLine instanceof HTMLElement) firstLine.style.textIndent = indents[index];
           });
           // A reflow after reading starts must not hide or replay the text.
           if (started || revealed.current) {
