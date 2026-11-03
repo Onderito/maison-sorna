@@ -7,7 +7,7 @@
 }
 
 .header { display: flex; flex-direction: column; align-items: center; gap: min(1.85185vw, 2.86482svh); text-align: center; }
-.title { font-family: var(--font-cormorant-garamond), Georgia, serif; font-size: min(10.41667vw, 16.11459svh); line-height: 0.96667; font-weight: 400; text-transform: uppercase; }
+.title { color: #838d76; font-family: var(--font-cormorant-garamond), Georgia, serif; font-size: min(10.41667vw, 16.11459svh); line-height: 0.96667; font-weight: 400; text-transform: uppercase; }
 .titleMask { display: block; overflow: clip; padding-block: 0.14em; margin-block: -0.14em; }
 .titleMask > span { display: block; }
 .header p { font-size: 18px; line-height: 1.4; }

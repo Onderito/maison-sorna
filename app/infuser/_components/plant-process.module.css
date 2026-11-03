@@ -25,6 +25,11 @@
   color: var(--text-on-light);
   /* Pinned panels must stay opaque as they overlap during scrolling. */
   background: var(--paper-background);
+  /* A viewport-fixed texture on every overlapping sticky panel forces
+     repainting and prevents the whole card from composing as one layer. */
+  background-attachment: scroll;
+  contain: paint;
+  isolation: isolate;
 }
 
 .panels {
@@ -116,7 +121,12 @@
 }
 
 @media (max-height: 650px) {
-  .step { height: auto; min-height: 100svh; overflow: visible; }
+  .step { height: auto; min-height: 100svh; overflow: visible; contain: none; }
   .editorial { min-height: 560px; }
   .botanical { top: 58%; }
+}
+
+/* Keep the same stacking motion without fixed/transform pin hand-offs. */
+@media (prefers-reduced-motion: no-preference) and (min-height: 651px) {
+  .step { position: sticky; top: 0; }
 }

@@ -12,6 +12,14 @@ export const ressentirNavigationLinks = [
   { label: "Ceux qui l’accompagnent", href: "/ressentir#ceux-qui-l-accompagnent" },
 ] as const;
 
+export const recevoirNavigationLinks = [
+  { label: "Pourquoi SÖRNA", href: "/recevoir#pourquoi-sorna" },
+  { label: "L’art de l’accord", href: "/recevoir#l-art-de-l-accord" },
+  { label: "Du matin au soir", href: "/recevoir#du-matin-au-soir" },
+  { label: "Goûtons ensemble", href: "/recevoir#degustation" },
+  { label: "Faisons connaissance", href: "/recevoir#demande" },
+] as const;
+
 export const footerNavigationGroups = [
   { title: "Infuser", links: infuserNavigationLinks },
   { title: "Appliquer", links: [
@@ -22,6 +30,7 @@ export const footerNavigationGroups = [
 
 export function getNavigationSubmenuLinks(href: string) {
   if (href === "/infuser") return infuserNavigationLinks;
+  if (href === "/recevoir") return recevoirNavigationLinks;
   if (href === "/ressentir") return ressentirNavigationLinks;
   return undefined;
 }

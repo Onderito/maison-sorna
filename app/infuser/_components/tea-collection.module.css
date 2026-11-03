@@ -34,8 +34,8 @@
 .price span { font-weight: 500; }
 .discover { display: inline-flex; min-height: 44px; align-items: center; gap: 16px; font-size: 16px; }
 .preview .discover { color: rgb(64 32 12 / 75%); }
-.ending { max-width: 720px; margin: 64px auto 0; padding-top: 16px; text-align: center; }
-.statement { font-family: var(--font-cormorant-garamond), Georgia, serif; font-size: 40px; font-weight: 400; line-height: 1.15; text-wrap: balance; }
+.ending { max-width: 720px; margin: 144px auto 0; padding-top: 16px; text-align: center; }
+.statement { font-family: var(--font-cormorant-garamond), Georgia, serif; font-size: 40px; font-weight: 400; line-height: 1.15; text-align: left; text-indent: 24%; text-wrap: pretty; }
 .statementSignature { margin-top: 24px; font-size: 12px; letter-spacing: 0.12em; }
 @media (hover: hover) and (pointer: fine) {
   .navigation a:hover { color: var(--text-on-light); }
@@ -53,6 +53,7 @@
   .botanical { padding: 56px 24% 16px; }
 }
 @media (max-width: 767px) {
+  .statement { font-size: 28px; line-height: 1.2; text-indent: 16%; }
   .header { text-align: center; }
   .navigation { display: none; }
 }
@@ -62,8 +63,7 @@
   .artwork { aspect-ratio: 1.1; }
   .botanical { padding: 48px 16% 12px; }
   .navigation { gap: 0; }
-  .ending { margin-top: 48px; }
-  .statement { font-size: 32px; }
+  .ending { margin-top: 128px; }
   .navigation a { font-size: 16px; }
   .bottom { gap: 4px 16px; }
   .discover { font-size: 14px; }

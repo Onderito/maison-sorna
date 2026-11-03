@@ -1,5 +1,6 @@
 "use server";
 
+import { CART_PRODUCT_LIMIT, CART_PRODUCT_LIMIT_MESSAGE, getProductCartQuantity } from "@/app/lib/shopify/cart-product-limit";
 import { revalidatePath } from "next/cache";
 import { shopifyFetch } from "@/app/lib/shopify";
 import {
@@ -48,9 +49,12 @@ async function mutateCartLine(
         ? null
         : getCartLineQuantityError(currentLine, quantity);
 
-      if (quantityError) {
+      const productLimitError = quantity !== null && quantity > currentLine.quantity &&
+        getProductCartQuantity(cart.lines, currentLine.merchandise.product.handle, lineId) + quantity > CART_PRODUCT_LIMIT
+        ? CART_PRODUCT_LIMIT_MESSAGE : null;
+      if (quantityError || productLimitError) {
         revalidatePath("/panier");
-        return { status: "error", message: quantityError };
+        return { status: "error", message: quantityError ?? productLimitError! };
       }
 
       const field = isRemoval ? "cartLinesRemove" : "cartLinesUpdate";

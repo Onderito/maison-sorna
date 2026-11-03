@@ -16,6 +16,7 @@
 }
 
 .title {
+  color: #838d76;
   font-size: var(--section-title-compact);
   font-weight: 600;
   line-height: 1.2143;

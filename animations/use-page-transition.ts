@@ -8,7 +8,7 @@ import { gsap, useGSAP } from "./gsap";
 
 gsap.registerPlugin(CustomEase);
 
-const editorialPaths = new Set(["/", "/infuser", "/appliquer", "/ressentir"]);
+const editorialPaths = new Set(["/", "/infuser", "/appliquer", "/ressentir", "/recevoir"]);
 type TransitionController = {
   navigate: (href: string) => boolean;
   committed: (pathname: string) => void;

@@ -2,7 +2,6 @@
 
 import { useRef } from "react";
 import { gsap, useGSAP } from "./gsap";
-import { ScrollTrigger } from "./scroll-trigger";
 
 export function useProcessTransitions() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -15,20 +14,7 @@ export function useProcessTransitions() {
 
     const media = gsap.matchMedia();
     media.add("(prefers-reduced-motion: no-preference) and (min-height: 651px)", () => {
-      // Each panel keeps its place in document flow. Earlier panels stay pinned
-      // until the last one reaches the top, matching the original sticky stack.
-      panels.slice(0, -1).forEach((panel) => {
-        ScrollTrigger.create({
-          trigger: panel,
-          start: "top top",
-          endTrigger: container,
-          // Use the panel's 100svh height, including mobile browser chrome.
-          end: () => `bottom ${panel.offsetHeight}px`,
-          pin: true,
-          pinSpacing: false,
-        });
-      });
-
+      // Native sticky owns the stack; GSAP only shades the covered panels.
       panels.slice(0, -1).forEach((panel, index) => {
         const shade = panel.querySelector<HTMLElement>("[data-process-shade]");
         if (!shade) return;

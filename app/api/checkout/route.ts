@@ -1,3 +1,4 @@
+import { exceedsCartProductLimit } from "@/app/lib/shopify/cart-product-limit";
 import { isIP } from "node:net";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -54,6 +55,12 @@ export async function GET(request: NextRequest) {
       const response = NextResponse.redirect(checkoutErrorUrl(request));
       response.headers.set("Cache-Control", "no-store");
       if (!cart) clearCart(response);
+      return response;
+    }
+
+    if (exceedsCartProductLimit(cart.lines)) {
+      const response = NextResponse.redirect(new URL("/panier?erreur=limite", request.url));
+      response.headers.set("Cache-Control", "no-store");
       return response;
     }
 

@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { TransitionLink as Link } from "@/components/page-transition";
 import { usePathname } from "next/navigation";
 import { useSyncExternalStore } from "react";
@@ -12,7 +11,7 @@ import { useCart } from "./cart-provider";
 import CustomerAccountLink from "@/components/customer-account-link";
 import MobileNavigation from "@/components/mobile-navigation";
 import NavigationSubmenu from "@/components/navigation-submenu";
-import { getNavigationSubmenuLinks } from "./navigation-submenu-links";
+import { getNavigationSubmenuLinks, recevoirNavigationLinks } from "./navigation-submenu-links";
 import styles from "./site-navigation.module.css";
 
 const navigation = [
@@ -37,7 +36,6 @@ export default function SiteNavigation({ overlay = false, tone = "auto" }: SiteN
   const { headerRef, barRef, surfaceRef, state: scrollState } = useSiteNavigation(overlay, pathname, hydrated);
   const { hidden, surface } = scrollState;
   const light = !surface && tone === "light";
-  const assets = light ? "/figma/ressenti-hero" : "/figma/hero";
   const header = (
     <header
       ref={headerRef}
@@ -49,8 +47,8 @@ export default function SiteNavigation({ overlay = false, tone = "auto" }: SiteN
     >
       <span ref={surfaceRef} className={styles.surface} aria-hidden="true" />
       <div ref={barRef} className={styles.bar}>
-        <Link href="/" className={styles.logo} aria-label="SÖRNA, accueil">SÖRNA</Link>
-        <MobileNavigation pathname={pathname} items={navigation} />
+        <Link href="/" className={styles.logo} aria-label="SÖRNA, accueil"><span className={styles.logoMark} aria-hidden="true" /></Link>
+        <MobileNavigation pathname={pathname} items={[...navigation, { label: "Recevoir", href: "/recevoir" }]} />
         <nav className={styles.primary} aria-label="Navigation principale">
           {navigation.map((item) => {
             const links = getNavigationSubmenuLinks(item.href);
@@ -64,9 +62,10 @@ export default function SiteNavigation({ overlay = false, tone = "auto" }: SiteN
           })}
         </nav>
         <div className={styles.actions}>
+          <NavigationSubmenu key={`recevoir:${pathname}`} current={pathname === "/recevoir"} label="Recevoir" href="/recevoir" links={recevoirNavigationLinks} linkClassName={styles.recevoirLink} />
           <button type="button" disabled title="Le changement de langue sera disponible ultérieurement" aria-label="Langue : français" className={styles.language}>
             Fr
-            <Image src={`${assets}/chevron.svg`} alt="" width={10} height={5} />
+            <svg width="8" height="5" viewBox="0 0 10 6" fill="none" aria-hidden="true"><path d="m1 1 4 4 4-4" stroke="currentColor" strokeWidth="1" /></svg>
           </button>
           <CartButton className={styles.cart} />
           <CustomerAccountLink />

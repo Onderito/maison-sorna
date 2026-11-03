@@ -1,5 +1,9 @@
 "use server";
 
+import { getCartDetails } from "@/app/lib/shopify/cart";
+import { getVariantProductHandle } from "@/app/lib/shopify/products";
+import { CART_PRODUCT_LIMIT, CART_PRODUCT_LIMIT_MESSAGE, getProductCartQuantity } from "@/app/lib/shopify/cart-product-limit";
+
 import {
   createCartMutation,
   shopifyFetch,
@@ -86,7 +90,13 @@ export async function addToCart(
 
   try {
     // Un panier absent ou expiré est remplacé lors de cet ajout.
-    const cart = (await getCart()) ?? (await createCart());
+    if (quantity > CART_PRODUCT_LIMIT) return { status: "error", message: CART_PRODUCT_LIMIT_MESSAGE };
+    const [existingCart, handle] = await Promise.all([getCartDetails(), getVariantProductHandle(variantId)]);
+    if (!handle) return { status: "error", message: "Ce produit n’est plus disponible." };
+    if (getProductCartQuantity(existingCart?.lines ?? [], handle) + quantity > CART_PRODUCT_LIMIT) {
+      return { status: "error", message: CART_PRODUCT_LIMIT_MESSAGE };
+    }
+    const cart = existingCart ?? (await createCart());
     const response = await shopifyFetch(
       addToCartMutation,
       { cartId: cart.id, merchandiseId: variantId, quantity },

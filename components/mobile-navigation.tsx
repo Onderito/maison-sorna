@@ -100,9 +100,8 @@ export default function MobileNavigation({ pathname, items }: MobileNavigationPr
     <div className={styles.mobileControls}>
       <button type="button" disabled title="Le changement de langue sera disponible ultérieurement" aria-label="Langue : français" className={styles.language}>
         Fr
-        <svg width="10" height="6" viewBox="0 0 10 6" fill="none" aria-hidden="true"><path d="m1 1 4 4 4-4" stroke="currentColor" /></svg>
+        <svg width="8" height="5" viewBox="0 0 10 6" fill="none" aria-hidden="true"><path d="m1 1 4 4 4-4" stroke="currentColor" /></svg>
       </button>
-      <CartButton className={styles.cart} />
       <button type="button" className={styles.menuButton} aria-label="Ouvrir le menu" aria-haspopup="dialog" aria-expanded={open} aria-controls="mobile-navigation" onClick={showMenu}>
         <span className={styles.burger} aria-hidden="true"><span /><span /></span>
       </button>
@@ -127,7 +126,7 @@ export default function MobileNavigation({ pathname, items }: MobileNavigationPr
         onClick={(event) => { if (event.target === dialogRef.current) closeMenu(); }}
       >
         <div className={styles.dialogHeader}>
-          <Link href="/" className={styles.logo} aria-label="SÖRNA, accueil" onClick={closeForNavigation}>SÖRNA</Link>
+          <Link href="/" className={styles.logo} aria-label="SÖRNA, accueil" onClick={closeForNavigation}><span className={styles.logoMark} aria-hidden="true" /></Link>
           <button ref={closeButtonRef} type="button" className={styles.menuButton} aria-label="Fermer le menu" onClick={closeMenu}>
             <span className={`${styles.burger} ${styles.burgerOpen}`} aria-hidden="true"><span /><span /></span>
           </button>

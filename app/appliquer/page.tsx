@@ -23,7 +23,7 @@ export default function AppliquerPage() {
           scrollTarget="#appliquer"
         >
           <Image
-            src="/figma/appliquer/hero.png"
+            src="/figma/appliquer/hero-soin.png"
             alt=""
             fill
             sizes="100vw"

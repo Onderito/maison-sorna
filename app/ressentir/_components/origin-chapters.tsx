@@ -24,14 +24,14 @@ const chapters: Chapter[] = [
     title: "L’Île",
     label: "Ö pour l’île",
     introduction: [<>Le Ö, c’est <strong>l’île</strong>.</>, <>En suédois, cette seule lettre suffit à la nommer.</>],
-    description: [<>Sur une île, on vit avec l’essentiel.</>, <><strong>SÖRNA</strong> en a fait une exigence : ne garder que ce qui sert, et laisser à chaque chose sa juste place.</>, <>Cette sobriété ne retire rien, elle donne plus de poids à ce qui reste.</>],
+    description: [<>Sur une île, on vit avec l’essentiel.</>, <><strong>SÖRNA</strong> en a fait une exigence, ne garder que ce qui sert, et laisser à chaque chose sa juste place.</>, <>Cette sobriété ne retire rien, elle donne plus de poids à ce qui reste.</>],
   },
   {
     id: "orna",
     title: "Orna",
     label: "ORNA pour orner",
     introduction: [<>ORNA vient du latin <em>ornare</em>, orner.</>, <>Le mot s’ouvre sur le même <strong>Ö</strong>, celui de l’île.</>],
-    description: [<>Orner, d’ordinaire, c’est ajouter.<br /></>, <><strong>SÖRNA</strong> l’entend autrement : révéler ce qui est déjà là, sans le masquer.<br /></>, <>Pour un thé, ne rien ajouter à la feuille.</>, <>Pour un soin, ne rien parfumer, pour ne rien cacher.</>],
+    description: [<>Orner, d’ordinaire, c’est ajouter.</>, <><strong>SÖRNA</strong> l’entend autrement : révéler ce qui est déjà là, sans le masquer.</>, <>Pour un thé, ne rien ajouter à la feuille.</>, <>Pour un soin, ne rien parfumer, pour ne rien cacher.</>],
   },
 ];
 

@@ -1,0 +1,46 @@
+/* Replace only the page scrollbar on desktop; nested drawers keep theirs. */
+@media (min-width: 768px) and (pointer: fine) {
+  :global(html.tea-scrollbar) { scrollbar-width: none; }
+  :global(html.tea-scrollbar)::-webkit-scrollbar { display: none; }
+}
+.indicator {
+  position: fixed;
+  z-index: 110;
+  inset: 8px 0 8px auto;
+  width: 20px;
+  color: #68745d;
+  cursor: pointer;
+  touch-action: none;
+  user-select: none;
+}
+.indicator::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 4px;
+  width: 10px;
+  border-radius: 8px;
+  background: #838d7640;
+}
+.indicator[hidden] { display: none; }
+.indicator:focus-visible { outline: 1px solid currentColor; outline-offset: -4px; }
+.thumb {
+  position: absolute;
+  right: 4px;
+  display: block;
+  width: 10px;
+  height: 88px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #a5b395;
+}
+.dark { position: absolute; inset: 0; background: #46563e; opacity: 0; }
+/* Direct scroll feedback, with no delayed or autonomous motion. */
+@media (max-width: 767px), (pointer: coarse) { .indicator { display: none; } }
+@media (forced-colors: active) {
+  :global(html.tea-scrollbar) { scrollbar-width: auto; }
+  :global(html.tea-scrollbar)::-webkit-scrollbar { display: block; }
+  .indicator { display: none; }
+}
+@media print { .indicator { display: none; } }

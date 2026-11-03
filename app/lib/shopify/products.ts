@@ -12,3 +12,20 @@ export async function getProduct(handle: string): Promise<ShopifyProduct | null>
   }
   return product;
 }
+
+export async function getVariantProductHandle(variantId: string): Promise<string | null> {
+  const response = await shopifyFetch(`
+    query VariantProduct($id: ID!) {
+      node(id: $id) {
+        ... on ProductVariant { product { handle } }
+      }
+    }
+  `, { id: variantId }, { cache: "no-store" });
+  if (!response.data || !("node" in response.data)) {
+    throw new Error("Shopify n’a pas renvoyé la variante attendue.");
+  }
+  if (response.data.node === null) return null;
+  const handle: unknown = response.data.node?.product?.handle;
+  if (typeof handle !== "string" || !handle) throw new Error("La variante Shopify est invalide.");
+  return handle;
+}

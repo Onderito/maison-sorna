@@ -23,7 +23,7 @@ export default function RessentirPage() {
           scrollTarget="#les-origines"
         >
           <Image
-            src="/figma/ressentir/hero.png"
+            src="/figma/ressentir/hero-fenetre.png"
             alt=""
             fill
             sizes="100vw"

@@ -5,6 +5,7 @@ import { getTeaCardEntry, teaEditions } from "../tea-editions";
 import { getTeaCollectionDescription } from "@/app/lib/shopify/tea-description";
 import ProductDialog from "@/components/product-dialog";
 import TeaCardDetails from "./tea-card-details";
+import TeaCollectionStatement from "./tea-collection-statement";
 import TeaCollectionEntrance from "./tea-collection-entrance";
 import styles from "./tea-collection.module.css";
 
@@ -82,10 +83,10 @@ export default async function TeaCollection() {
         })}
       </ul>
       </div>
-      <div className={styles.ending}>
+      <TeaCollectionStatement className={styles.ending}>
         <p className={styles.statement}>Nous choisissons chaque thé pour ce qu’il a de singulier. Une origine, une récolte, un caractère que les gestes viennent révéler.</p>
         <p className={styles.statementSignature}>SÖRNA</p>
-      </div>
+      </TeaCollectionStatement>
     </TeaCollectionEntrance>
   );
 }

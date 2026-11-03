@@ -6,6 +6,7 @@ import { CUSTOMER_AUTH_COOKIES } from "@/app/lib/shopify/customers";
 import { CustomerSessionProvider } from "@/components/customer-session-provider";
 import { SmoothScroll } from "@/components/smooth-scroll";
 import CartProvider from "@/components/cart-provider";
+import TeaScrollProgress from "@/components/tea-scroll-progress";
 import { PageTransition } from "@/components/page-transition";
 
 import "lenis/dist/lenis.css";
@@ -34,9 +35,9 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
 
   return (
     <html lang="fr" className={`${manrope.variable} ${cormorantGaramond.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col">
+      <body id="storefront-page" className="min-h-full flex flex-col">
         <CustomerSessionProvider initialAuthenticated={initialAuthenticated}>
-          <SmoothScroll><CartProvider><PageTransition>{children}</PageTransition></CartProvider></SmoothScroll>
+          <SmoothScroll><CartProvider><PageTransition>{children}</PageTransition></CartProvider><TeaScrollProgress /></SmoothScroll>
         </CustomerSessionProvider>
       </body>
     </html>

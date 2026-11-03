@@ -9,7 +9,7 @@
 }
 
 .header { display: flex; flex-direction: row; align-items: flex-end; align-self: start; justify-content: space-between; gap: min(1.85185vw, 2.86482svh); min-height: 0; }
-.title { font-size: min(10.41667vw, 16.11459svh); line-height: 0.95556; font-weight: 600; text-transform: uppercase; }
+.title { color: #838d76; font-size: min(10.41667vw, 16.11459svh); line-height: 0.95556; font-weight: 600; text-transform: uppercase; }
 .titleMask { display: block; overflow: clip; padding-block: 0.14em; margin-block: -0.14em; }
 .titleMask > span { display: block; }
 .introduction { width: 36%; max-width: 36em; margin-top: 0; text-align: right; font-size: 18px; line-height: 1.4; }

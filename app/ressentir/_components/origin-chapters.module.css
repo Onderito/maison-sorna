@@ -1,5 +1,6 @@
 .letterChapter {
   --chapter-sage: #838d76;
+  --copy-indent: 24%;
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
   gap: clamp(24px, 3vw, 56px);
@@ -24,6 +25,7 @@
 .character { display: inline-block; }
 .mainPhoto, .insetPhoto, .detailPhoto { position: relative; min-width: 0; overflow: hidden; }
 .letterIntroduction, .letterDescription { min-width: 0; font-size: 18px; line-height: 1.5; }
+:is(.letterIntroduction, .letterDescription) > p { font-family: var(--font-cormorant-garamond), Georgia, serif; font-size: 40px; font-weight: 400; line-height: 1.15; text-align: left; text-indent: var(--copy-indent); }
 .letterChapter p { text-wrap: pretty; }
 .letterChapter strong { color: var(--chapter-sage); font-weight: 700; }
 
@@ -39,14 +41,15 @@
 .ile .letterIntroduction { grid-column: 2 / 6; grid-row: 2; align-self: end; }
 .ile .insetPhoto { grid-column: 1 / 8; grid-row: 3; aspect-ratio: 1.8; }
 .ile .detailPhoto { grid-column: 10 / -1; grid-row: 3 / 5; aspect-ratio: 4 / 5; margin-top: 56px; }
-.ile .letterDescription { grid-column: 2 / 8; grid-row: 4; max-width: 36em; }
+.ile .letterDescription { grid-column: 1 / 10; grid-row: 4; }
 
 @media (min-width: 1024px) {
   :is(.sancerre, .orna) .letterDescription { grid-column: 5 / 12; justify-self: end; }
 }
 
 @media (max-width: 767px) {
-  .letterChapter { gap: 28px 12px; padding: 40px 16px; }
+  .letterChapter { --copy-indent: 16%; gap: 28px 12px; padding: 40px 16px; }
+  :is(.letterIntroduction, .letterDescription) > p { font-size: 28px; line-height: 1.2; }
   .letterHeader { gap: 24px; }
   .letter { font-size: 112px; }
   .letterLabel { margin-bottom: 12px; font-size: 10px; letter-spacing: 0.1em; }
@@ -65,12 +68,15 @@
   .ile .letterIntroduction { grid-column: 1 / -1; grid-row: 3; }
   .ile .insetPhoto { grid-column: 1 / 12; grid-row: 4; aspect-ratio: 1.5; }
   .ile .detailPhoto { grid-column: 8 / -1; grid-row: 5; margin-top: 0; }
-  .ile .letterDescription { grid-column: 1 / 8; grid-row: 5; align-self: end; font-size: 16px; }
+  .ile .letterDescription { grid-column: 1 / -1; grid-row: 6; }
 }
 
 /* SplitText adds a static overflow mask around each measured line. */
 .letterChapter :global(.origin-copy-line-mask) { overflow: clip; }
 .letterChapter :global(.origin-copy-line) { overflow: visible; }
+:is(.letterIntroduction, .letterDescription) :global(.origin-copy-line-mask),
+:is(.letterIntroduction, .letterDescription) :global(.origin-copy-line) { text-indent: 0; }
+:is(.letterIntroduction, .letterDescription) > p > :global(.origin-copy-line-mask):first-child > :global(.origin-copy-line) { text-indent: var(--copy-indent); }
 
 .photoReveal, .photoReveal > .photoContent { position: absolute; inset: 0; }
 .photoReveal { overflow: hidden; }

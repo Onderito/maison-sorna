@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { CART_PRODUCT_LIMIT, CART_PRODUCT_LIMIT_MESSAGE, getProductCartQuantity, exceedsCartProductLimit } from "@/app/lib/shopify/cart-product-limit";
 import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "./cart-provider";
@@ -23,6 +24,8 @@ export default function CartContents({ cart }: { cart: CartView | null }) {
   const hasUnavailableLine = cart?.lines.some(
     (line) => !line.merchandise.availableForSale,
   ) ?? false;
+
+  const overLimit = exceedsCartProductLimit(cart?.lines ?? []);
 
   function changeLine(lineId: string, quantity: number | null) {
     if (isPending) return;
@@ -57,6 +60,7 @@ export default function CartContents({ cart }: { cart: CartView | null }) {
       ) : (
         <div className="grid items-start gap-14 lg:grid-cols-[minmax(0,1.65fr)_minmax(18rem,0.7fr)] lg:gap-20">
           <section aria-label="Articles du panier">
+            <p className="mb-4 text-xs opacity-70">{CART_PRODUCT_LIMIT_MESSAGE}</p>
             <p className="mb-6 text-xs tracking-[0.16em] uppercase opacity-60">
               {cart.totalQuantity} {cart.totalQuantity > 1 ? "articles" : "article"}
             </p>
@@ -69,6 +73,7 @@ export default function CartContents({ cart }: { cart: CartView | null }) {
                 const canDecrease = line.quantity - increment >= minimum;
                 const canIncrease =
                   variant.availableForSale &&
+                  getProductCartQuantity(cart.lines, variant.product.handle) + increment <= CART_PRODUCT_LIMIT &&
                   (maximum === null || line.quantity + increment <= maximum);
 
                 return (
@@ -153,6 +158,7 @@ export default function CartContents({ cart }: { cart: CartView | null }) {
               </div>
             </dl>
             <p className="text-sm leading-relaxed opacity-80">Les frais de livraison et le montant final seront confirmés au paiement.</p>
+            {overLimit && <p className="text-sm" role="alert">Réduisez les quantités à deux sachets par produit pour continuer.</p>}
             {hasUnavailableLine && (
               <p className="text-sm" role="alert">
                 Retirez les articles indisponibles avant de passer au paiement.
@@ -160,10 +166,10 @@ export default function CartContents({ cart }: { cart: CartView | null }) {
             )}
             <a
               href="/api/checkout"
-              aria-disabled={isPending || hasUnavailableLine}
-              tabIndex={isPending || hasUnavailableLine ? -1 : undefined}
+              aria-disabled={isPending || hasUnavailableLine || overLimit}
+              tabIndex={isPending || hasUnavailableLine || overLimit ? -1 : undefined}
               onClick={(event) => {
-                if (isPending || hasUnavailableLine) event.preventDefault();
+                if (isPending || hasUnavailableLine || overLimit) event.preventDefault();
               }}
               className="flex min-h-14 w-full items-center justify-center bg-button px-6 py-4 text-center text-xs tracking-[0.14em] uppercase text-text-on-dark transition-[opacity,transform] duration-150 hover:opacity-85 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-foreground active:scale-[0.96] aria-disabled:pointer-events-none aria-disabled:opacity-50 motion-reduce:transform-none motion-reduce:transition-none"
             >

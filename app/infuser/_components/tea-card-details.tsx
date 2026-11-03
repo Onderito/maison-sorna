@@ -1,5 +1,6 @@
 "use client";
 
+import { CART_PRODUCT_LIMIT_MESSAGE } from "@/app/lib/shopify/cart-product-limit";
 import Image from "next/image";
 import { useId, useState, useTransition } from "react";
 import { useCart } from "@/components/cart-provider";
@@ -106,7 +107,7 @@ export default function TeaCardDetails({ entry, presentation = "page" }: { entry
         <div className={styles.priceRow} data-product-reveal>
           <div className={styles.cell}>
             <p className={styles.label}>{entry.harvest ? "Récolte" : "Torréfaction"}</p>
-            <p className={`${styles.number} ${styles.harvestValue}`}>{entry.harvest ?? entry.roasting ?? "—"}</p>
+            <p className={`${styles.number} ${styles.harvestValue}`}>{entry.harvest?.replace(/\bde printemps\b/gi, "printemps") ?? entry.roasting ?? "—"}</p>
           </div>
           <div className={styles.cell}>
             <p className={styles.label}>Prix</p>
@@ -124,6 +125,7 @@ export default function TeaCardDetails({ entry, presentation = "page" }: { entry
       <TeaProductDescription sections={entry.sections} />
       </div>
       <div className={styles.purchase} data-product-reveal>
+        <p className={styles.purchaseLimit}>{CART_PRODUCT_LIMIT_MESSAGE}</p>
         <button type="button" className={styles.addButton} onClick={handleAdd} disabled={pending || !selected?.availableForSale} aria-busy={pending}>
           <span>{pending ? "Ajout en cours…" : selected?.availableForSale ? "Ajouter au panier" : "Indisponible"}</span>
           {!pending && selected?.availableForSale && <span aria-hidden="true">→</span>}

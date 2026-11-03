@@ -78,7 +78,10 @@ export function useOriginChapterReveal() {
                   gsap.set(split.lines, { clearProps: "transform,opacity,visibility" });
                 },
               }).to(split.lines, {
-                yPercent: 0, autoAlpha: 1, duration: 0.8, stagger: 0.08, ease: "power2.out",
+                yPercent: 0, autoAlpha: 1,
+                duration: 0.3,
+                stagger: 0.06,
+                ease: "power3.out",
               });
               let started = false;
               const reveal = () => {

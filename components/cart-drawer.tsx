@@ -1,5 +1,6 @@
 "use client";
 
+import { CART_PRODUCT_LIMIT, CART_PRODUCT_LIMIT_MESSAGE, getProductCartQuantity, exceedsCartProductLimit } from "@/app/lib/shopify/cart-product-limit";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState, useTransition } from "react";
@@ -30,6 +31,7 @@ export default function CartDrawer({ cart, isOpen, loading, error, addedVariant,
   const highlighted = useRef<string | null>(null);
   const count = cart?.totalQuantity ?? 0;
   const unavailable = cart?.lines.some((line) => !line.merchandise.availableForSale) ?? false;
+  const overLimit = exceedsCartProductLimit(cart?.lines ?? []);
   const busy = pending || loading;
 
   useEffect(() => {
@@ -87,6 +89,7 @@ export default function CartDrawer({ cart, isOpen, loading, error, addedVariant,
         <button ref={closeButtonRef} type="button" className={styles.close} onClick={close} aria-label="Fermer le panier">×</button>
       </header>
       <div className={styles.contents} data-cart-lines-scroll aria-busy={busy} data-lenis-prevent>
+        <p className={styles.shipping}>{CART_PRODUCT_LIMIT_MESSAGE}</p>
         {error && <div className={styles.notice} role="alert"><p>{error}</p><button type="button" onClick={() => { void refreshCart(); }} disabled={loading}>Réessayer</button><Link href="/panier" onClick={close}>Voir la page panier</Link></div>}
         {feedback && <p className={styles.notice} role={feedback.status === "error" ? "alert" : "status"}>{feedback.message}</p>}
         {loading && !cart ? <p className={styles.loading} role="status">Chargement de votre sélection…</p> : count === 0 && !error ?
@@ -107,7 +110,7 @@ export default function CartDrawer({ cart, isOpen, loading, error, addedVariant,
                     <div className={styles.quantity} role="group" aria-label={`Quantité : ${label}`}>
                       <button type="button" aria-label={`Diminuer la quantité : ${label}`} disabled={busy || line.quantity - increment < minimum} onClick={() => changeLine(line.id, line.quantity - increment)}>−</button>
                       <span aria-live="polite">{line.quantity}</span>
-                      <button type="button" aria-label={`Augmenter la quantité : ${label}`} disabled={busy || !variant.availableForSale || (maximum !== null && line.quantity + increment > maximum)} onClick={() => changeLine(line.id, line.quantity + increment)}>+</button>
+                      <button type="button" aria-label={`Augmenter la quantité : ${label}`} disabled={busy || !variant.availableForSale || getProductCartQuantity(cart.lines, variant.product.handle) + increment > CART_PRODUCT_LIMIT || (maximum !== null && line.quantity + increment > maximum)} onClick={() => changeLine(line.id, line.quantity + increment)}>+</button>
                     </div>
                     <p className={styles.linePrice}>{money(line.cost.totalAmount)}</p>
                   </div>
@@ -120,9 +123,10 @@ export default function CartDrawer({ cart, isOpen, loading, error, addedVariant,
       {count > 0 && cart && <footer className={styles.footer}>
         <div className={styles.subtotal}><span>{cart.cost.subtotalAmountEstimated ? "Sous-total estimé" : "Sous-total"}</span><span aria-live="polite">{money(cart.cost.subtotalAmount)}</span></div>
         <p className={styles.shipping}>Les frais de livraison et le montant final seront confirmés au paiement.</p>
+        {overLimit && <p className={styles.unavailable}>Réduisez les quantités à deux sachets par produit pour continuer.</p>}
         {unavailable && <p className={styles.unavailable}>Retirez les articles indisponibles pour continuer.</p>}
-        <a href="/api/checkout" className={styles.checkout} aria-disabled={busy || unavailable || !!error} tabIndex={busy || unavailable || !!error ? -1 : undefined}
-          onClick={(event) => { if (busy || unavailable || error) event.preventDefault(); }}>Passer au paiement <span aria-hidden="true">→</span></a>
+        <a href="/api/checkout" className={styles.checkout} aria-disabled={busy || unavailable || overLimit || !!error} tabIndex={busy || unavailable || overLimit || !!error ? -1 : undefined}
+          onClick={(event) => { if (busy || unavailable || overLimit || error) event.preventDefault(); }}>Passer au paiement <span aria-hidden="true">→</span></a>
         <button type="button" className={styles.continue} onClick={close}>Poursuivre la découverte</button>
       </footer>}
     </section>

@@ -6,20 +6,21 @@ import { useNavigationSubmenu } from "@/animations/use-navigation-submenu";
 import styles from "./site-navigation.module.css";
 
 type NavigationSubmenuProps = {
+  linkClassName?: string;
   current: boolean;
   label: string;
   href: string;
   links: readonly { label: string; href: string }[];
 };
 
-export default function NavigationSubmenu({ current, label, href, links }: NavigationSubmenuProps) {
+export default function NavigationSubmenu({ current, label, href, links, linkClassName }: NavigationSubmenuProps) {
   const id = useId();
   const { groupRef, panelRef, toggleRef, expanded } = useNavigationSubmenu();
 
   return (
     <div ref={groupRef} className={styles.submenuGroup}>
       <div className={styles.submenuTrigger}>
-        <Link href={href} className={styles.navLink} aria-current={current ? "page" : undefined}>
+        <Link href={href} className={linkClassName ?? styles.navLink} aria-current={current ? "page" : undefined}>
           {label}
         </Link>
         <button ref={toggleRef} type="button" className={styles.submenuToggle}
