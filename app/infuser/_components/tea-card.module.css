@@ -62,7 +62,7 @@
   min-height: 0;
   border: 1px solid var(--text-on-light);
   display: grid;
-  grid-template-rows: 222fr 157fr 157fr 277fr 120fr 101fr;
+  grid-template-rows: 222fr 157fr 157fr minmax(min-content, 277fr) 120fr 101fr;
 }
 
 .heading {
@@ -126,9 +126,11 @@
 .bottomRule { top: 0; left: 0; right: 0; height: 1px; background-image: url("/figma/infuser/product/bottom-rule.svg"); }
 .priceDivider { top: 7.5%; bottom: 10%; left: 50%; width: 1px; background-image: url("/figma/infuser/product/price-divider.svg"); }
 
-.landscape { position: relative; min-height: 0; }
-.landscape .landscapeCrop { position: absolute; inset: 0; overflow: hidden; }
-.landscapeCrop .landscapeImage { position: absolute; left: 0; max-width: none; width: 101.25%; height: 242.84%; top: -21.32%; object-fit: fill; }
+.tastingCell { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 24px; min-height: min-content; text-align: center; }
+.tastingCell h3 { font-family: var(--font-manrope), Arial, sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.08em; line-height: 1.4; text-transform: uppercase; }
+.tastingCopy { font-family: var(--font-manrope), Arial, sans-serif; font-size: 20px; font-weight: 400; line-height: 1.2; text-wrap: pretty; }
+.tastingCopy > * + * { margin-top: 12px; }
+.tastingCopy ul { padding-left: 20px; list-style: disc; }
 .region { position: relative; display: flex; align-items: center; justify-content: center; min-height: 0; font-family: var(--font-cormorant-garamond), Georgia, serif; font-size: var(--label-size); font-weight: 300; line-height: 1.2; letter-spacing: -0.02em; text-align: center; text-transform: uppercase; }
 
 .addButton {
@@ -173,13 +175,13 @@
     --price-size: 22px;
     --cell-gap: 4px;
     --format-height: 46px;
-    --landscape-min-height: 72px;
+    --tasting-min-height: 208px;
     --heading-row: calc(var(--title-size) * 1.2 + var(--label-size) * 1.2 + var(--lot-size) * 1.4 + 17px);
     --detail-row: calc(var(--label-size) * 1.2 + max(var(--value-size) * 2.4, var(--format-height)) + var(--cell-gap) + 8px);
     --origin-row: calc(var(--label-size) * 1.2 + var(--value-size) * 2.4 + var(--cell-gap) + 8px);
     --price-row: calc(var(--label-size) * 1.2 + var(--price-size) * 1.2 + var(--cell-gap) + 8px);
     --region-row: calc(var(--label-size) * 2.4 + 8px);
-    --card-min-height: calc(var(--heading-row) + var(--detail-row) + var(--origin-row) + var(--landscape-min-height) + var(--price-row) + var(--region-row) + 2px);
+    --card-min-height: calc(var(--heading-row) + var(--detail-row) + var(--origin-row) + var(--tasting-min-height) + var(--price-row) + var(--region-row) + 2px);
     display: flex;
     flex-direction: column;
   }
@@ -190,7 +192,7 @@
   .detailsScroll .card { min-height: var(--card-min-height); }
   .description { padding: 20px; font-size: 16px; }
   .purchase, .addButton { height: 48px; }
-  .card { grid-template-rows: var(--heading-row) var(--detail-row) var(--origin-row) minmax(var(--landscape-min-height), 1fr) var(--price-row) var(--region-row); }
+  .card { grid-template-rows: var(--heading-row) var(--detail-row) var(--origin-row) minmax(min-content, 1fr) var(--price-row) var(--region-row); }
   .titleRule { margin-block: 3px; }
   .heading .number { margin-top: 2px; font-size: var(--lot-size); }
   .cell { gap: var(--cell-gap); }
@@ -199,7 +201,7 @@
   .formatAvailability { font-size: 16px; }
   .price { font-size: var(--price-size); }
   .addButton { font-size: 16px; }
-  .landscapeCrop .landscapeImage { top: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 8%; }
+  .tastingCell { padding: 16px; }
   .feedback { left: 10px; right: 10px; bottom: 76px; }
 }
 
@@ -219,9 +221,7 @@
 }
 
 @media (max-width: 1024px) and (max-height: 740px) {
-  .section { --landscape-min-height: 0px; }
-  .landscape { display: none; }
-  .card { grid-template-rows: minmax(var(--heading-row), 1.2fr) minmax(var(--detail-row), 1fr) minmax(var(--origin-row), 1fr) minmax(var(--price-row), 0.8fr) minmax(var(--region-row), 0.6fr); }
+  .card { grid-template-rows: minmax(var(--heading-row), 1.2fr) minmax(var(--detail-row), 1fr) minmax(var(--origin-row), 1fr) minmax(min-content, 1fr) minmax(var(--price-row), 0.8fr) minmax(var(--region-row), 0.6fr); }
 }
 
 @media (max-width: 1024px) and (max-height: 662px) {
@@ -242,19 +242,19 @@
 @media (min-width: 600px) and (max-width: 1024px) and (max-height: 900px) {
   .section {
     --heading-row: calc(var(--title-size) * 1.2 + 16px);
-    --card-min-height: calc(var(--heading-row) + max(var(--detail-row), var(--origin-row)) + max(var(--price-row), var(--region-row)) + 2px);
+    --card-min-height: calc(var(--heading-row) + max(var(--detail-row), var(--origin-row)) + var(--tasting-min-height) + max(var(--price-row), var(--region-row)) + 2px);
   }
   .photograph { flex: 1; }
   .panel { flex: 0 0 calc(var(--card-min-height) + 68px); }
-  .card { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: var(--heading-row) max(var(--detail-row), var(--origin-row)) max(var(--price-row), var(--region-row)); }
-  .landscape { display: none; }
+  .card { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: var(--heading-row) max(var(--detail-row), var(--origin-row)) minmax(min-content, 1fr) max(var(--price-row), var(--region-row)); }
+  .tastingCell { grid-column: 1 / -1; grid-row: 3; }
   .heading { grid-column: 1 / -1; display: grid; grid-template-columns: 2fr 1fr 1fr; padding-inline: 12px; }
   .titleRule { display: none; }
   .heading .number { margin-top: 0; }
   .detailRow:nth-child(2) { grid-column: 1; grid-row: 2; }
   .detailRow:nth-child(3) { grid-column: 2; grid-row: 2; border-left: 1px solid var(--text-on-light); }
-  .priceRow { grid-column: 1; grid-row: 3; }
-  .region { grid-column: 2; grid-row: 3; border-left: 1px solid var(--text-on-light); }
+  .priceRow { grid-column: 1; grid-row: 4; }
+  .region { grid-column: 2; grid-row: 4; border-left: 1px solid var(--text-on-light); }
 }
 
 @media (min-width: 1025px) and (max-height: 500px) {
@@ -274,9 +274,9 @@
 .dialogPanel .detailsScroll { flex: none; overflow: visible; }
 .dialogPanel .card {
   flex: none;
-  min-height: 0;
+  min-height: min-content;
   grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: 160px 120px 120px clamp(180px, 28svh, 240px) 100px 80px;
+  grid-template-rows: 160px 120px 120px minmax(min-content, 208px) 100px 80px;
 }
 .dialogPanel .heading { display: flex; grid-column: auto; padding: 12px; }
 .dialogPanel .heading h2 { font-weight: 500; white-space: normal; text-wrap: balance; }
@@ -290,15 +290,14 @@
 .dialogPanel .unitPrice, .dialogPanel .region { font-family: var(--font-manrope), Arial, sans-serif; font-size: 14px; font-weight: 400; letter-spacing: normal; line-height: 1.4; text-transform: none; }
 .dialogPanel .titleRule { display: block; margin-block: 8px; }
 .dialogPanel .detailRow, .dialogPanel .priceRow, .dialogPanel .region { grid-column: auto; grid-row: auto; border-left: 0; }
-.dialogPanel .landscape { display: block; }
-.dialogPanel .landscapeCrop .landscapeImage { top: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 45%; }
+.dialogPanel .tastingCell { grid-column: auto; grid-row: auto; }
 .dialogPanel .purchase { position: fixed; right: 32px; bottom: 32px; z-index: 5; width: calc(50% - 64px); height: auto; }
 .dialogPanel .addButton { height: 52px; }
 .dialogPanel .feedback { position: sticky; bottom: 0; margin-top: 16px; }
 @media (min-width: 768px) {
   .dialogPanel .card {
     height: max(622px, calc(100dvh - 56px));
-    grid-template-rows: minmax(144px, 160fr) minmax(96px, 120fr) minmax(96px, 120fr) minmax(140px, 200fr) minmax(80px, 100fr) minmax(64px, 80fr);
+    grid-template-rows: minmax(144px, 160fr) minmax(96px, 120fr) minmax(96px, 120fr) minmax(min-content, 200fr) minmax(80px, 100fr) minmax(64px, 80fr);
   }
 }
 @media (max-width: 767px) {
@@ -311,3 +310,5 @@
 .purchase { height: auto; }
 .purchaseLimit { margin-bottom: 8px; font-size: 12px; line-height: 1.4; }
 @media (min-width: 768px) { .purchase { height: auto; } }
+
+@media (max-width: 767px) { .tastingCopy { font-size: 18px; } }

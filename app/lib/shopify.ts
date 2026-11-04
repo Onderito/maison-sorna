@@ -189,6 +189,7 @@ export const addToCartMutation = `
 export const getCartQuery = `
   query GetCart($cartId: ID!) {
     cart(id: $cartId) {
+      createdAt
       id
       checkoutUrl
       totalQuantity

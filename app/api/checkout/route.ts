@@ -5,6 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 import {
   CUSTOMER_AUTH_COOKIES,
   refreshCustomerAccessToken,
+  getCustomerSessionExpiresAt,
 } from "@/app/lib/shopify/customers";
 import {
   associateCustomerWithCart,
@@ -12,7 +13,7 @@ import {
   SHOPIFY_CART_COOKIE,
 } from "@/app/lib/shopify/cart";
 
-const SESSION_MAX_AGE = 30 * 24 * 60 * 60;
+import { remainingSessionSeconds } from "@/app/lib/shopify/session-lifetime";
 
 function checkoutErrorUrl(request: NextRequest) {
   return new URL("/panier?erreur=checkout", request.url);
@@ -70,8 +71,13 @@ export async function GET(request: NextRequest) {
     let checkoutUrl = cart.checkoutUrl;
     let refreshedSession: Awaited<ReturnType<typeof refreshCustomerAccessToken>> | null = null;
     let shouldClearSession = false;
+    let sessionExpiresAt: number | null = null;
 
     try {
+      sessionExpiresAt = await getCustomerSessionExpiresAt();
+      if ((accessToken || refreshToken) && !remainingSessionSeconds(sessionExpiresAt)) {
+        throw new Error("La session client a expiré.");
+      }
       if (accessToken) {
         try {
           checkoutUrl = (await associateCustomerWithCart({
@@ -116,12 +122,12 @@ export async function GET(request: NextRequest) {
       };
       response.cookies.set(CUSTOMER_AUTH_COOKIES.accessToken, refreshedSession.accessToken, {
         ...cookieOptions,
-        maxAge: refreshedSession.expiresIn,
+        maxAge: Math.min(refreshedSession.expiresIn, remainingSessionSeconds(sessionExpiresAt)),
       });
       if (refreshedSession.refreshToken) {
         response.cookies.set(CUSTOMER_AUTH_COOKIES.refreshToken, refreshedSession.refreshToken, {
           ...cookieOptions,
-          maxAge: SESSION_MAX_AGE,
+          maxAge: remainingSessionSeconds(sessionExpiresAt),
         });
       }
     }

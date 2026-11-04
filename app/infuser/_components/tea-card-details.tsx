@@ -8,10 +8,12 @@ import { addToCart } from "@/app/actions/cart";
 import type { AddToCartResult } from "@/app/lib/shopify-types";
 import styles from "./tea-card.module.css";
 import type { TeaCardEntry } from "./tea-card-data";
-import TeaProductDescription from "./tea-product-description";
+import TeaProductDescription, { TeaDescriptionBlocks } from "./tea-product-description";
 
 export default function TeaCardDetails({ entry, presentation = "page" }: { entry: TeaCardEntry; presentation?: "page" | "dialog" }) {
   const { product, handle } = entry;
+  const tasting = entry.sections.find((section) => /^notes de d[eé]gustation$/i.test(section.title.trim()));
+  const featuredSection = tasting ?? entry.sections.find((section) => !section.title);
   const variants = product?.variants.nodes ?? [];
   const initialVariant = variants.find((variant) => variant.availableForSale) ?? variants[0];
   const [selection, setSelection] = useState({ handle, id: initialVariant?.id });
@@ -98,12 +100,13 @@ export default function TeaCardDetails({ entry, presentation = "page" }: { entry
           <span className={styles.rowRule} aria-hidden="true" />
           <span className={styles.detailDivider} aria-hidden="true" />
         </div>
-        <div className={styles.landscape} data-product-reveal>
-          <div className={`${styles.landscapeCrop} image-grain`}>
-            <Image src="/figma/infuser/product/wuyi.png" alt="Illustration des montagnes Wuyi à l’encre." width={1254} height={1254} quality={95} loading="eager" sizes="(max-width: 1024px) calc(100vw - 40px), 40vw" className={styles.landscapeImage} />
+        <section className={styles.tastingCell} data-product-reveal aria-label={tasting ? "Notes de dégustation" : "Présentation du cru"}>
+          <h3>{tasting ? "Notes de dégustation" : "Présentation du cru"}</h3>
+          <div className={styles.tastingCopy}>
+            {featuredSection ? <TeaDescriptionBlocks blocks={featuredSection.blocks} /> : <p>{product?.description || entry.teaType}</p>}
           </div>
           <span className={styles.landscapeRule} aria-hidden="true" />
-        </div>
+        </section>
         <div className={styles.priceRow} data-product-reveal>
           <div className={styles.cell}>
             <p className={styles.label}>{entry.harvest ? "Récolte" : "Torréfaction"}</p>
@@ -122,7 +125,7 @@ export default function TeaCardDetails({ entry, presentation = "page" }: { entry
           <span className={styles.bottomRule} aria-hidden="true" />
         </div>
       </div>
-      <TeaProductDescription sections={entry.sections} />
+      <TeaProductDescription sections={entry.sections.filter((section) => section !== featuredSection)} />
       </div>
       <div className={styles.purchase} data-product-reveal>
         <p className={styles.purchaseLimit}>{CART_PRODUCT_LIMIT_MESSAGE}</p>

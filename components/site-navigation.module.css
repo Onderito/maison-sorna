@@ -262,3 +262,17 @@
 @media (prefers-reduced-motion: reduce) { .floatingCart { transform: none; transition: opacity 150ms ease, visibility 0s 150ms; } .floatingVisible { transition-delay: 0s; } }
 
 .recevoirLink { display: inline-flex; align-items: center; min-height: 44px; font-family: var(--font-manrope), Arial, sans-serif; font-size: 18px; text-transform: uppercase; }
+
+@media (min-width: 1200px) {
+  .navLink, .recevoirLink, .language, .cart, .accountLink {
+    font-size: 18px;
+    line-height: 1.4;
+    letter-spacing: normal;
+    text-transform: uppercase;
+  }
+  /* Leave room for the extra sign-out link when a customer is connected. */
+  .bar:has(.accountLink[href="/api/auth/shopify/logout"]) .primary {
+    position: static;
+    transform: none;
+  }
+}

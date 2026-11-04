@@ -1,4 +1,5 @@
 import "server-only";
+import { CART_MAX_AGE, isCartExpired } from "./session-lifetime";
 
 import { cookies } from "next/headers";
 import { shopifyFetch } from "@/app/lib/shopify";
@@ -11,11 +12,12 @@ import type {
 } from "@/app/lib/shopify-types";
 
 export const SHOPIFY_CART_COOKIE = "cartId";
-export const SHOPIFY_CART_MAX_AGE = 30 * 24 * 60 * 60;
+export const SHOPIFY_CART_MAX_AGE = CART_MAX_AGE;
 
 const getCartDetailsQuery = `
   query GetCartDetails($cartId: ID!, $after: String) {
     cart(id: $cartId) {
+      createdAt
       id
       checkoutUrl
       totalQuantity
@@ -90,6 +92,7 @@ const updateCartBuyerIdentityMutation = `
 `;
 
 type CartPage = Omit<ShopifyCartDetails, "lines"> & {
+  createdAt: string;
   lines: {
     nodes: ShopifyCartLine[];
     pageInfo: { hasNextPage: boolean; endCursor: string | null };
@@ -242,6 +245,7 @@ export async function getCartDetails(): Promise<ShopifyCartDetails | null> {
     if (!cart) throw new Error("Shopify n’a pas renvoyé le panier attendu.");
 
     validateCart(cart);
+    if (isCartExpired(cart.createdAt)) return null;
     lines.push(...cart.lines.nodes);
 
     if (!cart.lines.pageInfo.hasNextPage) {

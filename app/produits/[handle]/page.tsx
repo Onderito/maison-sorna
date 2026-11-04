@@ -7,6 +7,7 @@ import Link from "next/link";
 import TeaCard from "@/app/infuser/_components/tea-card";
 import { getTeaCardEntry } from "@/app/infuser/tea-editions";
 import SiteFooter from "@/components/site-footer";
+import ProductProfessionalLink from "@/components/product-professional-link";
 import { pageMetadata } from "@/app/lib/seo/site";
 import { productStructuredData, serializeJsonLd } from "@/app/lib/seo/product";
 
@@ -79,6 +80,11 @@ export default async function ProductPage({
         key={product.id}
         variants={product.variants.nodes}
       />
+
+      <details className="border-t border-current/25">
+        <summary className="min-h-14 cursor-pointer py-4">Vous êtes professionnel ?</summary>
+        <div className="pb-6"><ProductProfessionalLink /></div>
+      </details>
 
       {cart && cart.totalQuantity > 0 && (
         <Link href="/panier" prefetch={false} className="inline-flex min-h-11 items-center underline underline-offset-4">

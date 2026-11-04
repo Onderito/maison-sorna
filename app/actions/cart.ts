@@ -1,5 +1,7 @@
 "use server";
 
+import { isCartExpired } from "@/app/lib/shopify/session-lifetime";
+
 import { getCartDetails } from "@/app/lib/shopify/cart";
 import { getVariantProductHandle } from "@/app/lib/shopify/products";
 import { CART_PRODUCT_LIMIT, CART_PRODUCT_LIMIT_MESSAGE, getProductCartQuantity } from "@/app/lib/shopify/cart-product-limit";
@@ -161,5 +163,6 @@ export async function getCart(): Promise<ShopifyCart | null> {
     throw new Error("La réponse Shopify ne contient pas le panier attendu.");
   }
 
-  return response.data.cart === null ? null : requireCart(response.data.cart);
+  if (response.data.cart === null || isCartExpired(response.data.cart.createdAt)) return null;
+  return requireCart(response.data.cart);
 }

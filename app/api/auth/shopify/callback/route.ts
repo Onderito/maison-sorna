@@ -8,7 +8,7 @@ import {
   verifyCustomerIdToken,
 } from "@/app/lib/shopify/customers";
 
-const SESSION_MAX_AGE = 30 * 24 * 60 * 60;
+import { remainingSessionSeconds } from "@/app/lib/shopify/session-lifetime";
 
 function valuesMatch(left: string, right: string) {
   const leftBuffer = Buffer.from(left);
@@ -48,23 +48,24 @@ export async function GET(request: NextRequest) {
 
   try {
     const { token, openIdConfiguration } = await exchangeCustomerAuthorizationCode({ code, codeVerifier });
-    await verifyCustomerIdToken({ idToken: token.id_token, nonce, openIdConfiguration });
+    const expiresAt = await verifyCustomerIdToken({ idToken: token.id_token, nonce, openIdConfiguration });
 
+    const sessionMaxAge = remainingSessionSeconds(expiresAt);
     const response = NextResponse.redirect(accountUrl);
     const cookieOptions = { httpOnly: true, secure: true, sameSite: "lax" as const, path: "/" };
 
     response.cookies.set(CUSTOMER_AUTH_COOKIES.accessToken, token.access_token, {
       ...cookieOptions,
-      maxAge: token.expires_in,
+      maxAge: Math.min(token.expires_in, sessionMaxAge),
     });
     response.cookies.set(CUSTOMER_AUTH_COOKIES.idToken, token.id_token, {
       ...cookieOptions,
-      maxAge: SESSION_MAX_AGE,
+      maxAge: sessionMaxAge,
     });
     if (token.refresh_token) {
       response.cookies.set(CUSTOMER_AUTH_COOKIES.refreshToken, token.refresh_token, {
         ...cookieOptions,
-        maxAge: SESSION_MAX_AGE,
+        maxAge: sessionMaxAge,
       });
     }
 

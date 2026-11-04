@@ -68,7 +68,7 @@ export default function SiteNavigation({ overlay = false, tone = "auto" }: SiteN
             <svg width="8" height="5" viewBox="0 0 10 6" fill="none" aria-hidden="true"><path d="m1 1 4 4 4-4" stroke="currentColor" strokeWidth="1" /></svg>
           </button>
           <CartButton className={styles.cart} />
-          <CustomerAccountLink />
+          <CustomerAccountLink className={styles.accountLink} />
         </div>
       </div>
     </header>

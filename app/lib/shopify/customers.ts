@@ -1,6 +1,8 @@
 import "server-only";
 
-import { createPublicKey, verify, type JsonWebKey } from "node:crypto";
+import type { JsonWebKey } from "node:crypto";
+import { cache } from "react";
+import { customerSessionExpiresAt, remainingSessionSeconds, verifyCustomerIdentitySignature, InvalidCustomerSessionError } from "./session-lifetime";
 import { cookies } from "next/headers";
 
 export const CUSTOMER_AUTH_COOKIES = {
@@ -192,60 +194,46 @@ export async function refreshCustomerAccessToken(
   };
 }
 
-function decodeJwtPart(value: string) {
-  return JSON.parse(Buffer.from(value, "base64url").toString("utf8")) as Record<string, unknown>;
+async function verifiedIdentityClaims(idToken: string, configuration: OpenIdConfiguration) {
+  const response = await fetch(configuration.jwks_uri, { cache: "no-store" });
+  if (!response.ok) throw new Error(`Les clés de signature Shopify sont indisponibles (HTTP ${response.status}).`);
+  const jwks = (await response.json()) as { keys?: JsonWebKeyWithId[] };
+  if (!Array.isArray(jwks.keys)) throw new Error("Les clés de signature Shopify sont invalides.");
+  return verifyCustomerIdentitySignature(idToken, jwks.keys, {
+    issuer: configuration.issuer, clientId: getCustomerAccountConfiguration().clientId,
+  });
 }
 
-export async function verifyCustomerIdToken({
-  idToken,
-  nonce,
-  openIdConfiguration,
-}: {
+export async function verifyCustomerIdToken({ idToken, nonce, openIdConfiguration }: {
   idToken: string;
   nonce: string;
   openIdConfiguration: OpenIdConfiguration;
 }) {
-  const parts = idToken.split(".");
-  if (parts.length !== 3) throw new Error("Le jeton d’identité Shopify est mal formé.");
-
-  const [encodedHeader, encodedPayload, encodedSignature] = parts;
-  const header = decodeJwtPart(encodedHeader);
-  const payload = decodeJwtPart(encodedPayload);
-
-  if (header.alg !== "RS256" || typeof header.kid !== "string") {
-    throw new Error("Le jeton d’identité Shopify utilise une clé invalide.");
+  const payload = await verifiedIdentityClaims(idToken, openIdConfiguration);
+  const expiresAt = customerSessionExpiresAt(payload);
+  if (expiresAt === null || payload.nonce !== nonce || typeof payload.exp !== "number" || payload.exp <= Date.now() / 1000 || !remainingSessionSeconds(expiresAt)) {
+    throw new InvalidCustomerSessionError("Le jeton d’identité Shopify n’est pas valide.");
   }
-
-  const jwksResponse = await fetch(openIdConfiguration.jwks_uri, { cache: "no-store" });
-  if (!jwksResponse.ok) {
-    throw new Error(`Les clés de signature Shopify sont indisponibles (HTTP ${jwksResponse.status}).`);
-  }
-
-  const jwks = (await jwksResponse.json()) as { keys?: JsonWebKeyWithId[] };
-  const signingKey = jwks.keys?.find((key) => key.kid === header.kid);
-  if (!signingKey) throw new Error("La clé de signature Shopify est introuvable.");
-
-  const signatureIsValid = verify(
-    "RSA-SHA256",
-    Buffer.from(`${encodedHeader}.${encodedPayload}`),
-    createPublicKey({ key: signingKey, format: "jwk" }),
-    Buffer.from(encodedSignature, "base64url"),
-  );
-  const { clientId } = getCustomerAccountConfiguration();
-  const audience = Array.isArray(payload.aud) ? payload.aud : [payload.aud];
-  const now = Math.floor(Date.now() / 1000);
-
-  if (
-    !signatureIsValid ||
-    payload.iss !== openIdConfiguration.issuer ||
-    !audience.includes(clientId) ||
-    payload.nonce !== nonce ||
-    typeof payload.exp !== "number" ||
-    payload.exp <= now
-  ) {
-    throw new Error("Le jeton d’identité Shopify n’est pas valide.");
-  }
+  return expiresAt;
 }
+
+export const getCustomerSessionExpiresAt = cache(async (): Promise<number | null> => {
+  const cookieStore = await cookies();
+  const idToken = cookieStore.get(CUSTOMER_AUTH_COOKIES.idToken)?.value;
+  if (!idToken) return null;
+  const { shopDomain } = getCustomerAccountConfiguration();
+  const configuration = await getCustomerOpenIdConfiguration(shopDomain);
+  try {
+    // The original ID token is retained only as a signed timestamp, never as
+    // API authorization. Shopify still validates the current access token.
+    const claims = await verifiedIdentityClaims(idToken, configuration);
+    const deadline = customerSessionExpiresAt(claims);
+    return remainingSessionSeconds(deadline) ? deadline : null;
+  } catch (error) {
+    if (error instanceof InvalidCustomerSessionError) return null;
+    throw error;
+  }
+});
 
 async function getCustomerGraphqlEndpoint(shopDomain: string) {
   const response = await fetch(
@@ -274,7 +262,7 @@ export async function customerAccountFetch<T>({
 }): Promise<T | null> {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get(CUSTOMER_AUTH_COOKIES.accessToken)?.value;
-  if (!accessToken) return null;
+  if (!accessToken || !remainingSessionSeconds(await getCustomerSessionExpiresAt())) return null;
 
   const { shopDomain } = getCustomerAccountConfiguration();
   const endpoint = await getCustomerGraphqlEndpoint(shopDomain);
@@ -306,7 +294,7 @@ export async function customerAccountFetch<T>({
 export async function getCustomerProfile(): Promise<CustomerProfile | null> {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get(CUSTOMER_AUTH_COOKIES.accessToken)?.value;
-  if (!accessToken) return null;
+  if (!accessToken || !remainingSessionSeconds(await getCustomerSessionExpiresAt())) return null;
 
   const { shopDomain } = getCustomerAccountConfiguration();
   const endpoint = await getCustomerGraphqlEndpoint(shopDomain);

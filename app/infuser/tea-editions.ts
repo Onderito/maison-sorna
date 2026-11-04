@@ -41,7 +41,7 @@ export function getTeaCardEntry(product: ShopifyProduct): TeaCardEntry | null {
     photographAlt: product.featuredImage?.altText ?? edition.photographAlt,
     teaType: description.teaType ?? product.productType,
     cuvee: description.cuvee,
-    origin: description.origin?.split(",")[0] ?? null,
+    origin: description.origin,
     region: description.origin,
     vintage: description.vintage,
     harvest: description.harvest,

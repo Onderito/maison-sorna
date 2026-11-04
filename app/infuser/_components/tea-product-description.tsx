@@ -1,7 +1,10 @@
+"use client";
+
 import type { TeaDescriptionBlock, TeaDescriptionSection } from "@/app/lib/shopify/tea-description";
 import styles from "./tea-card.module.css";
+import ProductProfessionalLink from "@/components/product-professional-link";
 
-function Blocks({ blocks }: { blocks: TeaDescriptionBlock[] }) {
+export function TeaDescriptionBlocks({ blocks }: { blocks: TeaDescriptionBlock[] }) {
   const groups: { kind: TeaDescriptionBlock["kind"]; texts: string[] }[] = [];
   for (const block of blocks) {
     const previous = groups.at(-1);
@@ -14,21 +17,35 @@ function Blocks({ blocks }: { blocks: TeaDescriptionBlock[] }) {
 }
 
 export default function TeaProductDescription({ sections }: { sections: TeaDescriptionSection[] }) {
-  if (!sections.length) return null;
   return <div className={styles.description}>
     {sections.map((section, index) => {
-      // Keep the introduction and tasting notes visible; practical information
-      // stays one click away without making the initial label overwhelming.
+      // Any introductory copy stays visible; practical information is folded.
       if (!section.title || /^notes de dégustation$/i.test(section.title)) {
         return <section key={index} className={styles.descriptionSection}>
           {section.title && <h3>{section.title}</h3>}
-          <Blocks blocks={section.blocks} />
+          <TeaDescriptionBlocks blocks={section.blocks} />
         </section>;
       }
       return <details key={index} className={styles.descriptionDisclosure}>
         <summary><span>{/^la cuvée$/i.test(section.title) ? "Le cru" : section.title}</span><span className={styles.disclosureMark} aria-hidden="true">+</span></summary>
-        <div className={styles.descriptionSection}><Blocks blocks={section.blocks} /></div>
+        <div className={styles.descriptionSection}><TeaDescriptionBlocks blocks={section.blocks} /></div>
       </details>;
     })}
+    <details className={styles.descriptionDisclosure} onToggle={(event) => {
+      const disclosure = event.currentTarget;
+      if (!disclosure.open) return;
+      const behavior = matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth";
+      const dialogScroll = disclosure.closest<HTMLElement>("[data-product-scroll]");
+      if (dialogScroll) {
+        // Only move the modal's content, preserving the page behind it.
+        dialogScroll.scrollTo({ top: dialogScroll.scrollHeight, behavior });
+      } else {
+        // A standalone fiche can also need the page to move into view.
+        disclosure.scrollIntoView({ block: "nearest", behavior });
+      }
+    }}>
+      <summary><span>Vous êtes professionnel ?</span><span className={styles.disclosureMark} aria-hidden="true">+</span></summary>
+      <div className={styles.descriptionSection}><ProductProfessionalLink /></div>
+    </details>
   </div>;
 }
