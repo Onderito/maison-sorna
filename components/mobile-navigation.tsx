@@ -135,7 +135,7 @@ export default function MobileNavigation({ pathname, items }: MobileNavigationPr
           {items.map((item) => {
             const links = getNavigationSubmenuLinks(item.href);
             return (
-            <div key={item.href}>
+            <div key={item.href} className={item.href === "/recevoir" ? styles.mobileProfessional : undefined}>
               <div className={styles.mobileGroupTrigger}>
                 <Link href={item.href} className={styles.mobileLink} aria-current={pathname === item.href ? "page" : undefined} onClick={closeForNavigation}>
                   {item.label}
