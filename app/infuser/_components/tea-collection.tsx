@@ -44,7 +44,7 @@ export default async function TeaCollection() {
       </aside>
       <ul className={styles.collection}>
         {entries.map(({ edition, product, failed }, index) => {
-          const isSignature = edition.handle === "sourcil-dor";
+          const isFavorite = edition.handle === "sourcil-dor";
           const teaEntry = product ? getTeaCardEntry(product) : null;
           const photograph = teaEntry?.photograph ?? edition.photograph;
           const photographAlt = teaEntry?.photographAlt ?? edition.photographAlt;
@@ -59,7 +59,7 @@ export default async function TeaCollection() {
           const description = getTeaCollectionDescription(teaEntry?.sections ?? []);
           const contents = <>
             <span className={styles.number} aria-hidden="true">{teaEntry?.cuvee ?? ["I", "II", "III", "IV", "V"][index]}</span>
-            {isSignature && <span className={styles.signatureLabel}>Notre thé signature · Notre coup de cœur</span>}
+            {isFavorite && <span className={styles.favoriteLabel}>Notre coup de cœur</span>}
             <div className={styles.artwork} data-product-artwork>
               <Image src={photograph} alt={photographAlt} fill sizes="(min-width: 1024px) 48vw, 100vw" className={styles.botanical} />
             </div>
@@ -72,7 +72,7 @@ export default async function TeaCollection() {
               </div></div>
             </div>
           </>;
-          return <li key={edition.handle} id={`collection-${edition.handle}`} data-collection-card data-signature={isSignature || undefined}>
+          return <li key={edition.handle} id={`collection-${edition.handle}`} data-collection-card data-favorite={isFavorite || undefined}>
             {product && teaEntry ? (
               <ProductDialog href={`/produits/${product.handle}`} title={product.title} trigger={contents} triggerClassName={styles.card} image={
                 <Image src={photograph} alt={photographAlt} fill loading="eager" sizes="(min-width: 768px) 50vw, 100vw" className="object-contain" />

@@ -37,7 +37,7 @@
   }
   .visual { order: 0; position: relative; inset: auto; flex: none; height: clamp(220px, 32dvh, 320px); }
   .image { inset: 64px 24px 16px; }
-  .content { order: 1; position: relative; inset: auto; flex: none; overflow: visible; padding: 16px 16px calc(184px + env(safe-area-inset-bottom, 0px)); }
+  .content { order: 1; position: relative; inset: auto; flex: none; overflow: visible; padding: 16px 16px calc(128px + env(safe-area-inset-bottom, 0px)); }
   .close { position: fixed; top: max(12px, env(safe-area-inset-top, 0px)); right: 12px; background: var(--background); }
 }
 

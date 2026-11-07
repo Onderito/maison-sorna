@@ -8,7 +8,7 @@
 .editorial { position: relative; min-width: 0; display: flex; flex-direction: column; justify-content: space-between; padding: 32px 20px 24px; }
 .chapter { font-size: 32px; font-weight: 400; line-height: 1.2; text-transform: uppercase; }
 .center { display: flex; flex-direction: column; align-items: center; gap: 24px; margin-block: 32px; }
-.thumbnail { position: relative; width: 29%; aspect-ratio: 244 / 321; border: .5px solid var(--accent); }
+.thumbnail { position: relative; width: 29%; aspect-ratio: 244 / 321; }
 .center p { max-width: 648px; padding-inline: 24px; font-family: var(--font-cormorant-garamond), Georgia, serif; font-size: 32px; font-weight: 400; line-height: 1.15; letter-spacing: -.02em; text-align: left; text-indent: 22%; text-wrap: pretty; }
 .caption { font-size: 16px; text-transform: uppercase; color: #838d76; }
 .scene { position: relative; min-height: 0; }
@@ -17,6 +17,7 @@
 @media (prefers-reduced-motion: no-preference) and (min-height: 651px) { .panel { position: sticky; top: 0; } }
 @media (prefers-reduced-motion: reduce) { .shade { display: none; } .panel[data-process-stacked] { box-shadow: none; } }
 @media (max-width: 767px) {
+  .section [id="l-art-de-l-accord"] img { object-position: 70% center; }
   .title { font-size: calc(var(--space-unit) * 6); }
   .introductionCopy { font-size: 16px; }
   .panel { grid-template-columns: 1fr; grid-template-rows: minmax(58svh, auto) 42svh; height: auto; min-height: 100svh; gap: 0; }

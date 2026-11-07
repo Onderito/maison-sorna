@@ -13,7 +13,7 @@ const accords = [
 
 export default function AccordSection() {
   return <div className={styles.section}>
-    <ScrollImageIntroduction id="l-art-de-l-accord" imageSrc="/recevoir/accords/pivoine-royale.png">
+    <ScrollImageIntroduction id="l-art-de-l-accord" imageSrc="/recevoir/accords/art-de-l-accord.png">
       <h2 id="l-art-de-l-accord-title" className={styles.title}>
         <span data-introduction-heading-mask><span data-introduction-heading>L’art de l’accord</span></span>
       </h2>

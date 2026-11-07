@@ -39,7 +39,7 @@
 .detailsScroll { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: rgb(64 32 12 / 35%) transparent; }
 .detailsScroll:focus-visible { outline: 1px solid var(--text-on-light); outline-offset: -3px; }
 .detailsScroll .card { min-height: calc(100svh - 128px); }
-.harvestValue { max-width: 25ch; padding-inline: 12px; font-size: clamp(16px, 1.2vw, 20px); text-wrap: pretty; }
+.harvestValue { max-width: 25ch; font-size: clamp(16px, 1.2vw, 18px); text-wrap: pretty; }
 .unitPrice { font-size: 14px; line-height: 1.4; font-variant-numeric: tabular-nums; }
 .region p { padding: 8px 16px; text-wrap: balance; }
 .description { padding: 24px; border: 1px solid var(--text-on-light); border-top: 0; font-size: 18px; line-height: 1.6; text-wrap: pretty; }
@@ -128,7 +128,7 @@
 
 .tastingCell { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 24px; min-height: min-content; text-align: center; }
 .tastingCell h3 { font-family: var(--font-manrope), Arial, sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.08em; line-height: 1.4; text-transform: uppercase; }
-.tastingCopy { font-family: var(--font-manrope), Arial, sans-serif; font-size: 20px; font-weight: 400; line-height: 1.2; text-wrap: pretty; }
+.tastingCopy { font-family: var(--font-manrope), Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 1.2; text-wrap: pretty; }
 .tastingCopy > * + * { margin-top: 12px; }
 .tastingCopy ul { padding-left: 20px; list-style: disc; }
 .region { position: relative; display: flex; align-items: center; justify-content: center; min-height: 0; font-family: var(--font-cormorant-garamond), Georgia, serif; font-size: var(--label-size); font-weight: 300; line-height: 1.2; letter-spacing: -0.02em; text-align: center; text-transform: uppercase; }
@@ -266,7 +266,7 @@
 /* The product overlay keeps the label artwork on the left and its image fixed on the right. */
 .dialogPanel {
   --label-size: 12px;
-  --value-size: 20px;
+  --value-size: 18px;
   --title-size: 48px;
   gap: 0;
   min-height: 100%;
@@ -308,7 +308,7 @@
 }
 
 .purchase { height: auto; }
-.purchaseLimit { margin-bottom: 8px; font-size: 12px; line-height: 1.4; }
+.formatLimit { max-width: 24ch; font-family: var(--font-manrope), Arial, sans-serif; font-size: 12px; font-weight: 400; line-height: 1.4; text-transform: none; letter-spacing: normal; }
 @media (min-width: 768px) { .purchase { height: auto; } }
 
 @media (max-width: 767px) { .tastingCopy { font-size: 18px; } }
@@ -334,7 +334,7 @@
     inset: auto 0 0;
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
-    gap: 10px 16px;
+    gap: 0 16px;
     width: auto;
     margin: 0;
     padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
@@ -343,6 +343,10 @@
   }
   .dialogPanel .purchaseSummary { display: block; grid-column: 1; grid-row: 1; align-self: center; font-size: 24px; line-height: 1.2; font-weight: 500; font-variant-numeric: tabular-nums; white-space: nowrap; }
   .dialogPanel .addButton { grid-column: 2; grid-row: 1; height: auto; min-height: 52px; gap: 12px; text-align: left; }
-  .dialogPanel .purchaseLimit { grid-column: 1 / -1; grid-row: 2; margin: 0; font-size: 12px; line-height: 1.4; }
   .dialogPanel .feedback { position: static; margin-top: 16px; }
 }
+
+.preparationMethods { display: flex; flex-direction: column; gap: 24px; }
+.preparationHeading { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 8px 16px; margin-bottom: 8px; }
+.preparationHeading h4 { font-family: var(--font-manrope), Arial, sans-serif; font-size: 16px; font-weight: 500; line-height: 1.4; }
+.infusionCount { padding: 4px 8px; border: 1px solid rgb(131 141 118 / 50%); background: rgb(131 141 118 / 10%); font-size: 14px; line-height: 1.4; font-weight: 500; font-variant-numeric: tabular-nums; }

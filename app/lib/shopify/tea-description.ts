@@ -74,11 +74,17 @@ export function parseTeaDescription(html: string, fallback = "") {
   const vintage = vintageText.match(/\b(?:19|20)\d{2}\b/)?.[0] ?? null;
   const harvest = fact("recolte") ?? vintageText.match(/récolte\s+(.*)/i)?.[1]?.replace(/\.$/, "") ?? null;
   const teaType = subtitle.split("·").map((part) => part.trim()).find((part) => /^(thé|oolong)(?:\s|$)/i.test(part)) ?? null;
+  const origin = fact("terroir") ?? fact("origine");
+  // The merchant's subtitle names the place briefly; terroir facts can include
+  // altitude and a longer account of the surrounding landscape.
+  const originSummary = subtitle.split("·").map((part) => part.trim())
+    .find((part) => part.includes(",") && !/millésime|récolte/i.test(part)) ?? origin;
 
   return {
     cuvee: metadata?.[1] ?? null,
     teaType,
-    origin: fact("terroir") ?? fact("origine"),
+    origin,
+    originSummary,
     vintage,
     harvest,
     oxidation: fact("oxydation"),

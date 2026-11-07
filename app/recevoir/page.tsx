@@ -52,19 +52,19 @@ export default function RecevoirPage() {
 
       <section id="du-matin-au-soir" className={styles.hospitality} aria-labelledby="hospitality-title">
         <div className={styles.hospitalityHeading}>
-          <p className={styles.eyebrow}>Du matin au soir</p>
+          <p className={styles.eyebrow}>Une montée en gamme</p>
           <h2 id="hospitality-title">Dans vos chambres,<br />vos salons <em>et votre bar.</em></h2>
         </div>
         <figure className={styles.hospitalityFigure}>
           <div className={`${styles.hospitalityPhoto} image-grain`}>
-            <Image src="/figma/infuser/product/sourcil-photo.png" alt="Une tasse de feuilles de thé Sourcil d’Or dans la lumière du matin" fill sizes="(max-width: 767px) 100vw, 38vw" className={styles.hospitalityImage} />
+            <Image src="/recevoir/terrasse-hotel.png" alt="Une personne de dos savoure son thé sur une terrasse face aux vignes, près d’une table nappée de lin" fill sizes="(max-width: 767px) 100vw, 38vw" className={styles.hospitalityImage} />
           </div>
-          <figcaption>Sourcil d’Or · La douceur du matin</figcaption>
+          <figcaption>Les Cinq Sommets · Cinq expressions du thé</figcaption>
         </figure>
         <div className={styles.hospitalityBody}>
-          <p className={styles.lead}>Du petit-déjeuner au dernier thé du soir, SÖRNA accompagne la journée de vos hôtes.</p>
-          <p className={styles.hospitalityCopy}>En chambre, un cru et sa théière, prêts en quelques minutes. Au salon et au bar, les Cinq Sommets, en théière ou infusés à froid. Au petit-déjeuner, Sourcil d’Or et sa douceur de miel.</p>
-          <p className={styles.future}>Et dès 2027, des soins pour vos cabines de spa et vos chambres.</p>
+          <p className={styles.lead}>Comme une carte des vins accueille de belles références, votre sélection de thés peut s’enrichir de crus singuliers, pour les hôtes qui souhaitent prolonger la découverte.</p>
+          <p className={styles.hospitalityCopy}>Avec les Cinq Sommets, SÖRNA propose cinq expressions du thé, chacune portée par une origine, une récolte et un caractère. En complément de votre offre actuelle, ces crus apportent une expérience de dégustation à la hauteur de l’attention que vous portez à vos clients.</p>
+          <p className={styles.future}>Et dès 2027, des soins pour vos spas et vos chambres.</p>
         </div>
       </section>
 

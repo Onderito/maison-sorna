@@ -13,9 +13,17 @@ describe("parseTeaDescription", () => {
     expect(result).toMatchObject({
       cuvee: "IV", teaType: "Thé noir", vintage: "2026",
       origin: "village d’Aotou, Jianyang, Fujian, Chine",
+      originSummary: "Village d’Aotou, Chine",
       harvest: "de printemps, bourgeons seuls", oxidation: "complète", roasting: "aucune",
     });
     expect(result.sections[0].blocks[0].text).toBe("Un style né en 2005 à Tongmu.");
+  });
+
+  it("uses the merchant's short origin without losing the detailed terroir", () => {
+    const result = parseTeaDescription(`<p>Cru IV · Millésime 2026 · Thé noir · Jin Jun Mei · Village d’Aotou, Chine</p><h2>Le cru</h2><p>Terroir : Village d’Aotou, Jianyang, Fujian, Chine, en bordure de la réserve de Tongmu, vers 1000 m.</p>`);
+    expect(result.originSummary).toBe("Village d’Aotou, Chine");
+    expect(result.origin).toContain("vers 1000 m");
+    expect(parseTeaDescription("<h2>Le cru</h2><p>Origine : Fujian, Chine.</p>").originSummary).toBe("Fujian, Chine");
   });
 
   it("lit les titres collés en gras et les spans de l’éditeur Shopify", () => {

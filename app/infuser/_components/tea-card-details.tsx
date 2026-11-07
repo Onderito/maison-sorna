@@ -1,6 +1,6 @@
 "use client";
 
-import { CART_PRODUCT_LIMIT_MESSAGE } from "@/app/lib/shopify/cart-product-limit";
+import { CART_PRODUCT_LIMIT } from "@/app/lib/shopify/cart-product-limit";
 import Image from "next/image";
 import ArrowRight from "@/components/arrow-right";
 import { useId, useState, useTransition } from "react";
@@ -85,6 +85,7 @@ export default function TeaCardDetails({ entry, presentation = "page" }: { entry
                 ))}
               </div>
             ) : <p className={styles.number}>{selected ? selected.title === "Default Title" ? "Format unique" : selected.title : "—"}</p>}
+            <p className={styles.formatLimit}>Maximum {CART_PRODUCT_LIMIT} sachets par cru.</p>
           </div>
           <span className={styles.rowRule} aria-hidden="true" />
           <span className={styles.detailDivider} aria-hidden="true" />
@@ -130,7 +131,6 @@ export default function TeaCardDetails({ entry, presentation = "page" }: { entry
       </div>
       <div className={styles.purchase} data-product-reveal>
         {presentation === "dialog" && <p className={styles.purchaseSummary}><span className="sr-only">Prix du format sélectionné : </span>{price}</p>}
-        <p className={styles.purchaseLimit}>{CART_PRODUCT_LIMIT_MESSAGE}</p>
         <button type="button" className={styles.addButton} onClick={handleAdd} disabled={pending || !selected?.availableForSale} aria-busy={pending}>
           <span>{pending ? "Ajout en cours…" : selected?.availableForSale ? "Ajouter au panier" : "Indisponible"}</span>
           {!pending && selected?.availableForSale && <ArrowRight />}

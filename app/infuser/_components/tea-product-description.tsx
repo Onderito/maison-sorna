@@ -2,6 +2,7 @@
 
 import type { TeaDescriptionBlock, TeaDescriptionSection } from "@/app/lib/shopify/tea-description";
 import styles from "./tea-card.module.css";
+import { parseTeaPreparation } from "@/app/lib/shopify/tea-preparation";
 import ProductProfessionalLink from "@/components/product-professional-link";
 
 export function TeaDescriptionBlocks({ blocks }: { blocks: TeaDescriptionBlock[] }) {
@@ -16,6 +17,22 @@ export function TeaDescriptionBlocks({ blocks }: { blocks: TeaDescriptionBlock[]
     : <p key={index}>{group.texts[0]}</p>);
 }
 
+function TeaPreparation({ blocks }: { blocks: TeaDescriptionBlock[] }) {
+  return <div className={styles.preparationMethods}>
+    {blocks.map((block, index) => {
+      const preparation = parseTeaPreparation(block.text);
+      if (!preparation) return <TeaDescriptionBlocks key={index} blocks={[block]} />;
+      return <section key={index} className={styles.preparationMethod}>
+        <div className={styles.preparationHeading}>
+          <h4>{preparation.method}</h4>
+          {preparation.infusions && <p className={styles.infusionCount}>{preparation.infusions}</p>}
+        </div>
+        {preparation.instructions && <p>{preparation.instructions}</p>}
+      </section>;
+    })}
+  </div>;
+}
+
 export default function TeaProductDescription({ sections }: { sections: TeaDescriptionSection[] }) {
   return <div className={styles.description}>
     {sections.map((section, index) => {
@@ -26,9 +43,10 @@ export default function TeaProductDescription({ sections }: { sections: TeaDescr
           <TeaDescriptionBlocks blocks={section.blocks} />
         </section>;
       }
+      const isPreparation = /^conseils de préparation$/i.test(section.title.trim());
       return <details key={index} className={styles.descriptionDisclosure}>
-        <summary><span>{/^la cuvée$/i.test(section.title) ? "Le cru" : section.title}</span><span className={styles.disclosureMark} aria-hidden="true">+</span></summary>
-        <div className={styles.descriptionSection}><TeaDescriptionBlocks blocks={section.blocks} /></div>
+        <summary><span>{isPreparation ? "Infusions & préparation" : /^la cuvée$/i.test(section.title) ? "Le cru" : section.title}</span><span className={styles.disclosureMark} aria-hidden="true">+</span></summary>
+        <div className={styles.descriptionSection}>{isPreparation ? <TeaPreparation blocks={section.blocks} /> : <TeaDescriptionBlocks blocks={section.blocks} />}</div>
       </details>;
     })}
     <details className={styles.descriptionDisclosure} onToggle={(event) => {
