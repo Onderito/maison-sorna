@@ -4,6 +4,8 @@
   height: 190svh;
 }
 
+.introduction[data-pace="relaxed"] { height: 250svh; }
+
 .introductionViewport {
   position: relative;
   display: flex;

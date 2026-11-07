@@ -26,7 +26,7 @@ export default async function TeaCollection() {
       <header data-collection-header className={styles.header}>
         <p data-collection-eyebrow className={styles.eyebrow}>La collection</p>
         <h2 id="collection-title"><span className={styles.titleMask}><span data-collection-title>À chacun<br />son sommet</span></span></h2>
-        <p data-collection-introduction>Cinq crus, cinq façons de découvrir la feuille.</p>
+        <p data-collection-introduction>Cinq crus à infuser plusieurs fois. À chaque infusion, la feuille révèle de nouvelles nuances.</p>
       </header>
       <nav aria-label="Les cinq crus" className={styles.navigation}>
         {entries.map(({ edition, product }, index) => (
@@ -58,7 +58,7 @@ export default async function TeaCollection() {
           const description = getTeaCollectionDescription(teaEntry?.sections ?? []);
           const contents = <>
             <span className={styles.number} aria-hidden="true">{teaEntry?.cuvee ?? ["I", "II", "III", "IV", "V"][index]}</span>
-            {isSignature && <span className={styles.signatureLabel}>Notre thé signature</span>}
+            {isSignature && <span className={styles.signatureLabel}>Notre thé signature · Notre coup de cœur</span>}
             <div className={styles.artwork} data-product-artwork>
               <Image src={photograph} alt={photographAlt} fill sizes="(min-width: 1024px) 48vw, 100vw" className={styles.botanical} />
             </div>

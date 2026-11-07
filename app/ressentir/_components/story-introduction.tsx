@@ -1,58 +1,35 @@
-import Image from "next/image";
 import { Fragment, type ReactNode } from "react";
-import StoryTextReveal from "./story-text-reveal";
+import ScrollImageIntroduction from "@/components/scroll-image-introduction";
 
 type StoryIntroductionProps = {
   id: string;
   title: string | string[];
   subtitle: ReactNode;
+  imageSrc: string;
   multiline?: boolean;
+  wideTitle?: boolean;
 };
 
-export default function StoryIntroduction({ id, title, subtitle, multiline = false }: StoryIntroductionProps) {
+export default function StoryIntroduction({ id, title, subtitle, imageSrc, multiline = false, wideTitle = false }: StoryIntroductionProps) {
   const lines = Array.isArray(title) ? title : [title];
   return (
-    <section
-      id={id}
-      aria-labelledby={`${id}-title`}
-      className="relative isolate flex min-h-[100svh] items-center justify-center overflow-hidden bg-[#40200c] px-5 py-24 text-center text-[#F5F2EB] md:px-11"
-    >
-      <Image
-        src="/figma/ressentir/origines.png"
-        alt=""
-        fill
-        sizes="100vw"
-        className="-z-10 object-cover"
-      />
-      <StoryTextReveal>
-        <div className="max-w-full overflow-hidden pb-[0.12em] -mb-[0.12em]">
-          <h2
-            data-story-heading
-            id={`${id}-title`}
-            aria-label={lines.join(" ")}
-            className={`font-display text-[length:var(--section-title-mobile-media)] font-normal text-balance md:whitespace-nowrap uppercase ${multiline ? "md:text-[clamp(2rem,10vw,11rem)] leading-[0.98]" : "md:h-[0.977em] md:text-[clamp(3rem,12.73vw,13.75rem)] leading-[normal]"}`}
-          >
-            <span aria-hidden="true">
-              {lines.map((line, lineIndex) => (
-                <Fragment key={line}>
-                  {lineIndex > 0 && <br />}
-                  {line.split(" ").map((word, wordIndex) => (
-                    <Fragment key={`${word}-${wordIndex}`}>
-                      {wordIndex > 0 && " "}
-                      <span className="inline-block overflow-clip align-bottom px-[0.04em] py-[0.14em] -mx-[0.04em] -my-[0.14em]">
-                        <span data-story-word className="inline-block">{word}</span>
-                      </span>
-                    </Fragment>
-                  ))}
-                </Fragment>
-              ))}
-            </span>
-          </h2>
-        </div>
-        <p data-story-copy className="max-w-[36em] font-sans text-[16px] md:text-[18px] lg:text-[20px] leading-[1.4] font-normal">
-          {subtitle}
-        </p>
-      </StoryTextReveal>
-    </section>
+    <ScrollImageIntroduction id={id} imageSrc={imageSrc} pace="relaxed">
+      <h2
+        id={`${id}-title`}
+        aria-label={lines.join(" ")}
+        className={`mx-auto max-w-[1407px] font-display ${wideTitle ? "text-[clamp(1rem,7.8vw,8rem)]" : "text-[length:var(--section-title-mobile-media)]"} font-normal text-balance md:whitespace-nowrap uppercase ${multiline ? `${wideTitle ? "" : "md:text-[clamp(2rem,10vw,11rem)]"} leading-[0.98]` : "md:text-[80px] lg:text-[112px] xl:text-[144px] 2xl:text-[160px] min-[1800px]:text-[176px] leading-[normal]"}`}
+      >
+        <span data-introduction-heading-mask>
+          <span data-introduction-heading aria-hidden="true">
+            {lines.map((line, index) => (
+              <Fragment key={line}>{index > 0 && <br />}{line}</Fragment>
+            ))}
+          </span>
+        </span>
+      </h2>
+      <p data-introduction-copy className="mx-auto mt-6 max-w-[36em] px-4 font-sans text-[16px] md:mt-8 md:text-[18px] lg:text-[20px] leading-[1.4] font-normal">
+        {subtitle}
+      </p>
+    </ScrollImageIntroduction>
   );
 }

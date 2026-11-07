@@ -7,7 +7,7 @@ import { useAuthenticityReveal } from "@/animations/use-authenticity-reveal";
 
 const commitments = [
   { text: "Chaque formule de soin est publiée en entier, proportions et origines comprises.", image: "formule" },
-  { text: "Chaque lot de thé est analysé par un laboratoire indépendant.", image: "analyse-the" },
+  { text: "Chaque récolte de thé est analysée par un laboratoire indépendant.", image: "analyse-the" },
   { text: "Chaque soin est testé sous contrôle dermatologique, et son efficacité mesurée en laboratoire.", image: "test-soin" },
   { text: "Tous les résultats sont consultables.", image: "resultats" },
 ];

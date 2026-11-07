@@ -5,20 +5,21 @@ import SiteFooter from "@/components/site-footer";
 import AccordSection from "./accord-section";
 import ReceptionForm from "./reception-form";
 import styles from "./recevoir.module.css";
+import heroMedia from "@/components/hero-media.module.css";
 
 export const metadata = pageMetadata("/recevoir", "Thés pour hôtels, restaurants et bars | SÖRNA", "Des crus de thé pour les restaurants, les pâtissiers, les bars et les hôtels. Découvrez notre accompagnement et demandez une dégustation professionnelle.", "/recevoir/hero-table.png");
 
 const reasons = [
-  { title: "Des crus, pas des mélanges.", text: "Cinq cuvées pures, sans arôme ajouté, chacune analysée par un laboratoire indépendant avant sa mise en vente." },
-  { title: "Des formats pour le service.", text: "Des sachets de 250 g et de 500 g, et une boîte de 2,5 kg pour la salle et le bar." },
-  { title: "Un service pensé pour vous.", text: "En théière pour deux ou quatre, au gaiwan, ou infusé à froid en carafe." },
+  { title: "Des crus, pas des mélanges.", text: "Cinq crus purs, sans arôme ajouté. Chaque récolte est analysée par un laboratoire indépendant avant sa mise en vente, notamment pour les métaux lourds." },
+  { title: "Des formats pour le service.", text: "Des conditionnements au choix, selon vos besoins et ceux de votre service." },
+  { title: "Un service pensé pour vous.", text: "En théière ou au gaiwan." },
 ];
 
 export default function RecevoirPage() {
   return <>
     <main className={styles.page}>
       <UniversHero id="recevoir" title={<>Le sens<br />de l’accueil</>} subtitle="Hôtellerie, restauration, bar" scrollTarget="#introduction">
-        <Image src="/recevoir/hero-table.png" alt="" fill priority sizes="100vw" className={styles.heroImage} />
+        <Image src="/recevoir/hero-table.png" alt="" fill priority sizes="100vw" className={`object-cover ${heroMedia.reception}`} />
         <div className={styles.heroShade} />
       </UniversHero>
 
@@ -68,10 +69,10 @@ export default function RecevoirPage() {
       </section>
 
       <section id="degustation" className={styles.tasting} aria-labelledby="tasting-title">
-        <p className={styles.eyebrow}>Une rencontre, cinq cuvées</p><h2 id="tasting-title">Goûtons <em>ensemble.</em></h2>
-        <p>Nous venons à vous, avec les cinq cuvées et tout le nécessaire. Quarante-cinq minutes, sans engagement : on goûte ensemble, et vous jugez par vous-même de ce qui fonctionne avec vos assiettes, votre service, vos hôtes.</p>
+        <p className={styles.eyebrow}>Une rencontre, cinq crus</p><h2 id="tasting-title">Goûtons <em>ensemble.</em></h2>
+        <p>Nous venons à vous, avec les cinq crus et tout le nécessaire. Quarante-cinq minutes, sans engagement : on goûte ensemble, et vous jugez par vous-même de ce qui fonctionne avec vos assiettes, votre service, vos hôtes.</p>
         <div className={styles.buttons}><a href="#demande" className={styles.button}>Demander une dégustation <span aria-hidden="true">↗</span></a><a href="#demande" className={styles.secondaryButton}>Recevoir le book <span aria-hidden="true">↗</span></a></div>
-        <p className={styles.tastingNote}>Notre book professionnel vous est envoyé dès votre demande.<br />Les prix professionnels sont communiqués sur demande.</p>
+        <p className={styles.tastingNote}>Notre book professionnel vous est envoyé dès votre demande.<br />Les prix professionnels sont communiqués après le rendez-vous.</p>
       </section>
 
       <section id="demande" className={styles.request} aria-labelledby="request-title">

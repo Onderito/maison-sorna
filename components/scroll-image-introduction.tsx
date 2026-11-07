@@ -9,13 +9,14 @@ type ScrollImageIntroductionProps = {
   id: string;
   imageSrc: string;
   children: ReactNode;
+  pace?: "default" | "relaxed";
 };
 
-export default function ScrollImageIntroduction({ id, imageSrc, children }: ScrollImageIntroductionProps) {
-  const { sectionRef, viewportRef, photographRef, titleRef, shadeRef } = useScrollImageIntroduction();
+export default function ScrollImageIntroduction({ id, imageSrc, children, pace = "default" }: ScrollImageIntroductionProps) {
+  const { sectionRef, viewportRef, photographRef, titleRef, shadeRef } = useScrollImageIntroduction(pace === "relaxed" ? 0.6 : 0.4);
 
   return (
-    <section ref={sectionRef} id={id} className={styles.introduction} aria-labelledby={`${id}-title`}>
+    <section ref={sectionRef} id={id} data-pace={pace} className={styles.introduction} aria-labelledby={`${id}-title`}>
       <div ref={viewportRef} className={styles.introductionViewport}>
         <div ref={photographRef} className={styles.introductionMedia} aria-hidden="true">
           <div data-introduction-image className={styles.introductionImage}>

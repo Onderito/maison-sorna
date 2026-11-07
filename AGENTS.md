@@ -159,6 +159,10 @@ Do NOT implement legacy customer authentication patterns when the modern Custome
 
 ---
 
+## Editorial terminology
+
+Use « cru » / « crus » in storefront copy. Do not use « cuvée » / « cuvées ».
+
 ## Products
 
 Products must come from Shopify.

@@ -111,11 +111,10 @@ export function useOriginChapterReveal() {
         if (isHeader) {
           const characters = block.querySelectorAll<HTMLElement>("[data-origin-character]");
           const details = block.querySelectorAll<HTMLElement>("[data-origin-heading-detail]");
-          entrance
-            .fromTo(details, { opacity: 0, y: 12 }, {
+          if (details.length) entrance.fromTo(details, { opacity: 0, y: 12 }, {
               opacity: 1, y: 0, duration: 0.8, clearProps: "opacity,transform",
-            }, 0)
-            .fromTo(characters, { yPercent: 120 }, {
+            }, 0);
+          entrance.fromTo(characters, { yPercent: 120 }, {
               yPercent: 0, duration: 1, stagger: 0.055, clearProps: "transform",
             }, 0.12);
         } else if (isPhoto) {

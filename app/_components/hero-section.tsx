@@ -4,6 +4,7 @@ import SeamlessBackgroundVideo from "@/components/seamless-background-video";
 import SiteNavigation from "@/components/site-navigation";
 import { TransitionLink } from "@/components/page-transition";
 import styles from "./hero-section.module.css";
+import heroMedia from "@/components/hero-media.module.css";
 
 const defaultVideoSrc = "/figma/hero/mist-loop-v1.mp4";
 
@@ -32,6 +33,7 @@ export function HeroSection({
       >
         {children ?? (
           <SeamlessBackgroundVideo
+            className={heroMedia.home}
             fadeDuration={videoFadeDuration}
             seamlessLoop={videoSrc === defaultVideoSrc}
             poster={

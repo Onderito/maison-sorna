@@ -5,8 +5,8 @@ export const infuserNavigationLinks = [
 ] as const;
 
 export const ressentirNavigationLinks = [
-  { label: "Les origines", href: "/ressentir#les-origines" },
-  { label: "Le regard", href: "/ressentir#le-regard" },
+  { label: "Nos origines", href: "/ressentir#les-origines" },
+  { label: "Notre regard", href: "/ressentir#le-regard" },
   { label: "La preuve", href: "/ressentir#la-preuve" },
   { label: "À l’origine de la Maison", href: "/ressentir#a-l-origine-de-la-maison" },
   { label: "Ceux qui l’accompagnent", href: "/ressentir#ceux-qui-l-accompagnent" },

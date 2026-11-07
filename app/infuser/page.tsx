@@ -5,6 +5,7 @@ import SiteFooter from "@/components/site-footer";
 import FaqSection from "@/components/faq-section";
 import PlantProcess from "./_components/plant-process";
 import TeaCollection from "./_components/tea-collection";
+import heroMedia from "@/components/hero-media.module.css";
 import { processSteps } from "./process-steps";
 
 export const metadata = pageMetadata("/infuser", "Les Cinq Sommets, cinq crus de thé | SÖRNA", "Explorez cinq crus de thé de Chine, leurs origines, leurs caractères et les gestes de préparation. Découvrez la collection Les Cinq Sommets de SÖRNA.", "/figma/infuser/hero-wuyi.png");
@@ -21,7 +22,7 @@ export default function InfuserPage() {
         >
           <SeamlessBackgroundVideo
             src="/videos/infuser-tea-artisan.mp4"
-            className="size-full"
+            className={`size-full ${heroMedia.infuser}`}
           />
         </UniversHero>
         <TeaCollection />

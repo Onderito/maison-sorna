@@ -1,5 +1,4 @@
 .page { --recevoir-editorial-title: calc(var(--space-unit) * 8); --sage: #838d76; --rule: rgb(64 32 12 / 24%); }
-.heroImage { object-fit: cover; object-position: center; }
 .heroShade { background: linear-gradient(180deg, rgb(24 21 15 / 20%), rgb(24 21 15 / 10%) 50%, rgb(24 21 15 / 35%)); }
 .eyebrow { font-size: 12px; text-transform: uppercase; letter-spacing: .16em; line-height: 1.6; }
 .introduction, .reasons, .hospitality, .request { padding: 112px max(32px, 6vw); }

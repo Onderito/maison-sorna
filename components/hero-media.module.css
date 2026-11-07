@@ -1,0 +1,30 @@
+/* Mobile art direction. Desktop keeps each hero's original centered framing. */
+@media (max-width: 767px) {
+  .home {
+    background-position: 56% center;
+  }
+
+  .home video {
+    object-position: 56% center;
+  }
+
+  .infuser {
+    background-position: 56% center;
+  }
+
+  .infuser video {
+    object-position: 56% center;
+  }
+
+  .care {
+    object-position: 56% center;
+  }
+
+  .house {
+    object-position: 80% center;
+  }
+
+  .reception {
+    object-position: 64% center;
+  }
+}

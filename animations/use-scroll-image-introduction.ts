@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { gsap, useGSAP } from "./gsap";
 import { ScrollTrigger } from "./scroll-trigger";
 
-export function useScrollImageIntroduction() {
+export function useScrollImageIntroduction(scrub = 0.4) {
   const sectionRef = useRef<HTMLElement>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
   const photographRef = useRef<HTMLDivElement>(null);
@@ -39,7 +39,7 @@ export function useScrollImageIntroduction() {
       const image = photograph.querySelector<HTMLElement>("[data-introduction-image]");
 
       ScrollTrigger.create({
-        id: "geste-pin",
+        id: `${section.id}-pin`,
         trigger: viewport,
         start: "top top",
         endTrigger: firstPanel ?? section,
@@ -53,12 +53,12 @@ export function useScrollImageIntroduction() {
       const scene = gsap.timeline({
         defaults: { ease: "none" },
         scrollTrigger: {
-          id: "geste-scene",
+          id: `${section.id}-scene`,
           trigger: section,
           start: "top 40%",
           endTrigger: firstPanel ?? section,
           end: firstPanel ? "top top" : "bottom bottom",
-          scrub: 0.4,
+          scrub,
           invalidateOnRefresh: true,
         },
       });
@@ -101,7 +101,7 @@ export function useScrollImageIntroduction() {
       active = false;
       media.revert();
     };
-  }, { scope: sectionRef });
+  }, { scope: sectionRef, dependencies: [scrub], revertOnUpdate: true });
 
   return { sectionRef, viewportRef, photographRef, titleRef, shadeRef };
 }

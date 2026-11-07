@@ -24,7 +24,7 @@ export default function ReceptionForm() {
       <label>Fonction<input name="Fonction" autoComplete="organization-title" maxLength={160} /></label>
       <label>Couverts par service ou chambres<input name="Couverts par service ou chambres" type="number" min="0" max="100000" /></label>
     </div>
-    <fieldset className={styles.interests}><legend>Ce qui vous intéresse</legend>{["Cinq Sommets", "Thé en chambre", "Infusion à froid", "Soins (2027)"].map(item => <label key={item}><input type="checkbox" name="Intérêt" value={item} />{item}</label>)}</fieldset>
+    <fieldset className={styles.interests}><legend>Ce qui vous intéresse</legend>{["Cinq Sommets", "Soins (2027)"].map(item => <label key={item}><input type="checkbox" name="Intérêt" value={item} />{item}</label>)}</fieldset>
     <label className={styles.message}>Votre message<textarea name="Message" rows={3} maxLength={4000} /></label>
     <button type="submit" className={styles.button}>Préparer ma demande par e-mail <span aria-hidden="true">↗</span></button>
     <p className={styles.formNote}>Votre messagerie s’ouvrira avec votre demande à envoyer à contact@sorna.fr.</p>

@@ -4,11 +4,11 @@ import ProcessTransitions from "@/app/infuser/_components/process-transitions";
 import styles from "./accord-section.module.css";
 
 const accords = [
-  { tea: "Pivoine Royale", title: "La fraîcheur de la mer", image: "pivoine-royale", alt: "Produits de la mer dans une assiette en céramique", text: "Pivoine Royale accompagne les produits de la mer, crus ou juste saisis. Son caractère délicat et floral prolonge l’accord avec légèreté, idéalement à l’apéritif ou en ouverture du repas." },
-  { tea: "Brume des Cimes", title: "La précision du végétal", image: "brume-des-cimes", alt: "Poisson blanc et légumes verts dans une assiette claire", text: "Tendue et minérale, Brume des Cimes trouve son accord avec un poisson blanc aux saveurs épurées. Sa finale presque saline accompagne le plat avec précision et laisse le palais net." },
-  { tea: "Écorce de Feu", title: "Les profondeurs du sous-bois", image: "ecorce-de-feu", alt: "Champignons dorés dans une assiette sombre", text: "Torréfié et boisé, Écorce de Feu trouve son accord avec les champignons et leurs notes profondes. Un cru de caractère, pensé pour accompagner les saveurs les plus intenses du repas." },
-  { tea: "Miel d’Orchidée", title: "La douceur du fruit", image: "miel-d-orchidee", alt: "Poire dressée dans une assiette en céramique", text: "Rond et floral, Miel d’Orchidée trouve son accord avec la délicatesse des fruits blancs. Sa douceur naturelle accompagne le dessert avec finesse, sans en masquer les nuances." },
-  { tea: "Sourcil d’Or", title: "La profondeur du dessert", image: "sourcil-d-or", alt: "Dessert au chocolat éclairé par le soleil", text: "Rond et sans amertume, Sourcil d’Or trouve son accord avec l’intensité d’un dessert au chocolat. Sa note de patate douce rôtie accompagne ses saveurs profondes et prolonge la fin du repas." },
+  { tea: "Pivoine Royale", title: "La délicatesse végétale", image: "pivoine-royale", alt: "Produits de la mer dans une assiette en céramique", text: "Pivoine Royale révèle une fraîcheur végétale et un caractère délicat." },
+  { tea: "Brume des Cimes", title: "La précision du végétal", image: "brume-des-cimes", alt: "Poisson blanc et légumes verts dans une assiette claire", text: "Tendue et minérale, Brume des Cimes dévoile une finale presque saline." },
+  { tea: "Écorce de Feu", title: "Les profondeurs du sous-bois", image: "ecorce-de-feu", alt: "Champignons dorés dans une assiette sombre", text: "Torréfié et boisé, Écorce de Feu offre une expression profonde et affirmée." },
+  { tea: "Miel d’Orchidée", title: "La douceur du fruit", image: "miel-d-orchidee", alt: "Poire dressée dans une assiette en céramique", text: "Rond et floral, Miel d’Orchidée séduit par sa douceur naturelle." },
+  { tea: "Sourcil d’Or", title: "La rondeur du thé noir", image: "sourcil-d-or", alt: "Dessert au chocolat éclairé par le soleil", text: "Rond et sans amertume, Sourcil d’Or révèle une note de patate douce rôtie." },
 ] as const;
 
 export default function AccordSection() {
@@ -18,7 +18,7 @@ export default function AccordSection() {
         <span data-introduction-heading-mask><span data-introduction-heading>L’art de l’accord</span></span>
       </h2>
       <p data-introduction-copy className={styles.introductionCopy}>
-        Un thé peut s’accorder à vos plats comme un vin. De l’apéritif au dessert, chaque cru accompagne une saveur, une texture, un moment du repas.
+        Nos crus s’infusent plusieurs fois. À chaque infusion, le thé évolue et révèle d’autres nuances. Un même cru peut ainsi accompagner toute une carte, de l’entrée au dessert.
       </p>
     </ScrollImageIntroduction>
     <ProcessTransitions className={styles.panels}>
