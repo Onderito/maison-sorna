@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import ArrowRight from "@/components/arrow-right";
 import { getProduct } from "@/app/lib/shopify/products";
 import { getTeaCardEntry, teaEditions } from "../tea-editions";
 import { getTeaCollectionDescription } from "@/app/lib/shopify/tea-description";
@@ -67,7 +68,7 @@ export default async function TeaCollection() {
               {description && <p className={`${styles.description} ${styles.textMask}`}><span data-collection-reveal>{description}</span></p>}
               <div className={styles.textMask}><div className={styles.bottom} data-collection-reveal>
                 {price && <p className={styles.price}>{available.length ? "À partir de" : "Épuisé ·"} <span>{price}</span></p>}
-                <span className={styles.discover}>{product ? "Découvrir ce cru" : failed ? "Indisponible pour le moment" : "Présentation à venir"}{product && <span aria-hidden="true">↗</span>}</span>
+                <span className={styles.discover}>{product ? "Découvrir ce cru" : failed ? "Indisponible pour le moment" : "Présentation à venir"}{product && <ArrowRight />}</span>
               </div></div>
             </div>
           </>;

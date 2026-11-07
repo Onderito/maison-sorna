@@ -37,8 +37,11 @@ export default function TeaProductDescription({ sections }: { sections: TeaDescr
       const behavior = matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth";
       const dialogScroll = disclosure.closest<HTMLElement>("[data-product-scroll]");
       if (dialogScroll) {
-        // Only move the modal's content, preserving the page behind it.
-        dialogScroll.scrollTo({ top: dialogScroll.scrollHeight, behavior });
+        // Mobile scrolls the complete sheet, including the photograph.
+        const scrollContainer = matchMedia("(max-width: 767px)").matches
+          ? disclosure.closest<HTMLElement>("[data-product-sheet]") ?? dialogScroll
+          : dialogScroll;
+        scrollContainer.scrollTo({ top: scrollContainer.scrollHeight, behavior });
       } else {
         // A standalone fiche can also need the page to move into view.
         disclosure.scrollIntoView({ block: "nearest", behavior });

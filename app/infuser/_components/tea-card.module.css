@@ -312,3 +312,37 @@
 @media (min-width: 768px) { .purchase { height: auto; } }
 
 @media (max-width: 767px) { .tastingCopy { font-size: 18px; } }
+
+.purchaseSummary { display: none; }
+
+@media (max-width: 767px) {
+  /* Intrinsic rows let long Shopify values wrap without crossing separators. */
+  .dialogPanel .detailsScroll .card { display: flex; flex-direction: column; height: auto; min-height: 0; }
+  .dialogPanel .heading { padding: 24px 16px; }
+  .dialogPanel .heading h2 { max-width: 100%; overflow-wrap: anywhere; }
+  .dialogPanel .detailRow, .dialogPanel .priceRow { align-items: stretch; }
+  .dialogPanel .cell { align-items: flex-start; justify-content: flex-start; padding: 20px 12px; text-align: left; overflow-wrap: anywhere; }
+  .dialogPanel .number, .dialogPanel .serifValue { max-width: 100%; }
+  .dialogPanel .formatButtons { width: 100%; flex-wrap: wrap; }
+  .dialogPanel .formatButton { flex: 1 1 64px; overflow-wrap: anywhere; }
+  .dialogPanel .tastingCell { align-items: flex-start; padding: 24px 16px; text-align: left; }
+  .dialogPanel .tastingCopy { font-size: 18px; line-height: 1.5; }
+  .dialogPanel .region { padding: 16px; }
+  .dialogPanel .region p { padding: 0; }
+  .dialogPanel .purchase {
+    position: fixed;
+    inset: auto 0 0;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 10px 16px;
+    width: auto;
+    margin: 0;
+    padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+    border-top: 1px solid rgb(64 32 12 / 20%);
+    background: var(--background);
+  }
+  .dialogPanel .purchaseSummary { display: block; grid-column: 1; grid-row: 1; align-self: center; font-size: 24px; line-height: 1.2; font-weight: 500; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .dialogPanel .addButton { grid-column: 2; grid-row: 1; height: auto; min-height: 52px; gap: 12px; text-align: left; }
+  .dialogPanel .purchaseLimit { grid-column: 1 / -1; grid-row: 2; margin: 0; font-size: 12px; line-height: 1.4; }
+  .dialogPanel .feedback { position: static; margin-top: 16px; }
+}

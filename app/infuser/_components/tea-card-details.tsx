@@ -2,6 +2,7 @@
 
 import { CART_PRODUCT_LIMIT_MESSAGE } from "@/app/lib/shopify/cart-product-limit";
 import Image from "next/image";
+import ArrowRight from "@/components/arrow-right";
 import { useId, useState, useTransition } from "react";
 import { useCart } from "@/components/cart-provider";
 import { addToCart } from "@/app/actions/cart";
@@ -128,10 +129,11 @@ export default function TeaCardDetails({ entry, presentation = "page" }: { entry
       <TeaProductDescription sections={entry.sections.filter((section) => section !== featuredSection)} />
       </div>
       <div className={styles.purchase} data-product-reveal>
+        {presentation === "dialog" && <p className={styles.purchaseSummary}><span className="sr-only">Prix du format sélectionné : </span>{price}</p>}
         <p className={styles.purchaseLimit}>{CART_PRODUCT_LIMIT_MESSAGE}</p>
         <button type="button" className={styles.addButton} onClick={handleAdd} disabled={pending || !selected?.availableForSale} aria-busy={pending}>
           <span>{pending ? "Ajout en cours…" : selected?.availableForSale ? "Ajouter au panier" : "Indisponible"}</span>
-          {!pending && selected?.availableForSale && <span aria-hidden="true">→</span>}
+          {!pending && selected?.availableForSale && <ArrowRight />}
         </button>
       </div>
       <div className={styles.feedback} role="status" aria-atomic="true">
