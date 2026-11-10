@@ -7,6 +7,7 @@ type VideoIndex = 0 | 1;
 type SeamlessBackgroundVideoProps = {
   className?: string;
   fadeDuration?: number;
+  playbackRate?: number;
   poster?: string;
   /** The source already contains its loop transition; use native looping. */
   seamlessLoop?: boolean;
@@ -16,6 +17,7 @@ type SeamlessBackgroundVideoProps = {
 export function SeamlessBackgroundVideo({
   className = "",
   fadeDuration = 1.2,
+  playbackRate = 1,
   poster,
   seamlessLoop = false,
   src,
@@ -33,6 +35,14 @@ export function SeamlessBackgroundVideo({
 
   const getVideo = (index: VideoIndex) =>
     index === 0 ? firstVideoRef.current : secondVideoRef.current;
+
+  useEffect(() => {
+    for (const video of [firstVideoRef.current, secondVideoRef.current]) {
+      if (!video) continue;
+      video.defaultPlaybackRate = playbackRate;
+      video.playbackRate = playbackRate;
+    }
+  }, [playbackRate, seamlessLoop]);
 
   useEffect(() => {
     return () => {
@@ -95,7 +105,7 @@ export function SeamlessBackgroundVideo({
       Number.isFinite(savedTime) &&
       savedTime > 0 &&
       Number.isFinite(video.duration) &&
-      savedTime < video.duration - (seamlessLoop ? 0 : fadeDuration)
+      savedTime < video.duration - (seamlessLoop ? 0 : fadeDuration * playbackRate)
     ) {
       video.currentTime = savedTime;
     }
@@ -107,7 +117,7 @@ export function SeamlessBackgroundVideo({
     const video = getVideo(index);
     if (!video || !Number.isFinite(video.duration)) return;
 
-    if (video.duration - video.currentTime <= fadeDuration) {
+    if (video.duration - video.currentTime <= fadeDuration * playbackRate) {
       startCrossfade(index);
     }
   };

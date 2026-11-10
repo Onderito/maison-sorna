@@ -71,13 +71,13 @@ export default function RecevoirPage() {
       <section id="degustation" className={styles.tasting} aria-labelledby="tasting-title">
         <p className={styles.eyebrow}>Une rencontre, cinq crus</p><h2 id="tasting-title">Goûtons <em>ensemble.</em></h2>
         <p>Nous venons à vous, avec les cinq crus et tout le nécessaire. Quarante-cinq minutes, sans engagement : on goûte ensemble, et vous jugez par vous-même de ce qui fonctionne avec vos assiettes, votre service, vos hôtes.</p>
-        <div className={styles.buttons}><a href="#demande" className={styles.button}>Demander une dégustation <span aria-hidden="true">↗</span></a><a href="#demande" className={styles.secondaryButton}>Recevoir le book <span aria-hidden="true">↗</span></a></div>
+        <div className={styles.buttons}><a href="#demande" className={styles.button}>Demander une dégustation <span aria-hidden="true">→</span></a><a href="#demande" className={styles.secondaryButton}>Recevoir le book <span aria-hidden="true">→</span></a></div>
         <p className={styles.tastingNote}>Notre book professionnel vous est envoyé dès votre demande.<br />Les prix professionnels sont communiqués après le rendez-vous.</p>
       </section>
 
       <section id="demande" className={styles.request} aria-labelledby="request-title">
-        <div className={styles.requestIntro}><p className={styles.eyebrow}>Faisons connaissance</p><h2 id="request-title">Votre maison,<br /><em>notre rencontre.</em></h2><p>Parlez-nous de votre établissement et de vos envies.</p><a href="mailto:contact@sorna.fr">contact@sorna.fr</a></div>
-        <ReceptionForm />
+        <Image src="/recevoir/entree-hotel.webp" alt="" fill sizes="100vw" className={styles.requestImage} />
+        <ReceptionForm introduction={<div className={styles.requestIntro}><p className={styles.eyebrow}>Faisons connaissance</p><h2 id="request-title">Votre maison,<br /><em>notre rencontre.</em></h2><p>Un lieu, une envie.<br />Imaginons la suite, ensemble.</p></div>} />
       </section>
     </main>
     <SiteFooter />

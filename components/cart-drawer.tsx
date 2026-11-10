@@ -93,7 +93,7 @@ export default function CartDrawer({ cart, isOpen, loading, error, addedVariant,
         {error && <div className={styles.notice} role="alert"><p>{error}</p><button type="button" onClick={() => { void refreshCart(); }} disabled={loading}>Réessayer</button><Link href="/panier" onClick={close}>Voir la page panier</Link></div>}
         {feedback && <p className={styles.notice} role={feedback.status === "error" ? "alert" : "status"}>{feedback.message}</p>}
         {loading && !cart ? <p className={styles.loading} role="status">Chargement de votre sélection…</p> : count === 0 && !error ?
-          <div className={styles.empty}><p>Votre prochaine<br />infusion commence ici.</p><button type="button" onClick={close}>Poursuivre la découverte ↗</button></div> :
+          <div className={styles.empty}><p>Votre prochaine<br />infusion commence ici.</p><button type="button" onClick={close}>Poursuivre la découverte <span aria-hidden="true">→</span></button></div> :
           <ul className={styles.lines} data-loading={busy}>
             {cart?.lines.map((line) => {
               const variant = line.merchandise;

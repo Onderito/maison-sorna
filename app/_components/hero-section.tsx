@@ -6,7 +6,8 @@ import { TransitionLink } from "@/components/page-transition";
 import styles from "./hero-section.module.css";
 import heroMedia from "@/components/hero-media.module.css";
 
-const defaultVideoSrc = "/figma/hero/mist-loop-v1.mp4";
+// The previous mist-loop-v1 video and poster are kept for a possible rollback.
+const defaultVideoSrc = "/figma/hero/wuyi-mist-loop-v2.mp4";
 
 type HeroSectionProps = {
   /** Replaces the default video with a custom background element. */
@@ -35,10 +36,11 @@ export function HeroSection({
           <SeamlessBackgroundVideo
             className={heroMedia.home}
             fadeDuration={videoFadeDuration}
+            playbackRate={videoSrc === defaultVideoSrc ? 0.75 : 1}
             seamlessLoop={videoSrc === defaultVideoSrc}
             poster={
               videoSrc === defaultVideoSrc
-                ? "/figma/hero/mist-loop-v1-poster.jpg"
+                ? "/figma/hero/wuyi-mist-loop-v2-poster.jpg"
                 : "/figma/hero/video-poster.jpg"
             }
             src={videoSrc}
@@ -47,7 +49,7 @@ export function HeroSection({
         <span className="image-grain-overlay" aria-hidden="true" />
       </div>
 
-      <SiteNavigation overlay tone="dark" />
+      <SiteNavigation overlay tone="light" />
 
       <div className="absolute inset-0 z-10 flex items-center justify-center px-4 pt-14 text-center md:px-11 md:pt-0">
         <div className="flex w-full max-w-[1640px] flex-col items-center gap-7 md:gap-10">

@@ -52,15 +52,13 @@ export default function FaqSection() {
         </div>
         <div className={styles.responses}>
           <FaqAccordion questions={questions} />
-          <button
-            type="button"
+          <a
+            href="mailto:contact@sorna.fr"
             data-faq-contact
             className={styles.contact}
-            disabled
-            title="Le contact sera bientôt disponible"
           >
             Une autre question ? Écrivez-nous.
-          </button>
+          </a>
         </div>
       </div>
     </FaqEntrance>

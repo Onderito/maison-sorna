@@ -1,4 +1,22 @@
-/* Mobile art direction. Desktop keeps each hero's original centered framing. */
+/* Lift the home landscape while keeping the video and its poster full bleed. */
+.home {
+  --home-media-rise: clamp(80px, 16svh, 144px);
+  height: calc(100% + var(--home-media-rise));
+  transform: translateY(calc(-1 * var(--home-media-rise)));
+}
+
+/* Keep pale mist from washing out the ivory navigation. */
+.home::after {
+  position: absolute;
+  z-index: 30;
+  inset: var(--home-media-rise) 0 auto;
+  height: clamp(180px, 30svh, 260px);
+  content: "";
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgb(0 0 0 / 38%), transparent);
+}
+
+/* Mobile art direction for each hero. */
 @media (max-width: 767px) {
   .home {
     background-position: 56% center;
