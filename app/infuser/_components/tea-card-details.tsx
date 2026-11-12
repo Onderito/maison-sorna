@@ -6,6 +6,7 @@ import ArrowRight from "@/components/arrow-right";
 import { useId, useRef, useState, useTransition } from "react";
 import { useCart } from "@/components/cart-provider";
 import { addToCart } from "@/app/actions/cart";
+import { withCartLock } from "@/app/lib/cart-lock";
 import type { AddToCartResult } from "@/app/lib/shopify-types";
 import styles from "./tea-card.module.css";
 import type { TeaCardEntry } from "./tea-card-data";
@@ -41,7 +42,7 @@ export default function TeaCardDetails({ entry, presentation = "page" }: { entry
     setFeedback(null);
     startTransition(async () => {
       try {
-        const result = await addToCart(variant.id, variant.quantityRule.minimum);
+        const result = await withCartLock(() => addToCart(variant.id, variant.quantityRule.minimum));
         setFeedback(result.status === "success" ? null : { ...result, handle });
         if (result.status !== "error") await openCart(variant.id);
       } catch {

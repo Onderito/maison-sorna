@@ -170,7 +170,7 @@ describe("masked collection copy", () => {
     const clearOrder = vi.mocked(gsap.set).mock.invocationCallOrder.at(-1)!;
     expect(revertOrder).toBeDefined();
     expect(clearOrder).toBeGreaterThan(revertOrder);
-    expect(gsap.set).toHaveBeenLastCalledWith(expect.any(Array), { clearProps: "transform" });
+    expect(gsap.set).toHaveBeenLastCalledWith(expect.any(Array), { clearProps: "transform,opacity" });
   });
   it("waits for the copy itself to enter rather than revealing below-screen text with the image", () => {
     harness.copy = true;

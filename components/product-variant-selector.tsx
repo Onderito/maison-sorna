@@ -3,6 +3,7 @@
 import { useId, useRef, useState, useTransition } from "react";
 import { useCart } from "@/components/cart-provider";
 import { addToCart } from "@/app/actions/cart";
+import { withCartLock } from "@/app/lib/cart-lock";
 import type { AddToCartResult, ShopifyVariant } from "@/app/lib/shopify-types";
 
 type ProductVariantSelectorProps = {
@@ -36,7 +37,7 @@ export default function ProductVariantSelector({
     setFeedback(null);
     startTransition(async () => {
       try {
-        const result = await addToCart(variant.id, variant.quantityRule.minimum);
+        const result = await withCartLock(() => addToCart(variant.id, variant.quantityRule.minimum));
         setFeedback(result.status === "success" ? null : { ...result, message: `${variant.title} : ${result.message}` });
         if (result.status !== "error") await openCart(variant.id);
       } catch {
