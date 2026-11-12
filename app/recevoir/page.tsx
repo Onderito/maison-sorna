@@ -37,7 +37,7 @@ export default function RecevoirPage() {
           <figure className={styles.reasonFigure}>
             <div className={styles.reasonPhoto}>
               <div className={`${styles.reasonReveal} image-grain`} data-reception-photo="founders">
-                <Image src="/recevoir/fondateurs-vignes.png" alt="Les deux fondateurs de SÖRNA devant les vignes" fill sizes="(max-width: 1199px) 100vw, 46vw" className={styles.reasonImage} data-reception-parallax />
+                <Image src="/recevoir/fondateurs-vignes.webp" alt="Les deux fondateurs de SÖRNA devant les vignes" fill sizes="(max-width: 1199px) 100vw, 46vw" className={styles.reasonImage} data-reception-parallax />
               </div>
             </div>
             <figcaption data-reception-detail>Le goût du détail, l’attention du service.</figcaption>
