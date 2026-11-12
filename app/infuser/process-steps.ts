@@ -33,8 +33,8 @@ export const processSteps: readonly [
         alt: "Jeunes feuilles de thé sur leur tige",
       },
       scene: {
-        src: "/figma/infuser/process/recolte.png",
-        alt: "Récolte à la main de jeunes feuilles de thé",
+        src: "/figma/infuser/process/01-recolte.webp",
+        alt: "Cueilleuse au chapeau de paille penchée sur les théiers, un sac de toile sur l’épaule",
       },
     },
   },
@@ -50,8 +50,8 @@ export const processSteps: readonly [
         alt: "Feuille de thé assouplie par le flétrissage",
       },
       scene: {
-        src: "/figma/infuser/process/02.webp",
-        alt: "Feuilles de thé étalées pendant le flétrissage",
+        src: "/figma/infuser/process/02-fletrissage.webp",
+        alt: "Claies de bambou chargées de feuilles de thé, près d’une fenêtre ouverte sur la montagne",
       },
     },
   },
@@ -67,8 +67,8 @@ export const processSteps: readonly [
         alt: "Feuille de thé en cours d’oxydation",
       },
       scene: {
-        src: "/figma/infuser/process/03.webp",
-        alt: "Feuilles de thé transformées par l’oxydation",
+        src: "/figma/infuser/process/03-oxydation.webp",
+        alt: "Artisan travaillant à la main les feuilles de thé étalées dans un bac",
       },
     },
   },

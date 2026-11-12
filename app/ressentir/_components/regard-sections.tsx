@@ -31,7 +31,7 @@ const sections: RegardSection[] = [
     id: "le-soin",
     title: "Le soin",
     introduction: "Du thé au soin, la démarche ne change pas, connaître chaque matière, et ne l’employer que pour ce qu’elle apporte.",
-    images: { main: "/figma/ressentir/regard/le-soin.png", inset: "/figma/appliquer/hero-soin.png", detail: "/figma/ressentir/regard/bakuchi.jpg" },
+    images: { main: "/figma/ressentir/regard/le-soin-creme.webp", inset: "/figma/appliquer/hero-soin.png", detail: "/figma/ressentir/regard/bakuchi.jpg" },
     leftTitle: "Anhydre",
     leftText: <><strong>Sans eau</strong>, les formules n’ont pas besoin de conservateur. Elles sont aussi <strong>sans parfum.</strong></>,
     ingredient: { title: "Le bakuchiol", text: <>Dans nos soins, le thé rencontre la vigne et le <strong>bakuchiol</strong>, un actif issu des graines du bakuchi (<em>Psoralea corylifolia</em>).</> },
