@@ -140,6 +140,13 @@ describe("hero entries wait for the page to be visible", () => {
     await vi.waitFor(() => expect(gsap.to).toHaveBeenCalledTimes(2));
     expect(reveal).not.toHaveBeenCalled();
 
+    // The hero starts while the curtain is leaving, not once it has gone.
+    const handoff = vi.mocked(window.setTimeout).mock.calls.find(([, delay]) => delay === 250);
+    expect(handoff).toBeDefined();
+    (handoff![0] as () => void)();
+    expect(reveal).toHaveBeenCalledOnce();
+    expect(harness.lenis.start).not.toHaveBeenCalled();
+
     vi.mocked(gsap.to).mock.calls[1][1]?.onComplete?.();
     expect(reveal).toHaveBeenCalledOnce();
     expect(harness.lenis.start).toHaveBeenCalledOnce();

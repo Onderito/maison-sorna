@@ -61,7 +61,19 @@ export function usePageTransition() {
     let holdTimeout = 0;
     let releaseScroll: (() => void) | null = null;
     let generation = 0;
+    // Heroes start while the curtain is still leaving, not after it has gone:
+    // waiting for the last column made titles arrive almost a second late.
+    const heroHandoff = 250;
+    let handoff = 0;
+    let pageShown = false;
     const revealCallbacks = new Set<() => void>();
+    const releaseReveal = () => {
+      window.clearTimeout(handoff);
+      pageShown = true;
+      const callbacks = Array.from(revealCallbacks);
+      revealCallbacks.clear();
+      callbacks.forEach(callback => callback());
+    };
 
     gsap.set(curtain, { y: 0, yPercent: 100, visibility: "hidden" });
 
@@ -88,9 +100,8 @@ export function usePageTransition() {
       destination = null;
       queued = null;
       origin = null;
-      const callbacks = Array.from(revealCallbacks);
-      revealCallbacks.clear();
-      callbacks.forEach(callback => callback());
+      releaseReveal();
+      pageShown = false;
     });
 
     const reveal = contextSafe(() => {
@@ -115,6 +126,8 @@ export function usePageTransition() {
           if (next && !navigate(next.href)) router.push(`${next.pathname}${next.search}${next.hash}`);
         },
       });
+      if (duration) handoff = window.setTimeout(releaseReveal, heroHandoff);
+      else releaseReveal();
     });
 
     const navigate = contextSafe((href: string): boolean => {
@@ -230,7 +243,7 @@ export function usePageTransition() {
     controllerRef.current = {
       navigate, committed,
       afterReveal: callback => {
-        if (phase === "idle") callback();
+        if (phase === "idle" || pageShown) callback();
         else revealCallbacks.add(callback);
         return () => { revealCallbacks.delete(callback); };
       },

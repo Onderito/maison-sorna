@@ -1,8 +1,9 @@
 "use client";
 
-import { ReactLenis, useLenis } from "lenis/react";
+import { ReactLenis, useLenis, type LenisRef } from "lenis/react";
+import { gsap } from "@/animations/gsap";
 import { ScrollTrigger } from "@/animations/scroll-trigger";
-import { useSyncExternalStore, type ReactNode } from "react";
+import { useEffect, useRef, useSyncExternalStore, type ReactNode } from "react";
 
 const reducedMotionQuery = "(prefers-reduced-motion: reduce)";
 
@@ -11,7 +12,7 @@ function updateScrollTriggers() {
 }
 
 function ScrollAnimationSync() {
-  // Lenis owns the only RAF; all scenes share one ScrollTrigger update.
+  // Every Lenis scroll step refreshes all scenes once.
   useLenis(updateScrollTriggers);
   return null;
 }
@@ -36,12 +37,27 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
     getReducedMotionSnapshot,
     getServerReducedMotionSnapshot,
   );
+  const lenisRef = useRef<LenisRef>(null);
+
+  useEffect(() => {
+    // One loop for scroll and animation: GSAP's ticker advances Lenis, so a
+    // scrubbed scene never draws a frame with the previous scroll position.
+    const advance = (time: number) => lenisRef.current?.lenis?.raf(time * 1000);
+    gsap.ticker.add(advance);
+    // Lag smoothing would shift GSAP's clock away from Lenis after a long frame.
+    gsap.ticker.lagSmoothing(0);
+    return () => {
+      gsap.ticker.remove(advance);
+      gsap.ticker.lagSmoothing(500, 33);
+    };
+  }, []);
 
   return (
     <ReactLenis
       root
+      ref={lenisRef}
       options={{
-        autoRaf: true,
+        autoRaf: false,
         lerp: 0.1,
         smoothWheel: reducedMotion === false,
         syncTouch: false,
