@@ -32,6 +32,7 @@ export default function RessentirPage() {
         </UniversHero>
         <StoryIntroduction
           id="les-origines"
+          opening="grand"
           imageSrc="/ressentir/introductions/nos-origines.png"
           title="Nos origines"
           subtitle="Un nom façonné par deux lieux, une influence, une même manière de regarder la matière."

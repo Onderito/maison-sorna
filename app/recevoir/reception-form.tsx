@@ -113,14 +113,14 @@ export default function ReceptionForm({ introduction }: { introduction: ReactNod
     <div className={styles.layout}>
       <div className={styles.editorial}>
         {introduction}
-        <ol className={styles.progress} aria-label="Les étapes de votre demande">
+        <ol className={styles.progress} aria-label="Les étapes de votre demande" data-reception-detail>
           {stages.map((label, index) => <li key={label} data-active={index === stage} data-complete={index < stage} aria-current={index === stage ? "step" : undefined}>
             <span className={styles.stageNumber}>0{index + 1}</span><span>{label}</span>
           </li>)}
         </ol>
         <a className={styles.email} href="mailto:contact@sorna.fr">Vous préférez nous écrire ?</a>
       </div>
-    <form ref={formRef} className={styles.form} onSubmit={continueForm}
+    <form ref={formRef} className={styles.form} onSubmit={continueForm} data-reception-panel
       onKeyDownCapture={() => { keyboardRef.current = true; }}
       onPointerDownCapture={() => { keyboardRef.current = false; }}>
       <div key={step} className={styles.step} data-instant={instant}>

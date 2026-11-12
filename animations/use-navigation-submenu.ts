@@ -20,7 +20,7 @@ export function useNavigationSubmenu() {
 
     const hover = window.matchMedia("(hover: hover) and (pointer: fine)");
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const desktop = window.matchMedia("(min-width: 768px)");
+    const desktop = window.matchMedia("(min-width: 1200px)");
     const ease = CustomEase.create("", "0.2,-0.03,0.52,0.99");
     let open = false;
     let closeTimer = 0;

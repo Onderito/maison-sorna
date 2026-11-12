@@ -1,5 +1,6 @@
 import { Fragment, type ReactNode } from "react";
 import ScrollImageIntroduction from "@/components/scroll-image-introduction";
+import type { IntroductionOpening } from "@/animations/use-scroll-image-introduction";
 
 type StoryIntroductionProps = {
   id: string;
@@ -8,12 +9,13 @@ type StoryIntroductionProps = {
   imageSrc: string;
   multiline?: boolean;
   wideTitle?: boolean;
+  opening?: IntroductionOpening;
 };
 
-export default function StoryIntroduction({ id, title, subtitle, imageSrc, multiline = false, wideTitle = false }: StoryIntroductionProps) {
+export default function StoryIntroduction({ id, title, subtitle, imageSrc, multiline = false, wideTitle = false, opening = "doux" }: StoryIntroductionProps) {
   const lines = Array.isArray(title) ? title : [title];
   return (
-    <ScrollImageIntroduction id={id} imageSrc={imageSrc} pace="relaxed">
+    <ScrollImageIntroduction id={id} imageSrc={imageSrc} pace="relaxed" opening={opening}>
       <h2
         id={`${id}-title`}
         aria-label={lines.join(" ")}

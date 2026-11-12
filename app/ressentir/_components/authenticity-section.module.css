@@ -19,7 +19,7 @@
 .image { object-fit: cover; }
 .navigation { display: none; }
 
-@media (max-width: 767px) {
+@media (max-width: 1199px) {
   .section { min-height: auto; padding: 40px 20px 24px; }
   .header { gap: 20px; }
   .title {
@@ -45,4 +45,13 @@
 
 @media (max-width: 359px) {
   .title { font-size: calc(var(--space-unit) * 4); }
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+  .section { padding: 64px 32px 40px; }
+  .title { font-size: calc(var(--space-unit) * 8); }
+  .header p { font-size: 18px; line-height: 1.5; }
+  .cards { width: 100%; max-width: 560px; margin-inline: auto; }
+  .card p { font-size: 18px; line-height: 1.5; }
+  .photograph { aspect-ratio: 4 / 3; }
 }

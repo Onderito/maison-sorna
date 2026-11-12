@@ -12,6 +12,7 @@ const editorialPaths = new Set(["/", "/infuser", "/appliquer", "/ressentir", "/r
 type TransitionController = {
   navigate: (href: string) => boolean;
   committed: (pathname: string) => void;
+  afterReveal: (callback: () => void) => () => void;
 };
 
 export function usePageTransition() {
@@ -35,6 +36,7 @@ export function usePageTransition() {
     let assetTimeout = 0;
     let releaseScroll: (() => void) | null = null;
     let generation = 0;
+    const revealCallbacks = new Set<() => void>();
 
     gsap.set(curtain, { y: 0, yPercent: 100, visibility: "hidden" });
 
@@ -49,6 +51,9 @@ export function usePageTransition() {
       releaseScroll = null;
       phase = "idle";
       destination = null;
+      const callbacks = Array.from(revealCallbacks);
+      revealCallbacks.clear();
+      callbacks.forEach(callback => callback());
     });
 
     const reveal = contextSafe(() => {
@@ -60,7 +65,17 @@ export function usePageTransition() {
 
     const navigate = contextSafe((href: string): boolean => {
       const next = new URL(href, window.location.href);
-      if (next.origin !== window.location.origin || !editorialPaths.has(window.location.pathname) ||
+      if (next.origin !== window.location.origin) return false;
+      // Re-selecting the current page is an explicit return to its beginning.
+      // Section anchors and query changes retain their normal navigation.
+      if (next.pathname === window.location.pathname && next.search === window.location.search && !next.hash) {
+        if (phase !== "idle") return true;
+        if (window.location.hash) router.replace(`${next.pathname}${next.search}`, { scroll: false });
+        if (lenis) lenis.scrollTo(0, { immediate: true, force: true });
+        else window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+        return true;
+      }
+      if (!editorialPaths.has(window.location.pathname) ||
           !editorialPaths.has(next.pathname) || next.pathname === window.location.pathname || reduced.matches) return false;
       if (phase === "waiting" || phase === "revealing") return true;
       destination = next;
@@ -123,7 +138,14 @@ export function usePageTransition() {
     };
 
     const cancel = () => finish();
-    controllerRef.current = { navigate, committed };
+    controllerRef.current = {
+      navigate, committed,
+      afterReveal: callback => {
+        if (phase === "idle") callback();
+        else revealCallbacks.add(callback);
+        return () => { revealCallbacks.delete(callback); };
+      },
+    };
     window.addEventListener("popstate", cancel);
     reduced.addEventListener("change", cancel);
     return () => {
@@ -138,5 +160,13 @@ export function usePageTransition() {
     controllerRef.current?.committed(pathname);
   }, { dependencies: [pathname] });
 
-  return { curtainRef, navigate: (href: string) => controllerRef.current?.navigate(href) ?? false };
+  return {
+    curtainRef,
+    navigate: (href: string) => controllerRef.current?.navigate(href) ?? false,
+    afterReveal: (callback: () => void) => {
+      if (controllerRef.current) return controllerRef.current.afterReveal(callback);
+      callback();
+      return () => {};
+    },
+  };
 }

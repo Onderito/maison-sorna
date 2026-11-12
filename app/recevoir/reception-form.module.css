@@ -50,7 +50,7 @@
   .choice:hover { border-color: var(--foreground); background: rgb(131 141 118 / 8%); }
   .continue:hover { opacity: .88; }
 }
-@media (min-width: 768px) and (max-width: 1023px) {
+@media (min-width: 768px) and (max-width: 959px) {
   .layout { grid-template-columns: minmax(0, 1fr); gap: 24px; }
   .form { width: min(100%, 600px); justify-self: end; }
   .progress { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; width: 100%; margin: 24px 0 0; }
@@ -81,4 +81,15 @@
   @starting-style { .step[data-instant="false"] { transform: none; } }
   .continue { transition: opacity 120ms ease; }
   .continue:active { transform: none; }
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+  .form { padding: 24px; }
+  .question { font-size: 28px; }
+}
+@media (min-width: 768px) and (max-width: 959px) {
+  .form { height: 520px; }
+}
+@media (min-width: 960px) and (max-width: 1199px) {
+  .layout { grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 32px; }
 }

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import type { ReactNode } from "react";
-import { useScrollImageIntroduction } from "@/animations/use-scroll-image-introduction";
+import { useScrollImageIntroduction, type IntroductionOpening } from "@/animations/use-scroll-image-introduction";
 import styles from "./scroll-image-introduction.module.css";
 
 type ScrollImageIntroductionProps = {
@@ -10,10 +10,11 @@ type ScrollImageIntroductionProps = {
   imageSrc: string;
   children: ReactNode;
   pace?: "default" | "relaxed";
+  opening?: IntroductionOpening;
 };
 
-export default function ScrollImageIntroduction({ id, imageSrc, children, pace = "default" }: ScrollImageIntroductionProps) {
-  const { sectionRef, viewportRef, photographRef, titleRef, shadeRef } = useScrollImageIntroduction(pace === "relaxed" ? 0.6 : 0.4);
+export default function ScrollImageIntroduction({ id, imageSrc, children, pace = "default", opening = "grand" }: ScrollImageIntroductionProps) {
+  const { sectionRef, viewportRef, photographRef, titleRef, shadeRef } = useScrollImageIntroduction(pace === "relaxed" ? 0.6 : 0.4, opening);
 
   return (
     <section ref={sectionRef} id={id} data-pace={pace} className={styles.introduction} aria-labelledby={`${id}-title`}>

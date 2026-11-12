@@ -55,6 +55,7 @@
 .descriptionDisclosure summary:focus-visible { outline: 2px solid var(--text-on-light); outline-offset: 3px; }
 .descriptionDisclosure > .descriptionSection { padding: 0 0 24px; }
 .disclosureMark { flex-shrink: 0; font-size: 24px; font-weight: 300; }
+.disclosureMark { transition: transform 200ms var(--ease-out, cubic-bezier(0.23, 1, 0.32, 1)); }
 .descriptionDisclosure[open] .disclosureMark { transform: rotate(45deg); }
 
 .card {
@@ -106,6 +107,8 @@
 .formatButton[data-available="false"] { color: rgb(64 32 12 / 75%); }
 .formatButton:focus-visible { outline: 2px solid var(--text-on-light); outline-offset: 2px; }
 .formatButton:disabled { opacity: 0.6; cursor: wait; }
+.formatButton, .addButton { transition: transform 160ms ease-out; }
+.formatButton:active:not(:disabled), .addButton:active:not(:disabled) { transform: scale(0.97); }
 .formatAvailability { margin-top: 2px; font-size: 16px; font-weight: 400; }
 .formatButton[aria-pressed="true"] .formatAvailability { font-weight: 500; }
 
@@ -147,9 +150,15 @@
   font-size: clamp(16px, 1.04vw, 18px);
   font-weight: 500;
   cursor: pointer;
- 
 }
-.addButton:disabled { justify-content: center; cursor: not-allowed; opacity: 0.65; }
+/* Pending keeps its label in place; only an unavailable variant centres it. */
+.addButton:disabled { cursor: not-allowed; opacity: 0.65; }
+.addButton:disabled:not([aria-busy="true"]) { justify-content: center; }
+.addButton[aria-busy="true"] { cursor: wait; }
+@media (prefers-reduced-motion: reduce) {
+  .formatButton, .addButton, .disclosureMark { transition: none; }
+  .formatButton:active:not(:disabled), .addButton:active:not(:disabled) { transform: none; }
+}
 .addButton:focus-visible { outline: 2px solid var(--button); outline-offset: 3px; }
 .feedback {
   position: absolute;
@@ -294,13 +303,16 @@
 .dialogPanel .purchase { position: fixed; right: 32px; bottom: 32px; z-index: 5; width: calc(50% - 64px); height: auto; }
 .dialogPanel .addButton { height: 52px; }
 .dialogPanel .feedback { position: sticky; bottom: 0; margin-top: 16px; }
-@media (min-width: 768px) {
+@media (min-width: 1200px) {
   .dialogPanel .card {
     height: max(622px, calc(100dvh - 56px));
-    grid-template-rows: minmax(144px, 160fr) minmax(96px, 120fr) minmax(96px, 120fr) minmax(min-content, 200fr) minmax(80px, 100fr) minmax(64px, 80fr);
+    grid-template-rows: minmax(144px, 160fr) minmax(96px, 120fr) minmax(96px, 120fr) minmax(min-content, 200fr) minmax(min-content, 100fr) minmax(64px, 80fr);
   }
+  /* Let the label grow beyond the preferred viewport height when needed. */
+  .dialogPanel .detailsScroll .card { min-height: min-content; }
+  .dialogPanel .priceRow .cell { padding-block: 12px; }
 }
-@media (max-width: 767px) {
+@media (max-width: 1199px) {
   .dialogPanel { --title-size: 32px; --value-size: 18px; }
   .dialogPanel .harvestValue { font-size: 16px; }
   .dialogPanel .price { font-size: 24px; }
@@ -309,13 +321,13 @@
 
 .purchase { height: auto; }
 .formatLimit { max-width: 24ch; font-family: var(--font-manrope), Arial, sans-serif; font-size: 12px; font-weight: 400; line-height: 1.4; text-transform: none; letter-spacing: normal; }
-@media (min-width: 768px) { .purchase { height: auto; } }
+@media (min-width: 1200px) { .purchase { height: auto; } }
 
-@media (max-width: 767px) { .tastingCopy { font-size: 18px; } }
+@media (max-width: 1199px) { .tastingCopy { font-size: 18px; } }
 
 .purchaseSummary { display: none; }
 
-@media (max-width: 767px) {
+@media (max-width: 1199px) {
   /* Intrinsic rows let long Shopify values wrap without crossing separators. */
   .dialogPanel .detailsScroll .card { display: flex; flex-direction: column; height: auto; min-height: 0; }
   .dialogPanel .heading { padding: 24px 16px; }

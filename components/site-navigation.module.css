@@ -199,11 +199,10 @@
 .header :is(a, button):focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
 .spacer { height: 112px; flex-shrink: 0; }
 
-@media (min-width: 768px) {
-  .header { padding-bottom: 52px; }
+@media (min-width: 1200px) {
   .bar { width: 90.8%; gap: 16px; min-height: 88px; }
   .logo { font-size: 18px; }
-  .actions { display: flex; gap: 8px; }
+  .actions { display: flex; gap: 16px; }
   .mobileControls { display: none; }
   .language { font-size: 16px; }
   .cart, .mobileCart { font-size: 14px; line-height: 20px; }
@@ -211,38 +210,21 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 24px;
     position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    padding: 0 16px 8px;
-    transform: translateY(0);
+    top: 50%;
+    left: 50%;
+    gap: 32px;
+    transform: translate(-50%, -50%);
   }
   .navLink {
     display: flex;
     align-items: center;
     min-height: 44px;
     font-family: var(--font-manrope), Arial, sans-serif;
-    font-size: 16px;
+    font-size: 18px;
     text-transform: uppercase;
     transition: opacity 160ms ease;
   }
-  .spacer { height: 160px; }
-}
-
-@media (min-width: 1200px) {
-  .header { padding-bottom: 0; }
-  .primary {
-    top: 50%;
-    left: 50%;
-    right: auto;
-    padding: 0;
-    gap: 32px;
-    transform: translate(-50%, -50%);
-  }
-  .navLink { font-size: 18px; }
-  .actions { gap: 16px; }
   .spacer { height: 128px; }
 }
 

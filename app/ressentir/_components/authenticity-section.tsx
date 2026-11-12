@@ -73,7 +73,7 @@ export default function AuthenticitySection() {
                 src={`/figma/ressentir/authenticite/${commitment.image}.png`}
                 alt=""
                 fill
-                sizes="(max-width: 767px) calc(100vw - 40px), 22vw"
+                sizes="(max-width: 767px) calc(100vw - 40px), (max-width: 1199px) 560px, 22vw"
                 className={styles.image}
               />
             </div>

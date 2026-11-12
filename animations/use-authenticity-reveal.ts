@@ -21,8 +21,8 @@ export function useAuthenticityReveal() {
 
     const media = gsap.matchMedia();
     media.add({
-      desktop: "(min-width: 768px)",
-      mobile: "(max-width: 767px)",
+      desktop: "(min-width: 1200px)",
+      mobile: "(max-width: 1199px)",
       reduced: "(prefers-reduced-motion: reduce)",
     }, (context) => {
       entrances.current = [];

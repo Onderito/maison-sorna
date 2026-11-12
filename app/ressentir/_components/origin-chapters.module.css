@@ -79,7 +79,7 @@
 :is(.letterIntroduction, .letterDescription) p > :global(.origin-copy-line-mask):first-child > :global(.origin-copy-line) { text-indent: var(--copy-indent); }
 
 .photoReveal, .photoReveal > .photoContent { position: absolute; inset: 0; }
-.photoReveal { overflow: hidden; }
+.photoReveal { overflow: hidden; transform-origin: center; }
 
 @media (prefers-reduced-motion: no-preference) {
   .letterChapter[data-origin-pending] :is([data-origin-copy], [data-origin-photo]) { visibility: hidden; }
@@ -90,8 +90,32 @@
   .letterChapter { --origin-chapter-title: calc(var(--space-unit) * 15); }
 }
 
-@media (min-width: 768px) and (max-width: 1023px) {
-  .letterChapter { --origin-chapter-title: calc(var(--space-unit) * 8); }
+@media (min-width: 768px) and (max-width: 1199px) {
+  .letterChapter {
+    --origin-chapter-title: calc(var(--space-unit) * 8);
+    --copy-indent: 24%;
+    gap: 64px 24px;
+    padding: 80px 32px;
+  }
+  .letterHeader { gap: 32px; }
+  .letter { font-size: 128px; }
+  :is(.letterIntroduction, .letterDescription) p { font-size: 28px; line-height: 1.35; }
+  /* Preserve measured lines: pretty wrapping must not reflow them after splitting. */
+  .letterChapter :global(.origin-copy-line) { white-space: nowrap; }
+  .letterIntroduction, .letterDescription { max-width: 640px; text-align: left; }
+
+  :is(.sancerre, .orna, .landscape) .mainPhoto { grid-column: 1 / -1; grid-row: 2; aspect-ratio: 1.8; }
+  :is(.sancerre, .orna, .landscape) .letterIntroduction { grid-column: 4 / -1; grid-row: 3; padding: 0; }
+  :is(.sancerre, .orna, .landscape) .insetPhoto { grid-column: 1 / 6; grid-row: 4; }
+  :is(.sancerre, .orna, .landscape) .detailPhoto { grid-column: 8 / 12; grid-row: 4; margin-top: 64px; }
+  :is(.sancerre, .orna, .landscape) .letterDescription { grid-column: 3 / 12; grid-row: 5; justify-self: start; }
+
+  :is(.ile, .portrait) .letterHeader { grid-column: 1 / -1; grid-row: 1; }
+  :is(.ile, .portrait) .mainPhoto { grid-column: 8 / -1; grid-row: 2; }
+  :is(.ile, .portrait) .letterIntroduction { grid-column: 1 / 7; grid-row: 2; align-self: center; }
+  :is(.ile, .portrait) .insetPhoto { grid-column: 1 / 9; grid-row: 3; }
+  :is(.ile, .portrait) .detailPhoto { grid-column: 10 / -1; grid-row: 3; margin-top: 64px; }
+  :is(.ile, .portrait) .letterDescription { grid-column: 2 / 12; grid-row: 4; }
 }
 
 @media (max-width: 359px) {

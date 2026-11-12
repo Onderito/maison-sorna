@@ -77,8 +77,9 @@ export function useTeaCollectionEntrance() {
 
       rows.forEach((row) => {
         gsap.set(row, { opacity: 0, y: 24 });
-        // Only the price/action row moves as one block; copy gets line masks.
-        gsap.set(row.flatMap((card) => Array.from(card.querySelectorAll<HTMLElement>("[data-collection-reveal]")).slice(-1)), { yPercent: 110 });
+        // Copy gets line masks; the price/action row only fades, so it is
+        // readable as soon as the card's text starts.
+        gsap.set(row.flatMap((card) => Array.from(card.querySelectorAll<HTMLElement>("[data-collection-reveal]")).slice(-1)), { opacity: 0 });
         const entrance = gsap.timeline({
           paused: true,
           onComplete: () => { row.forEach((card) => { if (!card.querySelector("[data-collection-copy]")) seenCards.current.add(card); }); },
@@ -108,7 +109,7 @@ export function useTeaCollectionEntrance() {
                 seenCards.current.add(card);
                 queueMicrotask(() => {
                   if (self.isSplit) self.revert();
-                  gsap.set(fields, { clearProps: "transform" });
+                  gsap.set(fields, { clearProps: "transform,opacity" });
                 });
                 return;
               }
@@ -121,15 +122,15 @@ export function useTeaCollectionEntrance() {
                   queueMicrotask(() => {
                     if (self.isSplit) self.revert();
                     // SplitText reverts its returned timeline too, including
-                    // the price row's initial hidden transform. Clear it AFTER.
-                    gsap.set(fields, { clearProps: "transform" });
+                    // the price row's initial hidden opacity. Clear it AFTER.
+                    gsap.set(fields, { clearProps: "transform,opacity" });
                   });
                 },
               }).to(self.lines, {
-                yPercent: 0, duration: 0.8, stagger: 0.08, ease: "power2.out",
+                yPercent: 0, duration: 0.5, stagger: 0.05, ease: "power2.out",
               }).to(bottom, {
-                yPercent: 0, duration: 0.8, ease: "power2.out", clearProps: "transform",
-              }, 0.24);
+                opacity: 1, duration: 0.3, ease: "power2.out", clearProps: "opacity",
+              }, 0);
               if (previous) {
                 entrances.current = entrances.current.filter((timeline) => timeline !== previous);
                 cardEntrances.current.set(card, cardEntrances.current.get(card)!.filter((timeline) => timeline !== previous));

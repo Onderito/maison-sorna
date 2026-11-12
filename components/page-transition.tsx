@@ -6,12 +6,17 @@ import type { ComponentProps } from "react";
 import { usePageTransition } from "@/animations/use-page-transition";
 import styles from "./page-transition.module.css";
 
-const PageTransitionContext = createContext<((href: string) => boolean) | null>(null);
+type PageTransitionContextValue = Pick<ReturnType<typeof usePageTransition>, "navigate" | "afterReveal">;
+const PageTransitionContext = createContext<PageTransitionContextValue | null>(null);
+
+export function useAfterPageReveal() {
+  return useContext(PageTransitionContext)?.afterReveal;
+}
 
 export function PageTransition({ children }: { children: ReactNode }) {
-  const { curtainRef, navigate } = usePageTransition();
+  const { curtainRef, navigate, afterReveal } = usePageTransition();
   return (
-    <PageTransitionContext.Provider value={navigate}>
+    <PageTransitionContext.Provider value={{ navigate, afterReveal }}>
       {children}
       <div ref={curtainRef} className={styles.curtain} aria-hidden="true" />
     </PageTransitionContext.Provider>
@@ -19,8 +24,8 @@ export function PageTransition({ children }: { children: ReactNode }) {
 }
 
 export function TransitionLink(props: Omit<ComponentProps<typeof Link>, "onNavigate">) {
-  const navigate = useContext(PageTransitionContext);
+  const transition = useContext(PageTransitionContext);
   return <Link {...props} onNavigate={(event) => {
-    if (typeof props.href === "string" && navigate?.(props.href)) event.preventDefault();
+    if (typeof props.href === "string" && transition?.navigate(props.href)) event.preventDefault();
   }} />;
 }

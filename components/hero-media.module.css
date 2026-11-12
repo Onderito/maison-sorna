@@ -1,6 +1,6 @@
-/* Lift the home landscape while keeping the video and its poster full bleed. */
+/* Preserve the panorama's dark upper sky behind the ivory navigation. */
 .home {
-  --home-media-rise: clamp(80px, 16svh, 144px);
+  --home-media-rise: 0px;
   height: calc(100% + var(--home-media-rise));
   transform: translateY(calc(-1 * var(--home-media-rise)));
 }
@@ -43,6 +43,11 @@
   }
 
   .reception {
+    background-position: 64% center;
+    object-position: 64% center;
+  }
+
+  .reception video {
     object-position: 64% center;
   }
 }

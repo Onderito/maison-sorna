@@ -79,7 +79,7 @@ export default function MobileNavigation({ pathname, items }: MobileNavigationPr
 
   useEffect(() => {
     const dialog = dialogRef.current;
-    const desktop = window.matchMedia("(min-width: 768px)");
+    const desktop = window.matchMedia("(min-width: 1200px)");
     const closeOnDesktop = () => {
       if (desktop.matches) dialog?.close();
     };

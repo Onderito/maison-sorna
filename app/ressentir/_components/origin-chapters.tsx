@@ -80,7 +80,7 @@ function LetterChapter({ chapter }: { chapter: Chapter }) {
               src={`${photoRoot}/${chapter.id}-photo-${isLandscape ? "panoramique" : "gauche"}.png`}
               alt=""
               fill
-              sizes="(max-width: 767px) 100vw, 65vw"
+              sizes={`(max-width: 767px) 100vw, (max-width: 1199px) ${isLandscape ? "100vw" : "42vw"}, 65vw`}
               className="object-cover"
             />
           </div>
@@ -94,7 +94,7 @@ function LetterChapter({ chapter }: { chapter: Chapter }) {
               src={`${photoRoot}/${chapter.id}-photo-${isLandscape ? "gauche" : "panoramique"}.png`}
               alt=""
               fill
-              sizes="(max-width: 767px) 75vw, 50vw"
+              sizes={`(max-width: 767px) 75vw, (max-width: 1199px) ${isLandscape ? "42vw" : "65vw"}, 50vw`}
               className="object-cover"
             />
           </div>
@@ -103,7 +103,7 @@ function LetterChapter({ chapter }: { chapter: Chapter }) {
       <div className={styles.detailPhoto} data-origin-photo>
         <div className={styles.photoReveal} data-origin-photo-reveal>
           <div className={`${styles.photoContent} image-grain`} data-origin-photo-content>
-            <Image src={`${photoRoot}/${chapter.id}-photo-droite.png`} alt="" fill sizes="(max-width: 767px) 42vw, 25vw" className="object-cover" />
+            <Image src={`${photoRoot}/${chapter.id}-photo-droite.png`} alt="" fill sizes={`(max-width: 767px) 42vw, (max-width: 1199px) ${isLandscape ? "33vw" : "25vw"}, 25vw`} className="object-cover" />
           </div>
         </div>
       </div>

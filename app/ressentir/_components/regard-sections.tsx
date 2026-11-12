@@ -30,7 +30,7 @@ const sections: RegardSection[] = [
   {
     id: "le-soin",
     title: "Le soin",
-    introduction: "Du thé au soin, la démarche ne change pas : connaître chaque matière, et ne l’employer que pour ce qu’elle apporte.",
+    introduction: "Du thé au soin, la démarche ne change pas, connaître chaque matière, et ne l’employer que pour ce qu’elle apporte.",
     images: { main: "/figma/ressentir/regard/le-soin.png", inset: "/figma/appliquer/hero-soin.png", detail: "/figma/ressentir/regard/bakuchi.jpg" },
     leftTitle: "Anhydre",
     leftText: <><strong>Sans eau</strong>, les formules n’ont pas besoin de conservateur. Elles sont aussi <strong>sans parfum.</strong></>,
@@ -101,27 +101,27 @@ export default function RegardSections() {
         <ChapterHeading id={section.id} title={section.title} />
         {isCare ? <>
           <div className={styles.careOpening}>
-            <div className={chapterStyles.letterIntroduction} data-origin-copy><p>{section.introduction}</p></div>
-            <div className={`${chapterStyles.letterDescription} ${styles.notes}`} data-origin-copy>
+            <div className={`${chapterStyles.letterIntroduction} ${styles.careIntroduction}`} data-origin-copy><p>{section.introduction}</p></div>
+            <div className={`${chapterStyles.letterDescription} ${styles.notes} ${styles.careAnhydre}`} data-origin-copy>
               <h3>{section.leftTitle}</h3>
               <p>{section.leftText}</p>
             </div>
           </div>
-          <ChapterPhoto src={section.images.main} className={styles.careTexture} sizes="(max-width: 767px) 75vw, 42vw" />
+          <ChapterPhoto src={section.images.main} className={styles.careTexture} sizes="(max-width: 767px) 75vw, (max-width: 1199px) 50vw, 42vw" />
           <div className={`${chapterStyles.letterDescription} ${styles.notes} ${styles.careRange}`} data-origin-copy>
             <h3>{section.rightTitle}</h3>
             <p>{section.rightText}</p>
           </div>
-          <ChapterPhoto src={section.images.inset} className={styles.careApplication} sizes="(max-width: 767px) 100vw, 50vw" />
+          <ChapterPhoto src={section.images.inset} className={styles.careApplication} sizes="(max-width: 767px) 100vw, (max-width: 1199px) 75vw, 50vw" />
           {section.ingredient && <div className={`${chapterStyles.letterDescription} ${styles.notes} ${styles.careIngredient}`} data-origin-copy>
             <h3>{section.ingredient.title}</h3>
             <p>{section.ingredient.text}</p>
           </div>}
           <BakuchiPhoto src={section.images.detail} className={styles.carePlant} />
         </> : <>
-          <ChapterPhoto src={section.images.main} className={chapterStyles.mainPhoto} sizes="(max-width: 767px) 100vw, 65vw" />
+          <ChapterPhoto src={section.images.main} className={chapterStyles.mainPhoto} sizes="(max-width: 1199px) 100vw, 65vw" />
           <div className={chapterStyles.letterIntroduction} data-origin-copy><p>{section.introduction}</p></div>
-          <ChapterPhoto src={section.images.inset} className={chapterStyles.insetPhoto} sizes="(max-width: 767px) 50vw, 25vw" />
+          <ChapterPhoto src={section.images.inset} className={chapterStyles.insetPhoto} sizes="(max-width: 767px) 50vw, (max-width: 1199px) 42vw, 25vw" />
           <ChapterPhoto src={section.images.detail} className={chapterStyles.detailPhoto} sizes="(max-width: 767px) 42vw, 33vw" />
           <div className={`${chapterStyles.letterDescription} ${styles.notes}`}>
             <div data-origin-copy>

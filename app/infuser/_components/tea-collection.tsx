@@ -61,7 +61,7 @@ export default async function TeaCollection() {
             <span className={styles.number} aria-hidden="true">{teaEntry?.cuvee ?? ["I", "II", "III", "IV", "V"][index]}</span>
             {isFavorite && <span className={styles.favoriteLabel}>Notre coup de cœur</span>}
             <div className={styles.artwork} data-product-artwork>
-              <Image src={photograph} alt={photographAlt} fill sizes="(min-width: 1024px) 48vw, 100vw" className={styles.botanical} />
+              <Image src={photograph} alt={photographAlt} fill sizes="(min-width: 1200px) 48vw, 100vw" className={styles.botanical} />
             </div>
             <div className={styles.copy} data-collection-copy>
               <h3 className={styles.textMask}><span data-collection-reveal>{product?.title ?? edition.title}</span></h3>
@@ -75,7 +75,7 @@ export default async function TeaCollection() {
           return <li key={edition.handle} id={`collection-${edition.handle}`} data-collection-card data-favorite={isFavorite || undefined}>
             {product && teaEntry ? (
               <ProductDialog href={`/produits/${product.handle}`} title={product.title} trigger={contents} triggerClassName={styles.card} image={
-                <Image src={photograph} alt={photographAlt} fill loading="eager" sizes="(min-width: 768px) 50vw, 100vw" className="object-contain" />
+                <Image src={photograph} alt={photographAlt} fill loading="eager" sizes="(min-width: 1200px) 50vw, 100vw" className="object-contain" />
               }>
                 <TeaCardDetails entry={teaEntry} presentation="dialog" />
               </ProductDialog>

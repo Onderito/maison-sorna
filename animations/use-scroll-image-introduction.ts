@@ -4,7 +4,15 @@ import { useRef } from "react";
 import { gsap, useGSAP } from "./gsap";
 import { ScrollTrigger } from "./scroll-trigger";
 
-export function useScrollImageIntroduction(scrub = 0.4) {
+// "grand": signature opening, reserved for a page's first act.
+// "doux": calmer opening for the following chapters, same choreography.
+export type IntroductionOpening = "grand" | "doux";
+const openingScale = {
+  grand: { desktop: 0.26, mobile: 0.76 },
+  doux: { desktop: 0.72, mobile: 0.88 },
+} as const;
+
+export function useScrollImageIntroduction(scrub = 0.4, opening: IntroductionOpening = "grand") {
   const sectionRef = useRef<HTMLElement>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
   const photographRef = useRef<HTMLDivElement>(null);
@@ -64,10 +72,10 @@ export function useScrollImageIntroduction(scrub = 0.4) {
       });
 
       if (context.conditions?.mobile) {
-        scene.fromTo(photograph, { scale: 0.76 },
+        scene.fromTo(photograph, { scale: openingScale[opening].mobile },
           { scale: 1, duration: 0.69 }, 0);
       } else {
-        scene.fromTo(photograph, { scale: 0.26 }, { scale: 1, duration: 0.69 }, 0);
+        scene.fromTo(photograph, { scale: openingScale[opening].desktop }, { scale: 1, duration: 0.69 }, 0);
         if (image) {
           // Overscan keeps both edges covered throughout this small internal drift.
           scene.fromTo(image, { scale: 1.06, yPercent: 1 },
@@ -81,9 +89,9 @@ export function useScrollImageIntroduction(scrub = 0.4) {
         .addLabel("relais", 1.5)
         .fromTo(shade, { opacity: 0 }, { opacity: 0.25, duration: 0.35 }, 0.32)
         .fromTo(heading, { yPercent: 125 },
-          { yPercent: 0, duration: 0.38, ease: "power2.out" }, "titre")
-        .fromTo(copy, { opacity: 0, y: 12 },
-          { opacity: 1, y: 0, duration: 0.33, ease: "power2.out" }, 0.67)
+          { yPercent: 0, duration: 0.45, ease: "power3.out" }, "titre")
+        .fromTo(copy, { opacity: 0, y: 16 },
+          { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 0.66)
         // No text movement during the reading hold. The next opaque panel
         // naturally rises over this pinned photograph before the text leaves.
         .to(title, { opacity: 0, y: -20, duration: 0.3, ease: "power2.out" }, "relais")
@@ -101,7 +109,7 @@ export function useScrollImageIntroduction(scrub = 0.4) {
       active = false;
       media.revert();
     };
-  }, { scope: sectionRef, dependencies: [scrub], revertOnUpdate: true });
+  }, { scope: sectionRef, dependencies: [scrub, opening], revertOnUpdate: true });
 
   return { sectionRef, viewportRef, photographRef, titleRef, shadeRef };
 }

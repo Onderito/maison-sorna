@@ -1,0 +1,18 @@
+.reveal { display: contents; }
+
+/* Adjacent negative mask margins must not collapse between title lines. */
+.reveal :has(> :global(.hero-text-line-mask)) {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Protect accents and descenders without changing the tight hero leading. */
+.reveal :global(.hero-text-line-mask) {
+  padding-block: .18em;
+  margin-block: -.18em;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .reveal[data-hero-pending] :is([data-hero-title], [data-hero-copy], [data-hero-monogram]) { visibility: hidden; }
+  .reveal[data-hero-pending] [data-hero-action] { opacity: 0; }
+}

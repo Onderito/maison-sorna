@@ -2,6 +2,7 @@ import Image from "next/image";
 import type { ReactNode } from "react";
 import SeamlessBackgroundVideo from "@/components/seamless-background-video";
 import SiteNavigation from "@/components/site-navigation";
+import HeroTextReveal from "@/components/hero-text-reveal";
 
 const defaultVideoSrc =
   "https://cdn.midjourney.com/video/5f955f2a-036c-41d6-8d47-66293ad99aca/1.mp4";
@@ -49,45 +50,49 @@ export function UniversHero({
 
       <SiteNavigation overlay tone="light" />
 
-      <div className="absolute inset-0 z-10 flex items-center justify-center px-4 pt-14 text-center md:px-11 md:pt-0">
-        <div className="flex w-full max-w-[1640px] flex-col items-center gap-7 md:gap-10">
-          <div className="flex w-full flex-col items-center gap-3 md:gap-4">
-            <div className="relative h-[clamp(5.75rem,11.9vh,8.375rem)] w-[clamp(4.5rem,6.02vw,6.5rem)] shrink-0 overflow-hidden">
-              <Image
-                src="/logos/sorna-beige.png"
-                alt=""
-                width={330}
-                height={708}
-                priority
-                className="h-full w-full object-contain"
-              />
+      <HeroTextReveal>
+        <div className="absolute inset-0 z-10 flex items-center justify-center px-4 pt-14 text-center md:px-11 md:pt-0">
+          <div className="flex w-full max-w-[1640px] flex-col items-center gap-7 md:gap-10">
+            <div className="flex w-full flex-col items-center gap-3 md:gap-4">
+              <div data-hero-monogram className="relative h-[clamp(5.75rem,11.9vh,8.375rem)] w-[clamp(4.5rem,6.02vw,6.5rem)] shrink-0 overflow-hidden">
+                <Image
+                  src="/logos/sorna-beige.png"
+                  alt=""
+                  width={330}
+                  height={708}
+                  priority
+                  className="h-full w-full object-contain"
+                />
+              </div>
+
+              <h1
+                id={`${id}-title`}
+                data-hero-title
+                className="w-full font-display text-[length:var(--hero-title-mobile)] md:text-[clamp(3.5rem,11.57vw,12.5rem)] leading-[0.85] font-normal tracking-[-0.04em] text-balance md:whitespace-nowrap uppercase"
+              >
+                {title}
+              </h1>
+              {subtitle && <p data-hero-copy className="max-w-[36em] px-4 font-sans text-[16px] md:text-[18px] lg:text-[20px] leading-[1.4]">{subtitle}</p>}
             </div>
 
-            <h1
-              id={`${id}-title`}
-              className="w-full font-display text-[length:var(--hero-title-mobile)] md:text-[clamp(3.5rem,11.57vw,12.5rem)] leading-[0.85] font-normal tracking-[-0.04em] text-balance md:whitespace-nowrap uppercase"
-            >
-              {title}
-            </h1>
-            {subtitle && <p className="max-w-[36em] px-4 font-sans text-[16px] md:text-[18px] lg:text-[20px] leading-[1.4]">{subtitle}</p>}
           </div>
-
         </div>
-      </div>
 
-      <a
-        href={scrollTarget}
-        className="absolute bottom-[clamp(1.25rem,2.8vh,1.9375rem)] left-1/2 z-20 flex h-11 w-16 -translate-x-1/2 items-center justify-center transition-transform duration-200 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current active:scale-[0.96] motion-reduce:transition-none"
-        aria-label="Découvrir la suite"
-      >
-        <Image
-          src="/figma/hero/scroll-indicator.svg"
-          alt=""
-          width={64}
-          height={45}
-          className="h-[45px] w-16"
-        />
-      </a>
+        <a
+          href={scrollTarget}
+          className="absolute bottom-[clamp(1.25rem,2.8vh,1.9375rem)] left-1/2 z-20 flex h-11 w-16 -translate-x-1/2 items-center justify-center transition-transform duration-200 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current active:scale-[0.96] motion-reduce:transition-none"
+          aria-label="Découvrir la suite"
+        >
+          <Image
+            data-hero-action
+            src="/figma/hero/scroll-indicator.svg"
+            alt=""
+            width={64}
+            height={45}
+            className="h-[45px] w-16"
+          />
+        </a>
+      </HeroTextReveal>
     </section>
   );
 }

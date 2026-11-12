@@ -31,7 +31,7 @@ export default function AccordSection() {
           </div>
           <p className={styles.caption}>{["I", "II", "III", "IV", "V"][index]} — {accord.tea}</p>
         </div>
-        <div className={styles.scene}><Image src={`/recevoir/accords/${accord.image}.png`} alt={accord.alt} fill sizes="(max-width: 767px) 100vw, 50vw" className={styles.image} /></div>
+        <div className={styles.scene}><Image src={`/recevoir/accords/${accord.image}.png`} alt={accord.alt} fill sizes="(max-width: 959px) 100vw, 50vw" className={styles.image} /></div>
         <span className={styles.shade} data-process-shade aria-hidden="true" />
       </article>)}
     </ProcessTransitions>

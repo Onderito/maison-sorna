@@ -6,7 +6,8 @@ import { CustomEase } from "gsap/CustomEase";
 import { gsap, useGSAP } from "./gsap";
 
 gsap.registerPlugin(CustomEase);
-const productEase = CustomEase.create("product-expansion", "0.2,-0.03,0.52,0.99");
+// Strong ease-out: the sheet answers the click at once, then settles.
+const productEase = CustomEase.create("product-expansion", "0.23,1,0.32,1");
 
 // Measure the actual contained bitmap, excluding its padding. Both endpoints
 // retain the image aspect ratio, so the shared image only needs uniform scale.
@@ -108,9 +109,10 @@ export function useProductDialog() {
       closeButtonRef.current?.focus({ preventScroll: true });
       animationRef.current?.kill();
       const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      const desktop = window.matchMedia("(min-width: 768px)").matches;
-      const detailsDelay = reduced ? 0 : desktop ? 0.42 : 0.27;
-      const surfaceDelay = !reduced && desktop ? 0.42 : 0;
+      const desktop = window.matchMedia("(min-width: 1200px)").matches;
+      // Details overlap the image landing (0.3s) instead of waiting after it.
+      const detailsDelay = reduced ? 0 : 0.2;
+      const surfaceDelay = !reduced && desktop ? 0.2 : 0;
       sheet.scrollTop = 0;
       sheet.querySelector("[data-product-reveal]")?.closest("[data-product-scroll]")?.scrollTo(0, 0);
       const destination = imageBounds(target, ratio);
