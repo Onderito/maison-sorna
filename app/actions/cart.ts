@@ -3,6 +3,7 @@
 import { isCartExpired } from "@/app/lib/shopify/session-lifetime";
 
 import { getCartDetails } from "@/app/lib/shopify/cart";
+import { isShopifyCartId } from "@/app/lib/shopify/cart-id";
 import { getVariantProductHandle } from "@/app/lib/shopify/products";
 import { CART_PRODUCT_LIMIT, CART_PRODUCT_LIMIT_MESSAGE, getProductCartQuantity } from "@/app/lib/shopify/cart-product-limit";
 
@@ -84,7 +85,7 @@ export async function addToCart(
     typeof variantId !== "string" ||
     !/^gid:\/\/shopify\/ProductVariant\/\d+$/.test(variantId)
   ) {
-    return { status: "error", message: "Choisis un format valide avant de l’ajouter." };
+    return { status: "error", message: "Choisissez un format valide avant de l’ajouter." };
   }
   if (!Number.isInteger(quantity) || quantity < 1 || quantity > 2_147_483_647) {
     return { status: "error", message: "La quantité choisie n’est pas valide." };
@@ -123,6 +124,16 @@ export async function addToCart(
 
     const updatedCart = requireCart(payload.cart);
 
+    // Concurrent adds (several tabs) can each be confirmed by Shopify while
+    // only some are kept: never announce an addition the cart does not show.
+    if (updatedCart.totalQuantity < (existingCart?.totalQuantity ?? 0) + quantity) {
+      return {
+        status: "warning",
+        message: "Votre panier a été modifié en parallèle. Vérifiez son contenu.",
+        totalQuantity: updatedCart.totalQuantity,
+      };
+    }
+
     if (payload.warnings.length > 0) {
       return {
         status: "warning",
@@ -141,7 +152,7 @@ export async function addToCart(
     console.error("Échec de la communication Shopify lors de l’ajout au panier.");
     return {
       status: "error",
-      message: "Impossible d’ajouter cet article pour le moment. Réessaie dans un instant.",
+      message: "Impossible d’ajouter cet article pour le moment. Réessayez dans un instant.",
     };
   }
 }
@@ -149,7 +160,7 @@ export async function addToCart(
 export async function getCart(): Promise<ShopifyCart | null> {
   const cartId = await getCartId();
 
-  if (!cartId || !/^gid:\/\/shopify\/Cart\/[^\s]+$/.test(cartId)) {
+  if (!isShopifyCartId(cartId)) {
     return null;
   }
 

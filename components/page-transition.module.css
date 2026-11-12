@@ -2,8 +2,28 @@
   position: fixed;
   inset: 0;
   z-index: 1000;
-  background: var(--paper-background);
+  display: flex;
   transform: translateY(100%);
   visibility: hidden;
   pointer-events: none;
+}
+
+/* Five side-by-side columns form one continuous paper surface while covering,
+   then leave upward one after another. */
+.column {
+  flex: 1;
+  background: var(--background) url("/figma/infuser/process/background.png") calc(var(--column) * -20vw) 0 / 100vw 100vh no-repeat;
+}
+
+/* Fades in while the curtain covers, fades as the staircase leaves. */
+.mark {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display);
+  font-size: calc(var(--space-unit) * 4);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  opacity: 0;
 }

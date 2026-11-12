@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useLenis } from "lenis/react";
 import { CustomEase } from "gsap/CustomEase";
 import { gsap, useGSAP } from "./gsap";
+import { ScrollTrigger } from "./scroll-trigger";
 
 gsap.registerPlugin(CustomEase);
 
@@ -27,13 +28,37 @@ export function usePageTransition() {
     if (!curtain || !contextSafe) return;
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const ease = CustomEase.create("", "0.2,-0.03,0.52,0.99");
+    // Covering crosses the screen (strong in-out); uncovering must show the
+    // new page at once (strong out).
+    const coverEase = CustomEase.create("", "0.77,0,0.175,1");
+    const revealEase = CustomEase.create("", "0.23,1,0.32,1");
+    // Depth: the page travels with the curtain, a fraction of its distance.
+    const pageLift = 30;
+    const pageRise = 40;
+    // The curtain covers as one surface and leaves upward as a staircase.
+    const columns = Array.from(curtain.querySelectorAll?.<HTMLElement>("[data-transition-column]") ?? []);
+    const leaving: gsap.TweenTarget = columns.length ? columns : curtain;
+    const stairStep = 0.07;
+    const mark = curtain.querySelector?.<HTMLElement>("[data-transition-mark]") ?? null;
+    // Editorial pacing: a responsive cover, a readable mark, a slow unveiling.
+    const page = () => document.querySelector?.<HTMLElement>("main") ?? null;
+    let movedPage = false;
+    const coverDuration = 0.4;
+    const revealDuration = 0.6;
+    // The mark stays readable at least this long once the curtain has closed.
+    const markHold = 400;
+    let coveredAt = 0;
     let phase: "idle" | "covering" | "waiting" | "revealing" = "idle";
     let destination: URL | null = null;
+    // A link chosen while the curtain is still out runs once it has left.
+    let queued: URL | null = null;
+    let origin: { pathname: string; scroll: number } | null = null;
     let tween: gsap.core.Tween | null = null;
+    let liftTween: gsap.core.Tween | null = null;
     let watchdog = 0;
     let frame = 0;
     let assetTimeout = 0;
+    let holdTimeout = 0;
     let releaseScroll: (() => void) | null = null;
     let generation = 0;
     const revealCallbacks = new Set<() => void>();
@@ -44,13 +69,25 @@ export function usePageTransition() {
       generation++;
       window.clearTimeout(watchdog);
       window.clearTimeout(assetTimeout);
+      window.clearTimeout(holdTimeout);
       window.cancelAnimationFrame(frame);
       tween?.kill();
+      liftTween?.kill();
+      liftTween = null;
       gsap.set(curtain, { y: 0, yPercent: 100, visibility: "hidden", pointerEvents: "none", clearProps: "willChange" });
+      if (columns.length) { gsap.killTweensOf(columns); gsap.set(columns, { clearProps: "transform,willChange" }); }
+      if (mark) { gsap.killTweensOf(mark); gsap.set(mark, { opacity: 0 }); }
+      const main = page();
+      if (main && movedPage) { gsap.killTweensOf(main); gsap.set(main, { clearProps: "transform" }); }
+      // Triggers measured while the page was offset must be remeasured.
+      if (movedPage) ScrollTrigger.refresh();
+      movedPage = false;
       releaseScroll?.();
       releaseScroll = null;
       phase = "idle";
       destination = null;
+      queued = null;
+      origin = null;
       const callbacks = Array.from(revealCallbacks);
       revealCallbacks.clear();
       callbacks.forEach(callback => callback());
@@ -60,7 +97,24 @@ export function usePageTransition() {
       if (phase !== "waiting") return;
       window.clearTimeout(watchdog);
       phase = "revealing";
-      tween = gsap.to(curtain, { yPercent: -100, duration: reduced.matches ? 0 : 0.28, ease, onComplete: finish });
+      const duration = reduced.matches ? 0 : revealDuration;
+      const main = page();
+      if (main && duration) {
+        movedPage = true;
+        gsap.set(main, { y: pageRise });
+        gsap.to(main, { y: 0, duration, ease: revealEase });
+      }
+      if (mark) gsap.to(mark, { opacity: 0, duration: 0.2, ease: "power1.out" });
+      if (columns.length) gsap.set(columns, { willChange: "transform" });
+      tween = gsap.to(leaving, {
+        yPercent: -100, duration, ease: coverEase,
+        stagger: duration ? stairStep : 0,
+        onComplete: () => {
+          const next = queued;
+          finish();
+          if (next && !navigate(next.href)) router.push(`${next.pathname}${next.search}${next.hash}`);
+        },
+      });
     });
 
     const navigate = contextSafe((href: string): boolean => {
@@ -77,12 +131,16 @@ export function usePageTransition() {
       }
       if (!editorialPaths.has(window.location.pathname) ||
           !editorialPaths.has(next.pathname) || next.pathname === window.location.pathname || reduced.matches) return false;
-      if (phase === "waiting" || phase === "revealing") return true;
+      if (phase === "waiting" || phase === "revealing") {
+        if (next.pathname !== destination?.pathname) queued = next;
+        return true;
+      }
       destination = next;
       router.prefetch(next.pathname);
       if (phase === "covering") return true;
 
       phase = "covering";
+      origin = { pathname: window.location.pathname, scroll: window.scrollY };
       const overflow = document.documentElement.style.overflow;
       const padding = document.documentElement.style.paddingRight;
       const scrollbar = window.innerWidth - document.documentElement.clientWidth;
@@ -97,14 +155,29 @@ export function usePageTransition() {
         document.documentElement.style.overflow = overflow;
         document.documentElement.style.paddingRight = padding;
       };
+      // The leaving page lifts by scrolling, not by transforming <main>:
+      // a transform would detach its fixed navigation and pinned scenes.
+      if (typeof window.scrollY === "number") {
+        const lift = { y: window.scrollY };
+        liftTween = gsap.to(lift, {
+          y: window.scrollY + pageLift, duration: coverDuration, ease: coverEase,
+          onUpdate: () => {
+            if (lenis) lenis.scrollTo(lift.y, { immediate: true, force: true });
+            else window.scrollTo({ top: lift.y, left: 0, behavior: "instant" });
+          },
+        });
+      }
       gsap.set(curtain, { y: 0, yPercent: 100, visibility: "visible", pointerEvents: "auto", willChange: "transform" });
+      // The brand mark settles in as the curtain closes, fades as it leaves.
+      if (mark) gsap.to(mark, { opacity: 1, duration: 0.3, delay: 0.15, ease: revealEase });
       tween = gsap.to(curtain, {
         yPercent: 0,
-        duration: 0.25,
-        ease,
+        duration: coverDuration,
+        ease: coverEase,
         onComplete: () => {
           if (!destination) return;
           phase = "waiting";
+          coveredAt = performance.now();
           // Reset under the opaque curtain, before the next page mounts:
           // one-shot reveals must never observe the previous page's scroll.
           // force is required because Lenis is stopped during the transition.
@@ -130,14 +203,30 @@ export function usePageTransition() {
         const images = Array.from(document.querySelectorAll<HTMLImageElement>("main > section:first-child img"));
         const decoded = Promise.allSettled(images.map((image) => image.decode()));
         const boundedWait = new Promise<void>((resolve) => { assetTimeout = window.setTimeout(resolve, 750); });
-        void Promise.race([decoded, boundedWait]).then(() => {
+        const remainingHold = mark ? markHold - (performance.now() - coveredAt) : 0;
+        const markRead = remainingHold > 0
+          ? new Promise<void>((resolve) => { holdTimeout = window.setTimeout(resolve, remainingHold); })
+          : Promise.resolve();
+        void Promise.all([Promise.race([decoded, boundedWait]), markRead]).then(() => {
           window.clearTimeout(assetTimeout);
           if (generation === currentGeneration) reveal();
         });
       });
     };
 
-    const cancel = () => finish();
+    // Back/forward during a transition: drop it, and if the visitor returns to
+    // the page they were leaving, give back the position reset under the curtain.
+    const cancel = () => {
+      const left = origin;
+      finish();
+      if (!left || left.pathname !== window.location.pathname || !left.scroll) return;
+      frame = window.requestAnimationFrame(() => {
+        frame = window.requestAnimationFrame(() => {
+          if (lenis) lenis.scrollTo(left.scroll, { immediate: true, force: true });
+          else window.scrollTo({ top: left.scroll, left: 0, behavior: "instant" });
+        });
+      });
+    };
     controllerRef.current = {
       navigate, committed,
       afterReveal: callback => {

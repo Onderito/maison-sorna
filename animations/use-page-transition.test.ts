@@ -17,11 +17,12 @@ vi.mock("next/navigation", () => ({
 }));
 vi.mock("lenis/react", () => ({ useLenis: () => harness.hasLenis ? harness.lenis : null }));
 vi.mock("gsap/CustomEase", () => ({ CustomEase: { create: () => "editorial-ease" } }));
+vi.mock("./scroll-trigger", () => ({ ScrollTrigger: { refresh: vi.fn() } }));
 vi.mock("./gsap", () => ({
   useGSAP: (setup: (context: unknown, safe: (callback: unknown) => unknown) => unknown) => {
     harness.setups.push(() => setup(undefined, callback => callback));
   },
-  gsap: { registerPlugin: vi.fn(), set: vi.fn(), to: vi.fn(() => ({ kill: vi.fn() })) },
+  gsap: { registerPlugin: vi.fn(), set: vi.fn(), killTweensOf: vi.fn(), to: vi.fn(() => ({ kill: vi.fn() })) },
 }));
 
 import { gsap } from "./gsap";
@@ -157,5 +158,41 @@ describe("hero entries wait for the page to be visible", () => {
     await vi.waitFor(() => expect(gsap.to).toHaveBeenCalledTimes(2));
     vi.mocked(gsap.to).mock.calls[1][1]?.onComplete?.();
     expect(reveal).not.toHaveBeenCalled();
+  });
+});
+
+describe("interruptions during a transition", () => {
+  it("runs a link chosen while the curtain is leaving once it has left", async () => {
+    const transition = useMountTransition("/ressentir");
+    transition.navigate("/infuser");
+    vi.mocked(gsap.to).mock.calls[0][1]?.onComplete?.();
+    harness.setups[1]();
+    harness.frames[0]();
+    await vi.waitFor(() => expect(gsap.to).toHaveBeenCalledTimes(2));
+
+    expect(transition.navigate("/recevoir")).toBe(true);
+    expect(harness.router.prefetch).not.toHaveBeenCalledWith("/recevoir");
+
+    vi.mocked(gsap.to).mock.calls[1][1]?.onComplete?.();
+    expect(harness.router.prefetch).toHaveBeenCalledWith("/recevoir");
+    expect(gsap.to).toHaveBeenCalledTimes(3);
+  });
+
+  it("stops the page lift and restores the scroll position on back navigation", () => {
+    const transition = useMountTransition("/ressentir");
+    Object.assign(window, { scrollY: 640 });
+    transition.navigate("/infuser");
+    const lift = vi.mocked(gsap.to).mock.results[0].value as { kill: ReturnType<typeof vi.fn> };
+    const cover = vi.mocked(gsap.to).mock.calls.find(([, vars]) => vars?.yPercent === 0);
+    cover?.[1]?.onComplete?.();
+    harness.lenis.scrollTo.mockClear();
+
+    const popstate = vi.mocked(window.addEventListener).mock.calls.find(([type]) => type === "popstate")?.[1] as () => void;
+    Object.assign(window, { location: new URL("/ressentir", "https://sorna.example") });
+    popstate();
+    expect(lift.kill).toHaveBeenCalled();
+    harness.frames.at(-1)?.();
+    harness.frames.at(-1)?.();
+    expect(harness.lenis.scrollTo).toHaveBeenCalledWith(640, { immediate: true, force: true });
   });
 });

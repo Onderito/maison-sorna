@@ -25,10 +25,10 @@ export function getCartErrorMessage(errors: CartUserError[]) {
     return "Le panier contient trop d’articles pour être mis à jour.";
   }
   if (codes.has("SERVICE_UNAVAILABLE")) {
-    return "Shopify est momentanément indisponible. Réessaie dans un instant.";
+    return "Shopify est momentanément indisponible. Réessayez dans un instant.";
   }
 
-  return "Shopify n’a pas pu modifier le panier. Vérifie son contenu et réessaie.";
+  return "Shopify n’a pas pu modifier le panier. Vérifiez son contenu et réessayez.";
 }
 
 export function getCartWarningMessage(warnings: CartWarning[]) {
@@ -41,5 +41,5 @@ export function getCartWarningMessage(warnings: CartWarning[]) {
     return "La quantité a été ajustée au stock actuellement disponible.";
   }
 
-  return "Le panier a été actualisé par Shopify. Vérifie les quantités avant de continuer.";
+  return "Le panier a été actualisé par Shopify. Vérifiez les quantités avant de continuer.";
 }

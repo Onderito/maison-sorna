@@ -3,7 +3,7 @@
 import { CART_PRODUCT_LIMIT } from "@/app/lib/shopify/cart-product-limit";
 import Image from "next/image";
 import ArrowRight from "@/components/arrow-right";
-import { useId, useState, useTransition } from "react";
+import { useId, useRef, useState, useTransition } from "react";
 import { useCart } from "@/components/cart-provider";
 import { addToCart } from "@/app/actions/cart";
 import type { AddToCartResult } from "@/app/lib/shopify-types";
@@ -21,6 +21,8 @@ export default function TeaCardDetails({ entry, presentation = "page" }: { entry
   const selected = variants.find((variant) => selection.handle === handle && variant.id === selection.id) ?? initialVariant;
   const [feedback, setFeedback] = useState<(AddToCartResult & { handle: string }) | null>(null);
   const [pending, startTransition] = useTransition();
+  // Blocks clicks fired before React re-renders the disabled button.
+  const adding = useRef(false);
   const { openCart } = useCart();
   const formatId = useId();
   const price = selected ? new Intl.NumberFormat("fr-FR", {
@@ -33,7 +35,8 @@ export default function TeaCardDetails({ entry, presentation = "page" }: { entry
     : null;
 
   function handleAdd() {
-    if (!selected?.availableForSale || pending) return;
+    if (!selected?.availableForSale || pending || adding.current) return;
+    adding.current = true;
     const variant = selected;
     setFeedback(null);
     startTransition(async () => {
@@ -42,7 +45,9 @@ export default function TeaCardDetails({ entry, presentation = "page" }: { entry
         setFeedback(result.status === "success" ? null : { ...result, handle });
         if (result.status !== "error") await openCart(variant.id);
       } catch {
-        setFeedback({ handle, status: "error", message: "Impossible d’ajouter ce cru. Réessaie dans un instant." });
+        setFeedback({ handle, status: "error", message: "Impossible d’ajouter ce cru. Réessayez dans un instant." });
+      } finally {
+        adding.current = false;
       }
     });
   }

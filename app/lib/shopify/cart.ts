@@ -1,5 +1,6 @@
 import "server-only";
 import { CART_MAX_AGE, isCartExpired } from "./session-lifetime";
+import { isShopifyCartId } from "./cart-id";
 
 import { cookies } from "next/headers";
 import { shopifyFetch } from "@/app/lib/shopify";
@@ -192,7 +193,7 @@ export async function associateCustomerWithCart({
   customerAccessToken: string;
   buyerIp?: string;
 }) {
-  if (!/^gid:\/\/shopify\/Cart\/[^\s]+$/.test(cartId) || !customerAccessToken) {
+  if (!isShopifyCartId(cartId) || !customerAccessToken) {
     throw new Error("Les informations d’association du panier sont invalides.");
   }
 
@@ -224,7 +225,7 @@ export async function getCartDetails(): Promise<ShopifyCartDetails | null> {
   const cookieStore = await cookies();
   const cartId = cookieStore.get(SHOPIFY_CART_COOKIE)?.value;
 
-  if (!cartId || !/^gid:\/\/shopify\/Cart\/[^\s]+$/.test(cartId)) {
+  if (!isShopifyCartId(cartId)) {
     return null;
   }
 

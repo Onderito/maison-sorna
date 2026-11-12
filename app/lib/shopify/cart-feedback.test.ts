@@ -20,7 +20,7 @@ describe("getCartErrorMessage", () => {
     ["INVALID_INCREMENT", "Cette quantité ne respecte pas le pas de commande de cet article."],
     ["MINIMUM_NOT_MET", "La quantité choisie est inférieure au minimum autorisé."],
     ["MAXIMUM_EXCEEDED", "La quantité choisie dépasse le maximum autorisé."],
-    ["SERVICE_UNAVAILABLE", "Shopify est momentanément indisponible. Réessaie dans un instant."],
+    ["SERVICE_UNAVAILABLE", "Shopify est momentanément indisponible. Réessayez dans un instant."],
   ])("traduit le code Shopify %s", (code, expected) => {
     expect(getCartErrorMessage([cartError(code)])).toBe(expected);
   });

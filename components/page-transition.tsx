@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, type ReactNode } from "react";
+import { createContext, useContext, type CSSProperties, type ReactNode } from "react";
 import Link from "next/link";
 import type { ComponentProps } from "react";
 import { usePageTransition } from "@/animations/use-page-transition";
@@ -18,7 +18,12 @@ export function PageTransition({ children }: { children: ReactNode }) {
   return (
     <PageTransitionContext.Provider value={{ navigate, afterReveal }}>
       {children}
-      <div ref={curtainRef} className={styles.curtain} aria-hidden="true" />
+      <div ref={curtainRef} className={styles.curtain} aria-hidden="true">
+        {[0, 1, 2, 3, 4].map((column) => (
+          <div key={column} data-transition-column className={styles.column} style={{ "--column": column } as CSSProperties} />
+        ))}
+        <span data-transition-mark className={styles.mark}>SÖRNA</span>
+      </div>
     </PageTransitionContext.Provider>
   );
 }

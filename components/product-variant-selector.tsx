@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useState, useTransition } from "react";
+import { useId, useRef, useState, useTransition } from "react";
 import { useCart } from "@/components/cart-provider";
 import { addToCart } from "@/app/actions/cart";
 import type { AddToCartResult, ShopifyVariant } from "@/app/lib/shopify-types";
@@ -15,6 +15,8 @@ export default function ProductVariantSelector({
   const groupName = useId();
   const { openCart } = useCart();
   const [isPending, startTransition] = useTransition();
+  // Blocks clicks fired before React re-renders the disabled button.
+  const adding = useRef(false);
   const [feedback, setFeedback] = useState<AddToCartResult | null>(null);
   const defaultVariant =
     variants.find((variant) => variant.availableForSale) ?? variants[0];
@@ -27,7 +29,8 @@ export default function ProductVariantSelector({
   }
 
   function handleAddToCart() {
-    if (!selectedVariant?.availableForSale || isPending) return;
+    if (!selectedVariant?.availableForSale || isPending || adding.current) return;
+    adding.current = true;
 
     const variant = selectedVariant;
     setFeedback(null);
@@ -39,8 +42,10 @@ export default function ProductVariantSelector({
       } catch {
         setFeedback({
           status: "error",
-          message: "La demande n’a pas pu aboutir. Vérifie ta connexion et réessaie.",
+          message: "La demande n’a pas pu aboutir. Vérifiez votre connexion et réessayez.",
         });
+      } finally {
+        adding.current = false;
       }
     });
   }
