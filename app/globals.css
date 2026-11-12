@@ -104,7 +104,9 @@ body {
 }
 
 /* Apply to the photograph wrapper; keep logos and icons untextured. */
-.image-grain {
+/* Zero specificity: a component's own position (e.g. an absolute frame)
+   must win whatever order the stylesheets load in production. */
+:where(.image-grain) {
   position: relative;
   isolation: isolate;
 }
